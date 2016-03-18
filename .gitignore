@@ -9,3 +9,9 @@ pom.xml.asc
 /.nrepl-port
 .hgignore
 .hg/
+
+/src
+/template
+/resources/public/cljs/
+/resources/public/index.html
+/figwheel_server.log
