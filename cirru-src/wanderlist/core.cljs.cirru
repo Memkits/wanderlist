@@ -8,6 +8,7 @@ ns wanderlist.core $ :require
   [] respo-client.controller.client :refer $ [] initialize-instance activate-instance patch-instance
   [] devtools.core :as devtools
   [] wanderlist.component.container :refer $ [] container-component
+  [] wanderlist.updater.core :refer $ [] updater
 
 defonce global-states $ atom $ {}
 
@@ -15,14 +16,23 @@ defonce global-element $ atom nil
 
 defonce global-store $ atom $ {} (:groups $ {})
   :tasks $ {}
+  :router nil
+
+defonce id-counter $ atom 0
 
 defn render-element ()
+  .info js/console |rendering: @global-store @global-states
   render-app
     [] container-component $ {} :store @global-store
     , @global-states
 
 defn intent (op-type op-data)
-  .log js/console op-type op-data
+  .info js/console |Intent: op-type op-data
+  reset! id-counter $ inc @id-counter
+  let
+    (new-store $ updater @global-store op-type op-data @id-counter)
+    reset! global-store new-store
+    .info js/console "|new store:" new-store
 
 defn get-root ()
   .querySelector js/document |#app

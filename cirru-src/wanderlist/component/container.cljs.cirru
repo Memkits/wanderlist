@@ -22,5 +22,5 @@ def container-component $ {} (:name :container)
       {} $ :style style-app
       [] :div
         {} $ :style style-left-column
-        [] sidebar-component $ {}
+        [] sidebar-component $ {} $ :groups $ :groups $ :store props
       [] :div $ {} $ :style style-right-column

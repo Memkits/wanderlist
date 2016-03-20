@@ -4,7 +4,7 @@ ns wanderlist.component.sidebar $ :require
   [] hsl.core :refer $ [] hsl
 
 def style-sidebar $ {}
-  :background-color $ hsl 40 30 90
+  :background-color $ hsl 40 30 96
   :display |flex
   :flex-direction |column
 
@@ -25,17 +25,38 @@ def style-add $ {} (:line-height |32px)
   :background-color $ hsl 200 80 60
   :padding "|0 16px"
   :font-family |Verdana
+  :cursor |pointer
 
 def style-body $ {} (:flex |1)
-  :background-color $ hsl 0 0 80
+  :background-color $ hsl 0 0 94
+  :position |relative
+
+defn style-group (index)
+  {} (:padding "|0px 8px")
+    :color $ hsl 0 0 40
+    :line-height |32px
+    :cursor |pointer
+    :position |absolute
+    :top $ str (* 32 index)
+      , |px
+    :width |100%
+    :transition-duration |300ms
 
 defn on-query-change (props state)
   fn (simple-event intent set-state)
     .log js/console simple-event
+    set-state $ {} :query $ :value simple-event
 
 defn on-group-add (props state)
   fn (simple-event intent set-state)
+    set-state $ {} $ :query |
+    .log js/console "|set state"
     intent :add-group $ :query state
+
+defn on-group-route (props state entry)
+  fn (simple-event intent set-state)
+    intent :set-router (key entry)
+      , ""
 
 def sidebar-component $ {} (:name :sidebar)
   :initial-state $ {} $ :query |
@@ -46,10 +67,26 @@ def sidebar-component $ {} (:name :sidebar)
         {} $ :style style-header
         [] :input $ {}
           :on-input $ on-query-change props state
+          :value $ :query state
           :style style-query
           :placeholder |Seach...
         [] :div $ {} (:style style-add)
           :inner-text |Add
           :on-click $ on-group-add props state
 
-      [] :div $ {} $ :style style-body
+      [] :div
+        {} $ :style style-body
+        ->> (:groups props)
+          sort $ fn (group-a group-b)
+            compare
+              :id $ val group-b
+              :id $ val group-a
+
+          map-indexed $ fn (index entry)
+            [] (key entry)
+              [] :div $ {}
+                :inner-text $ :text $ val entry
+                :style $ style-group index
+                :on-click $ on-group-route props state entry
+
+          into $ sorted-map
