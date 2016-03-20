@@ -10,19 +10,19 @@
                  [differ "0.2.2"]
                  [mvc-works/hsl "0.1.2"]
                  [org.clojure/core.async "0.2.374"]
-                 [mvc-works/respo "0.1.5"]
+                 [mvc-works/respo "0.1.6"]
                  [mvc-works/respo-client "0.1.5"]]
   :plugins [[cirru/lein-sepal "0.0.18"]
             [mvc-works/lein-html-entry "0.0.2"]
             [lein-cljsbuild "1.1.3"]
             [lein-figwheel "0.5.0-6"]]
-  :cirru-sepal {:paths ["cirru-src" "cirru-template" "cirru-server"]}
+  :cirru-sepal {:paths ["cirru-src" "cirru-template"]}
   :html-entry {:file "template/html.clj" :output "resources/public/index.html"}
   :clean-targets ^{:protect false} [:target-path "resources/public/cljs"]
   :main ^:skip-aot wanderlist.core
   :target-path "target/%s"
   :cljsbuild {:builds {:web-dev {:source-paths ["src"]
-                             :figwheel {:websocket-host "localhost"
+                             :figwheel {:websocket-host "frp.im"
                                         :on-jsload "wanderlist.core/fig-reload"}
                              :compiler {:main wanderlist.core
                                         :verbose true
