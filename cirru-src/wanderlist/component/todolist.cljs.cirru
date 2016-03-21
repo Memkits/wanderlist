@@ -37,6 +37,17 @@ defn handle-task-add (props state)
       :group-id $ :router props
     set-state $ {} :draft |
 
+defn handle-keydown (props state)
+  fn (simple-event intent set-state)
+    if
+      = (:key-code simple-event)
+        , 13
+      do
+        intent :add-task $ {}
+          :text $ :draft state
+          :group-id $ :router props
+        set-state $ {} :draft |
+
 def todolist-component $ {} (:name :todolist)
   :initial-state $ {} :draft |
   :render $ fn (props state)
@@ -49,6 +60,7 @@ def todolist-component $ {} (:name :todolist)
           :style style-input
           :on-input $ handle-input props state
           :placeholder "|Add a task..."
+          :on-keydown $ handle-keydown props state
         [] :div $ {} (:inner-text |Add)
           :style style-button
           :on-click $ handle-task-add props state

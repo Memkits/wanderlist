@@ -60,6 +60,15 @@ defn on-group-add (props state)
     .log js/console "|set state"
     intent :add-group $ :query state
 
+defn handle-keydown (props state)
+  fn (simple-event intent set-state)
+    if
+      = (:key-code simple-event)
+        , 13
+      do
+        intent :add-group $ :query state
+        set-state $ {} :query |
+
 defn on-group-route (props state entry)
   fn (simple-event intent set-state)
     intent :set-router (key entry)
@@ -81,6 +90,7 @@ def sidebar-component $ {} (:name :sidebar)
           :value $ :query state
           :style style-query
           :placeholder |Seach...
+          :on-keydown $ handle-keydown props state
         [] :div $ {} (:style style-add)
           :inner-text |Add
           :on-click $ on-group-add props state

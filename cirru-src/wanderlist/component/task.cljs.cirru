@@ -18,6 +18,11 @@ def style-input $ {} (:outline |none)
   :font-size |16px
   :flex |1
 
+def style-remove $ {} (:width |32px)
+  :height |32px
+  :background-color $ hsl 0 80 40
+  :cursor |pointer
+
 defn handle-change (props state)
   fn (simple-event intent set-state)
     intent :update-task $ {}
@@ -27,6 +32,10 @@ defn handle-change (props state)
 defn handle-toggle (task)
   fn (simple-event intent set-state)
     intent :toggle-task $ :id task
+
+defn handle-remove (task)
+  fn (simple-event intent set-state)
+    intent :rm-task $ :id task
 
 def task-component $ {} (:name :task)
   :initial-state $ {}
@@ -43,3 +52,5 @@ def task-component $ {} (:name :task)
           :value $ :text $ :task props
           :on-input $ handle-change props state
           :style style-input
+        [] :div $ {} (:style style-remove)
+          :on-click $ handle-remove task
