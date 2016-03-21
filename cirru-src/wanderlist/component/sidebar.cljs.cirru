@@ -7,6 +7,7 @@ def style-sidebar $ {}
   :background-color $ hsl 40 30 96
   :display |flex
   :flex-direction |column
+  :height |100%
 
 def style-header $ {}
   :background-color $ hsl 0 0 50
@@ -31,9 +32,11 @@ def style-body $ {} (:flex |1)
   :background-color $ hsl 0 0 94
   :position |relative
 
-defn style-group (index)
+defn style-group (index selected?)
   {} (:padding "|0px 8px")
-    :color $ hsl 0 0 40
+    :color $ if selected?
+      hsl 0 0 100
+      hsl 0 0 40
     :line-height |32px
     :cursor |pointer
     :position |absolute
@@ -41,6 +44,10 @@ defn style-group (index)
       , |px
     :width |100%
     :transition-duration |300ms
+    :cursor |pointer
+    :background-color $ if selected?
+      hsl 200 80 70
+      , |transparent
 
 defn on-query-change (props state)
   fn (simple-event intent set-state)
@@ -57,6 +64,10 @@ defn on-group-route (props state entry)
   fn (simple-event intent set-state)
     intent :set-router (key entry)
       , ""
+
+defn on-empty-route (props state)
+  fn (simple-event intent set-state)
+    intent :set-router nil
 
 def sidebar-component $ {} (:name :sidebar)
   :initial-state $ {} $ :query |
@@ -75,7 +86,8 @@ def sidebar-component $ {} (:name :sidebar)
           :on-click $ on-group-add props state
 
       [] :div
-        {} $ :style style-body
+        {} (:style style-body)
+          :on-click $ on-empty-route props state
         ->> (:groups props)
           sort $ fn (group-a group-b)
             compare
@@ -86,7 +98,8 @@ def sidebar-component $ {} (:name :sidebar)
             [] (key entry)
               [] :div $ {}
                 :inner-text $ :text $ val entry
-                :style $ style-group index
+                :style $ style-group index $ = (:router props)
+                  :id $ val entry
                 :on-click $ on-group-route props state entry
 
           into $ sorted-map

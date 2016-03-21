@@ -16,7 +16,10 @@ defn updater
       :text op-data
 
     :add-task $ update old-store :tasks $ fn (tasks)
-      assoc tasks op-id $ assoc schema/task :id op-id :text :text op-data :group-id $ :group-id op-data
+      assoc tasks op-id $ assoc schema/task :id op-id :text (:text op-data)
+        , :group-id
+        :group-id op-data
+
     :rm-task $ update old-store :tasks $ fn (tasks)
       dissoc tasks op-data
     :update-task $ assoc-in old-store
