@@ -40,7 +40,8 @@ defn style-group (index selected?)
     :line-height |32px
     :cursor |pointer
     :position |absolute
-    :top $ str (* 32 index)
+    :top $ str
+      + 8 $ * 32 index
       , |px
     :width |100%
     :transition-duration |300ms

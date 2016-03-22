@@ -3,7 +3,14 @@ ns wanderlist.component.task $ :require
   [] clojure.string :as string
   [] hsl.core :refer $ [] hsl
 
-def style-task $ {} $ :display |flex
+defn style-task (index)
+  {} (:display |flex)
+    :position |absolute
+    :top $ str
+      + 8 $ * index 40
+      , |px
+    :width |100%
+    :transition-duration |300ms
 
 defn style-done (done?)
   {} (:width |32px)
@@ -44,7 +51,7 @@ def task-component $ {} (:name :task)
       (task $ :task props)
         done? $ :done task
       [] :div
-        {} $ :style style-task
+        {} $ :style $ style-task $ :index props
         [] :div $ {}
           :style $ style-done done?
           :on-click $ handle-toggle task

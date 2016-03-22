@@ -2,6 +2,7 @@
 ns wanderlist.component.todolist $ :require
   [] hsl.core :refer $ [] hsl
   [] wanderlist.component.task :refer $ [] task-component
+  [] wanderlist.component.group :refer $ [] group-component
 
 def style-todolist $ {}
   :background-color $ hsl 40 40 96
@@ -17,14 +18,21 @@ def style-input $ {} (:outline |none)
   :font-size |16px
   :flex |1
 
-def style-body $ {} (:display |flex)
-  :flex-direction |column
+defn style-body (size)
+  {} (:display |flex)
+    :flex-direction |column
+    :position |relative
+    :height $ str (* 40 size)
+      , |px
 
 def style-button $ {} (:padding "|0 16px")
   :background-color $ hsl 200 40 60
   :line-height |32px
   :font-size |16px
   :color |white
+
+def style-space $ {} (:width |100%)
+  :height |8px
 
 defn handle-input (props state)
   fn (simple-event intent set-state)
@@ -53,6 +61,8 @@ def todolist-component $ {} (:name :todolist)
   :render $ fn (props state)
     [] :div
       {} $ :style style-todolist
+      [] group-component $ {} $ :group $ :group props
+      [] :div $ {} $ :style style-space
       [] :header
         {} $ :style style-header
         [] :input $ {}
@@ -66,7 +76,12 @@ def todolist-component $ {} (:name :todolist)
           :on-click $ handle-task-add props state
 
       [] :div
-        {} $ :style style-body
+        {} $ :style $ style-body $ count $ ->> (:tasks props)
+          filter $ fn (entry)
+            =
+              :group-id $ val entry
+              :router props
+
         ->> (:tasks props)
           filter $ fn (entry)
             =

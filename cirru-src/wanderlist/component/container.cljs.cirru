@@ -51,6 +51,9 @@ def container-component $ {} (:name :container)
             [] todolist-component $ {}
               :router $ :router store
               :tasks $ :tasks store
+              :group $ get (:groups store)
+                :router store
+
             [] :div
               {} $ :style style-placeholder
               [] :span $ {} $ :inner-text "|Select a group?"

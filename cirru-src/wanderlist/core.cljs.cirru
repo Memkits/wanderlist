@@ -9,16 +9,19 @@ ns wanderlist.core $ :require
   [] devtools.core :as devtools
   [] wanderlist.component.container :refer $ [] container-component
   [] wanderlist.updater.core :refer $ [] updater
+  [] cljs.reader :as reader
 
 defonce global-states $ atom $ {}
 
 defonce global-element $ atom nil
 
-defonce global-store $ atom $ {} (:groups $ {})
-  :tasks $ {}
-  :router nil
-
-defonce id-counter $ atom 0
+defonce global-store $ atom $ let
+  (stored-data $ .getItem js/localStorage |wanderlist)
+  if (some? stored-data)
+    reader/read-string stored-data
+    {} (:groups $ {})
+      :tasks $ {}
+      :router nil
 
 defn render-element ()
   .info js/console |rendering: @global-store @global-states
@@ -28,9 +31,8 @@ defn render-element ()
 
 defn intent (op-type op-data)
   .info js/console |Intent: op-type op-data
-  reset! id-counter $ inc @id-counter
   let
-    (new-store $ updater @global-store op-type op-data @id-counter)
+    (new-store $ updater @global-store op-type op-data $ .valueOf $ js/Date.)
     reset! global-store new-store
     .info js/console "|new store:" new-store
 
@@ -69,8 +71,15 @@ defn -main ()
   .info js/console "|app started"
   mount-app
 
+defn save-local-storage ()
+  .setItem js/localStorage |wanderlist $ pr-str @global-store
+  .log js/console $ pr-str @global-store
+
 set! (.-onload js/window)
   , -main
+
+set! (.-onbeforeunload js/window)
+  , save-local-storage
 
 defn fig-reload ()
   .info js/console |Reload!
