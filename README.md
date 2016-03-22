@@ -1,6 +1,6 @@
 # wanderlist
 
-FIXME: description
+Demo http://repo.tiye.me/Memkits/wanderlist/public/
 
 ## Installation
 

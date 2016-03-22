@@ -8,8 +8,18 @@ defn updater
   case op-type
     :add-group $ update old-store :groups $ fn (task-groups)
       assoc task-groups op-id $ assoc schema/group :id op-id :text op-data
-    :rm-group $ update old-store :groups $ fn (task-groups)
-      dissoc task-groups op-data
+    :rm-group $ -> old-store
+      update :groups $ fn (task-groups)
+        dissoc task-groups op-data
+      update :tasks $ fn (tasks)
+        ->> tasks
+          filter $ fn (entry)
+            not=
+              :group-id $ val entry
+              , op-data
+
+          into $ {}
+
     :update-group $ assoc-in old-store
       [] :groups (:id op-data)
         , :text

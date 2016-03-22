@@ -3,6 +3,7 @@ ns wanderlist.component.group $ :require $ hsl.core :refer $ [] hsl
 
 def style-group $ {} (:width |100%)
   :display |flex
+  :justify-content |flex-end
 
 def style-input $ {} (:border |none)
   :outline |none
