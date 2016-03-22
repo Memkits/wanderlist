@@ -2,35 +2,25 @@
 
 Demo http://repo.tiye.me/Memkits/wanderlist/public/
 
-## Installation
+### Develop
 
-Download from http://example.com/FIXME.
+```bash
+lein cirru-sepal
+lein html-entry
+lein cirru-sepal watch
+rlwrap lein figwheel web-dev
+# open resources/public/index.html
+```
 
-## Usage
+build:
 
-FIXME: explanation
-
-    $ java -jar wanderlist-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
+```bash
+lein cljsbuild web-prod
+```
 
 ## License
 
-Copyright © 2016 FIXME
+Copyright © 2016 jiyinyiyong
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.

@@ -1,6 +1,6 @@
 (defproject wanderlist "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
-  :url "http://example.com/FIXME"
+  :url "https://github.com/Memkits/wanderlist"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.8.0"]
@@ -22,7 +22,7 @@
   :main ^:skip-aot wanderlist.core
   :target-path "target/%s"
   :cljsbuild {:builds {:web-dev {:source-paths ["src"]
-                             :figwheel {:websocket-host "frp.im"
+                             :figwheel {:websocket-host "repo"
                                         :on-jsload "wanderlist.core/fig-reload"}
                              :compiler {:main wanderlist.core
                                         :verbose true
