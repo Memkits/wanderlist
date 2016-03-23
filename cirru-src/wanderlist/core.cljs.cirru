@@ -10,18 +10,27 @@ ns wanderlist.core $ :require
   [] wanderlist.component.container :refer $ [] container-component
   [] wanderlist.updater.core :refer $ [] updater
   [] cljs.reader :as reader
+  [] wanderlist.util.migration :refer $ [] migrate-from-v0
+  [] wanderlist.schema :as schema
 
 defonce global-states $ atom $ {}
 
 defonce global-element $ atom nil
 
 defonce global-store $ atom $ let
-  (stored-data $ .getItem js/localStorage |wanderlist)
+    stored-data $ .getItem js/localStorage |wanderlist
   if (some? stored-data)
-    reader/read-string stored-data
-    {} (:groups $ {})
-      :tasks $ {}
-      :router nil
+    let
+        old-store $ reader/read-string stored-data
+        version $ or (:version old-store)
+          , 0
+
+      case version
+        0 $ migrate-from-v0 old-store
+        1 old-store
+        , schema/store
+
+    schema/store
 
 defn render-element ()
   .info js/console |rendering: @global-store @global-states
@@ -32,7 +41,7 @@ defn render-element ()
 defn intent (op-type op-data)
   .info js/console |Intent: op-type op-data
   let
-    (new-store $ updater @global-store op-type op-data $ .valueOf $ js/Date.)
+      new-store $ updater @global-store op-type op-data $ .valueOf $ js/Date.
     reset! global-store new-store
     .info js/console "|new store:" new-store
 
@@ -42,7 +51,7 @@ defn get-root ()
 declare rerender-app
 
 defn get-deliver-event ()
-  build-deliver-event global-element intent global-states rerender-app
+  build-deliver-event global-element intent global-states
 
 defn mount-app ()
   let
@@ -70,6 +79,8 @@ defn -main ()
   devtools/install!
   .info js/console "|app started"
   mount-app
+  add-watch global-store :rerender rerender-app
+  add-watch global-states :rerender rerender-app
 
 defn save-local-storage ()
   .setItem js/localStorage |wanderlist $ pr-str @global-store

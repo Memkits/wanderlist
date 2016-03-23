@@ -19,7 +19,7 @@ def style-remove $ {} (:width |32px)
 defn handle-click (props state)
   fn (simple-event intent set-state)
     intent :rm-group $ :id $ :group props
-    intent :set-router nil
+    intent :set-router $ {} $ :name :table
 
 defn handle-input (props state)
   fn (simple-event intent set-state)
@@ -31,7 +31,7 @@ def group-component $ {} (:name :group)
   :intial-state $ {}
   :render $ fn (props state)
     let
-      (group $ :group props)
+        group $ :group props
       [] :div
         {} $ :style style-group
         [] :input $ {}

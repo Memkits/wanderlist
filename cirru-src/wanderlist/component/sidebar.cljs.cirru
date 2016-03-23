@@ -72,12 +72,12 @@ defn handle-keydown (props state)
 
 defn on-group-route (props state entry)
   fn (simple-event intent set-state)
-    intent :set-router (key entry)
-      , ""
+    intent :set-router $ {} (:name :table)
+      :group-id $ key entry
 
 defn on-empty-route (props state)
   fn (simple-event intent set-state)
-    intent :set-router nil
+    intent :set-router $ {} $ :name :table
 
 def sidebar-component $ {} (:name :sidebar)
   :initial-state $ {} $ :query |
@@ -109,7 +109,8 @@ def sidebar-component $ {} (:name :sidebar)
             [] (key entry)
               [] :div $ {}
                 :inner-text $ :text $ val entry
-                :style $ style-group index $ = (:router props)
+                :style $ style-group index $ =
+                  :group-id $ :router props
                   :id $ val entry
                 :on-click $ on-group-route props state entry
 

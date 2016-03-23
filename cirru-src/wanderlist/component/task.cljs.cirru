@@ -16,8 +16,9 @@ defn style-done (done?)
   {} (:width |32px)
     :height |32px
     :background-color $ if done?
-      hsl 200 20 90
-      hsl 30 80 80
+      hsl 200 10 90
+      hsl 20 80 70
+    :cursor |pointer
 
 def style-input $ {} (:outline |none)
   :border |none
@@ -30,25 +31,26 @@ def style-remove $ {} (:width |32px)
   :background-color $ hsl 0 80 40
   :cursor |pointer
 
-defn handle-change (props state)
+defn handle-change (task state)
   fn (simple-event intent set-state)
     intent :update-task $ {}
-      :id $ :id $ :task props
+      :group-id $ :group-id task
+      :id $ :id task
       :text $ :value simple-event
 
 defn handle-toggle (task)
   fn (simple-event intent set-state)
-    intent :toggle-task $ :id task
+    intent :toggle-task task
 
 defn handle-remove (task)
   fn (simple-event intent set-state)
-    intent :rm-task $ :id task
+    intent :rm-task task
 
 def task-component $ {} (:name :task)
   :initial-state $ {}
   :render $ fn (props state)
     let
-      (task $ :task props)
+        task $ :task props
         done? $ :done task
       [] :div
         {} $ :style $ style-task $ :index props
@@ -57,7 +59,7 @@ def task-component $ {} (:name :task)
           :on-click $ handle-toggle task
         [] :input $ {}
           :value $ :text $ :task props
-          :on-input $ handle-change props state
+          :on-input $ handle-change task state
           :style style-input
         [] :div $ {} (:style style-remove)
           :on-click $ handle-remove task

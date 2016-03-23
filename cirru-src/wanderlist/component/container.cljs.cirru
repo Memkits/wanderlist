@@ -35,7 +35,8 @@ def container-component $ {} (:name :container)
   :initial-state $ {}
   :render $ fn (props state)
     let
-      (store $ :store props)
+        store $ :store props
+        group-id $ :group-id $ :router store
       [] :div
         {} $ :style style-app
         [] :div
@@ -46,13 +47,12 @@ def container-component $ {} (:name :container)
 
         [] :div
           {} $ :style style-right-column
-          if
-            some? $ :router $ :store props
+          if (some? group-id)
             [] todolist-component $ {}
               :router $ :router store
               :tasks $ :tasks store
               :group $ get (:groups store)
-                :router store
+                , group-id
 
             [] :div
               {} $ :style style-placeholder
