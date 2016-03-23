@@ -31,12 +31,11 @@ def style-add $ {} (:line-height |32px)
 def style-body $ {} (:flex |1)
   :background-color $ hsl 0 0 94
   :position |relative
+  :overflow |auto
 
 defn style-group (index selected?)
   {} (:padding "|0px 8px")
-    :color $ if selected?
-      hsl 0 0 100
-      hsl 0 0 40
+    :color $ hsl 0 0 40
     :line-height |32px
     :cursor |pointer
     :position |absolute
@@ -47,8 +46,20 @@ defn style-group (index selected?)
     :transition-duration |300ms
     :cursor |pointer
     :background-color $ if selected?
-      hsl 200 80 70
+      hsl 160 50 84
       , |transparent
+
+def style-space $ {} (:width |8px)
+  :display |inline-block
+  :height |100%
+
+defn style-box (n)
+  {} (:width |100%)
+    :height $ str (* n 34)
+      , |px
+
+def style-small-hint $ {} (:font-size |12px)
+  :color $ hsl 0 0 70
 
 defn on-query-change (props state)
   fn (simple-event intent set-state)
@@ -60,15 +71,6 @@ defn on-group-add (props state)
     set-state $ {} $ :query |
     .log js/console "|set state"
     intent :add-group $ :query state
-
-defn handle-keydown (props state)
-  fn (simple-event intent set-state)
-    if
-      = (:key-code simple-event)
-        , 13
-      do
-        intent :add-group $ :query state
-        set-state $ {} :query |
 
 defn on-group-route (props state entry)
   fn (simple-event intent set-state)
@@ -91,7 +93,6 @@ def sidebar-component $ {} (:name :sidebar)
           :value $ :query state
           :style style-query
           :placeholder |Seach...
-          :on-keydown $ handle-keydown props state
         [] :div $ {} (:style style-add)
           :inner-text |Add
           :on-click $ on-group-add props state
@@ -99,19 +100,36 @@ def sidebar-component $ {} (:name :sidebar)
       [] :div
         {} (:style style-body)
           :on-click $ on-empty-route props state
-        ->> (:groups props)
-          sort $ fn (group-a group-b)
-            compare
-              :id $ val group-b
-              :id $ val group-a
+        [] :div
+          {} $ :style $ style-box $ count $ :groups props
+          ->> (:groups props)
+            filter $ fn (entry)
+              let
+                  group $ val entry
+                string/includes? (:text group)
+                  :query state
 
-          map-indexed $ fn (index entry)
-            [] (key entry)
-              [] :div $ {}
-                :inner-text $ :text $ val entry
-                :style $ style-group index $ =
-                  :group-id $ :router props
-                  :id $ val entry
-                :on-click $ on-group-route props state entry
+            sort $ fn (group-a group-b)
+              compare
+                :id $ val group-b
+                :id $ val group-a
 
-          into $ sorted-map
+            map-indexed $ fn (index entry)
+              [] (key entry)
+                let
+                    group $ val entry
+                    tasks $ :tasks group
+                  [] :div
+                    {}
+                      :style $ style-group index $ =
+                        :group-id $ :router props
+                        :id group
+                      :on-click $ on-group-route props state entry
+
+                    [] :span $ {} $ :inner-text $ :text group
+                    [] :div $ {} $ :style style-space
+                    [] :span $ {}
+                      :inner-text $ str $ count tasks
+                      :style style-small-hint
+
+            into $ sorted-map
