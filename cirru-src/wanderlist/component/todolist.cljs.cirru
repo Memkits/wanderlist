@@ -41,6 +41,8 @@ def style-button $ {} (:padding "|0 16px")
   :line-height |32px
   :font-size |16px
   :color |white
+  :display |inline-block
+  :cursor |pointer
 
 def style-space $ {} (:width |100%)
   :height |8px
@@ -71,8 +73,13 @@ defn handle-keydown (props state)
           :group-id $ :group-id $ :router props
         set-state $ {} :draft |
 
+defn handle-toggle (props state)
+  fn (simple-event intent set-state)
+    set-state $ {} $ :fold-done? $ not $ :fold-done? state
+
 def todolist-component $ {} (:name :todolist)
-  :initial-state $ {} :draft |
+  :initial-state $ {} (:draft |)
+    :fold-done? true
   :render $ fn (props state)
     let
         group $ :group props
@@ -125,21 +132,27 @@ def todolist-component $ {} (:name :todolist)
 
           [] :div
             {} $ :style style-section
-            [] :span $ {} (:style style-hint)
-              :inner-text |Done:
+            if
+              > (count done-tasks)
+                , 0
+              [] :span $ {} (:style style-button)
+                :inner-text |Toggle
+                :on-click $ handle-toggle props state
 
-          [] :section
-            {} $ :style $ style-list $ count done-tasks
-            ->> done-tasks
-              sort $ fn (entry-a entry-b)
-                compare
-                  :id $ val entry-b
-                  :id $ val entry-a
+          if
+            not $ :fold-done? state
+            [] :section
+              {} $ :style $ style-list $ count done-tasks
+              ->> done-tasks
+                sort $ fn (entry-a entry-b)
+                  compare
+                    :id $ val entry-b
+                    :id $ val entry-a
 
-              map-indexed $ fn (index entry)
-                [] (key entry)
-                  [] task-component $ {}
-                    :task $ val entry
-                    :index index
+                map-indexed $ fn (index entry)
+                  [] (key entry)
+                    [] task-component $ {}
+                      :task $ val entry
+                      :index index
 
-              into $ sorted-map
+                into $ sorted-map
