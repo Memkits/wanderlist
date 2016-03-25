@@ -84,53 +84,57 @@ defn on-empty-route (props state)
 def sidebar-component $ {} (:name :sidebar)
   :initial-state $ {} $ :query |
   :render $ fn (props state)
-    [] :div
-      {} $ :style style-sidebar
-      [] :div
-        {} $ :style style-header
-        [] :input $ {}
-          :on-input $ on-query-change props state
-          :value $ :query state
-          :style style-query
-          :placeholder |Seach...
-        [] :div $ {} (:style style-add)
-          :inner-text |Add
-          :on-click $ on-group-add props state
+    let
+        match-query $ fn (entry)
+          let
+              group $ val entry
+            string/includes? (:text group)
+              :query state
+        by-newest-group $ fn (group-a group-b)
+          compare
+            :id $ val group-b
+            :id $ val group-a
 
       [] :div
-        {} (:style style-body)
-          :on-click $ on-empty-route props state
+        {} $ :style style-sidebar
         [] :div
-          {} $ :style $ style-box $ count $ :groups props
-          ->> (:groups props)
-            filter $ fn (entry)
-              let
-                  group $ val entry
-                string/includes? (:text group)
-                  :query state
+          {} $ :style style-header
+          [] :input $ {}
+            :on-input $ on-query-change props state
+            :value $ :query state
+            :style style-query
+            :placeholder |Seach...
+          [] :div $ {} (:style style-add)
+            :inner-text |Add
+            :on-click $ on-group-add props state
 
-            sort $ fn (group-a group-b)
-              compare
-                :id $ val group-b
-                :id $ val group-a
-
-            map-indexed $ fn (index entry)
-              [] (key entry)
-                let
-                    group $ val entry
-                    tasks $ :tasks group
-                  [] :nav
-                    {}
-                      :style $ style-group index $ =
+        [] :div
+          {} (:style style-body)
+            :on-click $ on-empty-route props state
+          [] :div
+            {} $ :style $ style-box $ count $ :groups props
+            ->> (:groups props)
+              filter match-query
+              sort by-newest-group
+              map-indexed $ fn (index entry)
+                [] (key entry)
+                  let
+                      group $ val entry
+                      tasks $ :tasks group
+                      selected? $ =
                         :group-id $ :router props
                         :id group
-                      :on-click $ on-group-route props state entry
-
-                    [] :span $ {} $ :inner-text $ :text group
-                    [] :div $ {} $ :style style-space
-                    [] :span $ {}
-                      :inner-text $ str $ count $ ->> tasks $ filter $ fn (entry)
+                      todo-size $ count $ ->> tasks $ filter $ fn (entry)
                         not $ :done $ val entry
-                      :style style-small-hint
 
-            into $ sorted-map
+                    [] :nav
+                      {}
+                        :style $ style-group index selected?
+                        :on-click $ on-group-route props state entry
+                      [] :span $ {} $ :inner-text $ :text group
+                      [] :div $ {} $ :style style-space
+                      [] :span $ {}
+                        :inner-text $ str todo-size
+                        :style style-small-hint
+
+              into $ sorted-map
