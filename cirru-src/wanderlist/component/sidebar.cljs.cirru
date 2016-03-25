@@ -119,7 +119,7 @@ def sidebar-component $ {} (:name :sidebar)
                 let
                     group $ val entry
                     tasks $ :tasks group
-                  [] :div
+                  [] :nav
                     {}
                       :style $ style-group index $ =
                         :group-id $ :router props
@@ -129,7 +129,8 @@ def sidebar-component $ {} (:name :sidebar)
                     [] :span $ {} $ :inner-text $ :text group
                     [] :div $ {} $ :style style-space
                     [] :span $ {}
-                      :inner-text $ str $ count tasks
+                      :inner-text $ str $ count $ ->> tasks $ filter $ fn (entry)
+                        not $ :done $ val entry
                       :style style-small-hint
 
             into $ sorted-map

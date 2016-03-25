@@ -37,7 +37,7 @@ def container-component $ {} (:name :container)
     let
         store $ :store props
         group-id $ :group-id $ :router store
-      [] :div
+      [] :nav
         {} $ :style style-app
         [] :div
           {} $ :style style-left-column

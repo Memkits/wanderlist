@@ -34,16 +34,19 @@
     [:style
      nil
      "body * {box-sizing: border-box; scroll-behavior: smooth; }"]]
+    [:script (if (= :build (:env data))
+        "window._appConfig = {env: 'build'}"
+        "window._appConfig = {env: 'dev'}")]
    [:body [:div#app] [:script {:src "main.js"}]]])
 
 (deftask gen-static []
   (comp
     (cljs)
-    (html-entry :dsl (html-dsl {}) :html-name "index.html")))
+    (html-entry :dsl (html-dsl {:env :dev}) :html-name "index.html")))
 
 (deftask dev []
   (comp
-    (html-entry :dsl (html-dsl {}) :html-name "index.html")
+    (html-entry :dsl (html-dsl {:env :dev}) :html-name "index.html")
     (cirru-sepal :paths ["cirru-src"] :watch true)
     (watch)
     (reload :on-jsload 'wanderlist.core/on-jsload)
@@ -52,10 +55,15 @@
 (deftask build-app []
     (comp
         (cljs :optimizations :advanced)
-        (html-entry :dsl (html-dsl {}) :html-name "index.html")))
+        (html-entry :dsl (html-dsl {:env :build}) :html-name "index.html")))
 
-(deftask send-tiye []
+(deftask rsync []
   (fn [next-task]
     (fn [fileset]
         (sh "rsync" "-r" "target/" "tiye:repo/Memkits/wanderlist" "--exclude" "main.out" "--delete")
         (next-task fileset))))
+
+(deftask send-tiye []
+    (comp
+        (build-app)
+        (rsync)))

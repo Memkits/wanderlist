@@ -52,7 +52,7 @@ def task-component $ {} (:name :task)
     let
         task $ :task props
         done? $ :done task
-      [] :div
+      [] :section
         {} $ :style $ style-task $ :index props
         [] :div $ {}
           :style $ style-done done?

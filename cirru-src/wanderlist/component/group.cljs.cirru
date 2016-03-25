@@ -32,7 +32,7 @@ def group-component $ {} (:name :group)
   :render $ fn (props state)
     let
         group $ :group props
-      [] :div
+      [] :section
         {} $ :style style-group
         [] :input $ {}
           :value $ :text group

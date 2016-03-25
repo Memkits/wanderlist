@@ -8,8 +8,14 @@ def style-todolist $ {}
   :background-color $ hsl 40 40 96
   :width |100%
   :height |100%
+  :display |flex
+  :flex-direction |column
 
-def style-header $ {} $ :display |flex
+def style-header $ {} (:display |flex)
+  :flex-direction |column
+  :height |auto
+
+def style-adder $ {} $ :display |flex
 
 def style-input $ {} (:outline |none)
   :border |none
@@ -18,13 +24,17 @@ def style-input $ {} (:outline |none)
   :font-size |16px
   :flex |1
 
-defn style-body (size)
+defn style-list (size)
   {} (:display |flex)
     :flex-direction |column
     :position |relative
     :height $ str (* 40 size)
       , |px
     :transition-duration |300ms
+
+def style-body $ {} (:flex |1)
+  :overflow |auto
+  :padding-bottom |200px
 
 def style-button $ {} (:padding "|0 16px")
   :background-color $ hsl 200 40 60
@@ -77,55 +87,59 @@ def todolist-component $ {} (:name :todolist)
             :done $ val entry
           into $ {}
 
-      [] :div
+      [] :nav
         {} $ :style style-todolist
-        [] group-component $ {} $ :group $ :group props
-        [] :div $ {} $ :style style-space
         [] :header
           {} $ :style style-header
-          [] :input $ {}
-            :value $ :draft state
-            :style style-input
-            :on-input $ handle-input props state
-            :placeholder "|Add a task..."
-            :on-keydown $ handle-keydown props state
-          [] :div $ {} (:inner-text |Add)
-            :style style-button
-            :on-click $ handle-task-add props state
+          [] group-component $ {} $ :group $ :group props
+          [] :div $ {} $ :style style-space
+          [] :div
+            {} $ :style style-adder
+            [] :input $ {}
+              :value $ :draft state
+              :style style-input
+              :on-input $ handle-input props state
+              :placeholder "|Add a task..."
+              :on-keydown $ handle-keydown props state
+            [] :div $ {} (:inner-text |Add)
+              :style style-button
+              :on-click $ handle-task-add props state
 
-        [] :div
-          {} $ :style $ style-body $ count todo-tasks
-          ->> todo-tasks
-            sort $ fn (entry-a entry-b)
-              compare
-                :id $ val entry-b
-                :id $ val entry-a
+        [] :section
+          {} $ :style style-body
+          [] :section
+            {} $ :style $ style-list $ count todo-tasks
+            ->> todo-tasks
+              sort $ fn (entry-a entry-b)
+                compare
+                  :id $ val entry-b
+                  :id $ val entry-a
 
-            map-indexed $ fn (index entry)
-              [] (key entry)
-                [] task-component $ {}
-                  :task $ val entry
-                  :index index
+              map-indexed $ fn (index entry)
+                [] (key entry)
+                  [] task-component $ {}
+                    :task $ val entry
+                    :index index
 
-            into $ sorted-map
+              into $ sorted-map
 
-        [] :div
-          {} $ :style style-section
-          [] :span $ {} (:style style-hint)
-            :inner-text |Done:
+          [] :div
+            {} $ :style style-section
+            [] :span $ {} (:style style-hint)
+              :inner-text |Done:
 
-        [] :div
-          {} $ :style $ style-body $ count done-tasks
-          ->> done-tasks
-            sort $ fn (entry-a entry-b)
-              compare
-                :id $ val entry-b
-                :id $ val entry-a
+          [] :section
+            {} $ :style $ style-list $ count done-tasks
+            ->> done-tasks
+              sort $ fn (entry-a entry-b)
+                compare
+                  :id $ val entry-b
+                  :id $ val entry-a
 
-            map-indexed $ fn (index entry)
-              [] (key entry)
-                [] task-component $ {}
-                  :task $ val entry
-                  :index index
+              map-indexed $ fn (index entry)
+                [] (key entry)
+                  [] task-component $ {}
+                    :task $ val entry
+                    :index index
 
-            into $ sorted-map
+              into $ sorted-map
