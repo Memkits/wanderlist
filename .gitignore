@@ -11,7 +11,4 @@ pom.xml.asc
 .hg/
 
 /src
-/template
-/resources/public/cljs/
-/resources/public/index.html
-/figwheel_server.log
+/.nrepl-history

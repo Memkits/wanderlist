@@ -5,17 +5,13 @@ Demo http://repo.tiye.me/Memkits/wanderlist/public/
 ### Develop
 
 ```bash
-lein cirru-sepal
-lein html-entry
-lein cirru-sepal watch
-rlwrap lein figwheel web-dev
-# open resources/public/index.html
+boot gen-static
+# open target/index.html
 ```
 
-build:
-
 ```bash
-lein cljsbuild web-prod
+boot dev
+# open target/index.html
 ```
 
 ## License
