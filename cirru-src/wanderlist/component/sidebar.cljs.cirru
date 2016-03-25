@@ -28,6 +28,12 @@ def style-add $ {} (:line-height |32px)
   :font-family |Verdana
   :cursor |pointer
 
+def style-button $ {} (:line-height |32px)
+  :color $ hsl 200 40 100
+  :background-color $ hsl 120 80 60
+  :cursor |pointer
+  :padding "|0 16px"
+
 def style-body $ {} (:flex |1)
   :background-color $ hsl 0 0 94
   :position |relative
@@ -81,6 +87,10 @@ defn on-empty-route (props state)
   fn (simple-event intent set-state)
     intent :set-router $ {} $ :name :table
 
+defn on-route-code (props state)
+  fn (simpe-event intent set-state)
+    intent :set-router $ {} $ :name :code
+
 def sidebar-component $ {} (:name :sidebar)
   :initial-state $ {} $ :query |
   :render $ fn (props state)
@@ -107,6 +117,9 @@ def sidebar-component $ {} (:name :sidebar)
           [] :div $ {} (:style style-add)
             :inner-text |Add
             :on-click $ on-group-add props state
+          [] :div $ {} (:style style-button)
+            :inner-text |Code
+            :on-click $ on-route-code props state
 
         [] :div
           {} (:style style-body)

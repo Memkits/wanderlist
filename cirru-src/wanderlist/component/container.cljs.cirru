@@ -4,6 +4,7 @@ ns wanderlist.component.container $ :require
   [] hsl.core :refer $ [] hsl
   [] wanderlist.component.sidebar :refer $ [] sidebar-component
   [] wanderlist.component.todolist :refer $ [] todolist-component
+  [] wanderlist.component.codebox :refer $ [] codebox-component
 
 def style-app $ {}
   :background-color $ hsl 20 20 95
@@ -36,7 +37,8 @@ def container-component $ {} (:name :container)
   :render $ fn (props state)
     let
         store $ :store props
-        group-id $ :group-id $ :router store
+        router $ :router store
+        group-id $ :group-id router
       [] :nav
         {} $ :style style-app
         [] :div
@@ -47,13 +49,18 @@ def container-component $ {} (:name :container)
 
         [] :div
           {} $ :style style-right-column
-          if (some? group-id)
-            [] todolist-component $ {}
-              :router $ :router store
-              :tasks $ :tasks store
-              :group $ get (:groups store)
-                , group-id
+          case (:name router)
+            :table $ if (some? group-id)
+              [] todolist-component $ {}
+                :router $ :router store
+                :tasks $ :tasks store
+                :group $ get (:groups store)
+                  , group-id
 
-            [] :div
-              {} $ :style style-placeholder
-              [] :span $ {} $ :inner-text "|Select a group?"
+              [] :div
+                {} $ :style style-placeholder
+                [] :span $ {} $ :inner-text "|Select a group?"
+
+            :code $ [] codebox-component $ {} $ :store store
+            [] :div ({})
+              [] :span $ {} $ :inner-text "|router not matching a page"
