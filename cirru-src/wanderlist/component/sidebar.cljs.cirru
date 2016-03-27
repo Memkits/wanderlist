@@ -58,6 +58,7 @@ defn style-group (index selected?)
 def style-space $ {} (:width |8px)
   :display |inline-block
   :height |100%
+  :pointer-events |none
 
 defn style-box (n)
   {} (:width |100%)
@@ -66,6 +67,9 @@ defn style-box (n)
 
 def style-small-hint $ {} (:font-size |12px)
   :color $ hsl 0 0 70
+  :pointer-events |none
+
+def style-silent $ {} $ :pointer-events |none
 
 defn on-query-change (props state)
   fn (simple-event intent set-state)
@@ -144,7 +148,9 @@ def sidebar-component $ {} (:name :sidebar)
                       {}
                         :style $ style-group index selected?
                         :on-click $ on-group-route props state entry
-                      [] :span $ {} $ :inner-text $ :text group
+                      [] :span $ {}
+                        :inner-text $ :text group
+                        :style style-silent
                       [] :div $ {} $ :style style-space
                       [] :span $ {}
                         :inner-text $ str todo-size

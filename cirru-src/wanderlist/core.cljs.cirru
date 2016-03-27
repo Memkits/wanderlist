@@ -30,7 +30,7 @@ defonce global-store $ atom $ let
         1 old-store
         , schema/store
 
-    schema/store
+    , schema/store
 
 defn render-element ()
   .info js/console |rendering: @global-store @global-states
@@ -92,6 +92,6 @@ set! (.-onload js/window)
 set! (.-onbeforeunload js/window)
   , save-local-storage
 
-defn fig-reload ()
+defn on-jsload ()
   .info js/console |Reload!
   rerender-app
