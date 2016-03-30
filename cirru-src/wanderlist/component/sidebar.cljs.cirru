@@ -78,9 +78,13 @@ defn on-query-change (state)
 
 defn on-group-add (state)
   fn (simple-event intent inward)
-    inward $ {} (:query |)
-    .log js/console "|set state"
-    intent :add-group $ :query state
+    if
+      >
+        count $ :query state
+        , 0
+      do
+        intent :add-group $ :query state
+        inward $ {} (:query |)
 
 defn on-group-route (state entry)
   fn (simple-event intent inward)

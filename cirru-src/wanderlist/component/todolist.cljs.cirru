@@ -58,16 +58,26 @@ defn handle-input (state)
 
 defn handle-task-add (router state)
   fn (simple-event intent inward)
-    intent :add-task $ {}
-      :text $ :draft state
-      :group-id $ :group-id router
-    inward $ {} :draft |
+    if
+      >
+        count $ :draft state
+        , 0
+      do
+        intent :add-task $ {}
+          :text $ :draft state
+          :group-id $ :group-id router
+        inward $ {} (:draft |)
 
 defn handle-keydown (router state)
   fn (simple-event intent inward)
     if
-      = (:key-code simple-event)
-        , 13
+      and
+        = (:key-code simple-event)
+          , 13
+        >
+          count $ :draft state
+          , 0
+
       do
         intent :add-task $ {}
           :text $ :draft state
