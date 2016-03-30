@@ -1,7 +1,8 @@
 
 (set-env!
- :source-paths #{"src"}
- :resource-paths #{"assets"}
+ :asset-paths #{"assets"}
+ :source-paths #{}
+ :resource-paths #{"src"}
 
  :dev-dependencies '[]
  :dependencies '[[adzerk/boot-cljs "1.7.170-3"      :scope "provided"]
@@ -9,13 +10,12 @@
                  [mvc-works/boot-html-entry "0.1.1" :scope "provided"]
                  [cirru/boot-cirru-sepal "0.1.1"    :scope "provided"]
                  [org.clojure/clojure "1.8.0"]
-                 [org.clojure/clojurescript "1.7.228"]
+                 [org.clojure/clojurescript "1.8.40"]
                  [org.clojure/core.async "0.2.374"]
                  [binaryage/devtools "0.5.2"]
-                 [differ "0.2.2"]
                  [mvc-works/hsl "0.1.2"]
-                 [mvc-works/respo "0.1.7"]
-                 [mvc-works/respo-client "0.1.6"]])
+                 [mvc-works/respo "0.1.9"]
+                 [mvc-works/respo-client "0.1.8"]])
 
 (require '[adzerk.boot-cljs :refer [cljs]]
          '[adzerk.boot-reload :refer [reload]]

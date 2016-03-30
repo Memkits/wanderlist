@@ -1,5 +1,6 @@
 
-ns wanderlist.component.group $ :require $ hsl.core :refer $ [] hsl
+ns wanderlist.component.group $ :require
+  hsl.core :refer $ [] hsl
 
 def style-group $ {} (:width |100%)
   :display |flex
@@ -17,26 +18,29 @@ def style-remove $ {} (:width |32px)
   :cursor |pointer
 
 defn handle-click (props state)
-  fn (simple-event intent set-state)
-    intent :rm-group $ :id $ :group props
-    intent :set-router $ {} $ :name :table
+  fn (simple-event intent inward)
+    intent :rm-group $ :id (:group props)
+    intent :set-router $ {} (:name :table)
 
 defn handle-input (props state)
-  fn (simple-event intent set-state)
+  fn (simple-event intent inward)
     intent :update-group $ {}
-      :id $ :id $ :group props
+      :id $ :id (:group props)
       :text $ :value simple-event
 
 def group-component $ {} (:name :group)
-  :intial-state $ {}
-  :render $ fn (props state)
-    let
-        group $ :group props
-      [] :section
-        {} $ :style style-group
-        [] :input $ {}
-          :value $ :text group
-          :style style-input
-          :on-input $ handle-input props state
-        [] :div $ {} (:style style-remove)
-          :on-click $ handle-click props state
+  :update-state merge
+  :get-state $ fn (props)
+    {}
+  :render $ fn (props)
+    fn (state)
+      let
+        (group $ :group props)
+        [] :section
+          {} $ :style style-group
+          [] :input $ {}
+            :value $ :text group
+            :style style-input
+            :on-input $ handle-input props state
+          [] :div $ {} (:style style-remove)
+            :on-click $ handle-click props state

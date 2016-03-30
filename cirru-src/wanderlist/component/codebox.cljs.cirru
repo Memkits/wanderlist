@@ -1,5 +1,6 @@
 
-ns wanderlist.component.codebox $ :require $ [] clojure.string :as string
+ns wanderlist.component.codebox $ :require
+  [] clojure.string :as string
 
 def style-text $ {} (:border |none)
   :outline |none
@@ -10,11 +11,15 @@ def style-text $ {} (:border |none)
   :font-family |Menlo
   :line-height |24px
 
-def codebox-component $ {} (:initial-state $ {})
-  :render $ fn (props state)
-    let
-        store $ :store props
-      [] :div ({})
-        [] :textarea $ {}
-          :value $ pr-str store
-          :style style-text
+def codebox-component $ {} (:name :codebox)
+  :update-state merge
+  :get-state $ fn (props)
+    {}
+  :render $ fn (props)
+    fn (state)
+      let
+        (store $ :store props)
+        [] :div ({})
+          [] :textarea $ {}
+            :value $ pr-str store
+            :style style-text

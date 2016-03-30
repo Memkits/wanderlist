@@ -69,91 +69,94 @@ def style-small-hint $ {} (:font-size |12px)
   :color $ hsl 0 0 70
   :pointer-events |none
 
-def style-silent $ {} $ :pointer-events |none
+def style-silent $ {} (:pointer-events |none)
 
 defn on-query-change (props state)
-  fn (simple-event intent set-state)
+  fn (simple-event intent inward)
     .log js/console simple-event
-    set-state $ {} :query $ :value simple-event
+    inward $ {} :query (:value simple-event)
 
 defn on-group-add (props state)
-  fn (simple-event intent set-state)
-    set-state $ {} $ :query |
+  fn (simple-event intent inward)
+    inward $ {} (:query |)
     .log js/console "|set state"
     intent :add-group $ :query state
 
 defn on-group-route (props state entry)
-  fn (simple-event intent set-state)
+  fn (simple-event intent inward)
     intent :set-router $ {} (:name :table)
       :group-id $ key entry
 
 defn on-empty-route (props state)
-  fn (simple-event intent set-state)
-    intent :set-router $ {} $ :name :table
+  fn (simple-event intent inward)
+    intent :set-router $ {} (:name :table)
 
 defn on-route-code (props state)
-  fn (simpe-event intent set-state)
-    intent :set-router $ {} $ :name :code
+  fn (simpe-event intent inward)
+    intent :set-router $ {} (:name :code)
 
 def sidebar-component $ {} (:name :sidebar)
-  :initial-state $ {} $ :query |
-  :render $ fn (props state)
-    let
-        match-query $ fn (entry)
-          let
-              group $ val entry
-            string/includes? (:text group)
-              :query state
-        by-newest-group $ fn (group-a group-b)
-          compare
-            :id $ val group-b
-            :id $ val group-a
-
-      [] :div
-        {} $ :style style-sidebar
-        [] :div
-          {} $ :style style-header
-          [] :input $ {}
-            :on-input $ on-query-change props state
-            :value $ :query state
-            :style style-query
-            :placeholder |Seach...
-          [] :div $ {} (:style style-add)
-            :inner-text |Add
-            :on-click $ on-group-add props state
-          [] :div $ {} (:style style-button)
-            :inner-text |Code
-            :on-click $ on-route-code props state
+  :update-state merge
+  :get-state $ fn (props)
+    {} $ :query |
+  :render $ fn (props)
+    fn (state)
+      let
+        (match-query $ fn (entry) (let ((group $ val entry)) (string/includes? (:text group) (:query state))))
+          by-newest-group $ fn (group-a group-b)
+            compare
+              :id $ val group-b
+              :id $ val group-a
 
         [] :div
-          {} (:style style-body)
-            :on-click $ on-empty-route props state
+          {} $ :style style-sidebar
           [] :div
-            {} $ :style $ style-box $ count $ :groups props
-            ->> (:groups props)
-              filter match-query
-              sort by-newest-group
-              map-indexed $ fn (index entry)
-                [] (key entry)
-                  let
-                      group $ val entry
-                      tasks $ :tasks group
-                      selected? $ =
-                        :group-id $ :router props
-                        :id group
-                      todo-size $ count $ ->> tasks $ filter $ fn (entry)
-                        not $ :done $ val entry
+            {} $ :style style-header
+            [] :input $ {}
+              :on-input $ on-query-change props state
+              :value $ :query state
+              :style style-query
+              :placeholder |Seach...
+            [] :div $ {} (:style style-add)
+              :inner-text |Add
+              :on-click $ on-group-add props state
+            [] :div $ {} (:style style-button)
+              :inner-text |Code
+              :on-click $ on-route-code props state
 
-                    [] :nav
-                      {}
-                        :style $ style-group index selected?
-                        :on-click $ on-group-route props state entry
-                      [] :span $ {}
-                        :inner-text $ :text group
-                        :style style-silent
-                      [] :div $ {} $ :style style-space
-                      [] :span $ {}
-                        :inner-text $ str todo-size
-                        :style style-small-hint
+          [] :div
+            {} (:style style-body)
+              :on-click $ on-empty-route props state
+            [] :div
+              {} $ :style
+                style-box $ count (:groups props)
 
-              into $ sorted-map
+              ->> (:groups props)
+                filter match-query
+                sort by-newest-group
+                map-indexed $ fn (index entry)
+                  [] (key entry)
+                    let
+                      (group $ val entry)
+                        tasks $ :tasks group
+                        selected? $ =
+                          :group-id $ :router props
+                          :id group
+                        todo-size $ count
+                          ->> tasks $ filter
+                            fn (entry)
+                              not $ :done (val entry)
+
+                      [] :nav
+                        {}
+                          :style $ style-group index selected?
+                          :on-click $ on-group-route props state entry
+                        [] :span $ {}
+                          :inner-text $ :text group
+                          :style style-silent
+                        [] :div $ {} (:style style-space)
+                        [] :span $ {}
+                          :inner-text $ str todo-size
+                          :style style-small-hint
+
+                into $ sorted-map

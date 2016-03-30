@@ -15,7 +15,7 @@ def style-header $ {} (:display |flex)
   :flex-direction |column
   :height |auto
 
-def style-adder $ {} $ :display |flex
+def style-adder $ {} (:display |flex)
 
 def style-input $ {} (:outline |none)
   :border |none
@@ -47,103 +47,87 @@ def style-button $ {} (:padding "|0 16px")
 def style-space $ {} (:width |100%)
   :height |8px
 
-def style-section $ {} $ :margin-top |16px
+def style-section $ {} (:margin-top |16px)
 
-def style-hint $ {} $ :color $ hsl 0 0 60
+def style-hint $ {}
+  :color $ hsl 0 0 60
 
 defn handle-input (props state)
-  fn (simple-event intent set-state)
-    set-state $ {} :draft $ :value simple-event
+  fn (simple-event intent inward)
+    inward $ {} :draft (:value simple-event)
 
 defn handle-task-add (props state)
-  fn (simple-event intent set-state)
+  fn (simple-event intent inward)
     intent :add-task $ {}
       :text $ :draft state
-      :group-id $ :group-id $ :router props
-    set-state $ {} :draft |
+      :group-id $ :group-id (:router props)
+
+    inward $ {} :draft |
 
 defn handle-keydown (props state)
-  fn (simple-event intent set-state)
+  fn (simple-event intent inward)
     if
       = (:key-code simple-event)
         , 13
       do
         intent :add-task $ {}
           :text $ :draft state
-          :group-id $ :group-id $ :router props
-        set-state $ {} :draft |
+          :group-id $ :group-id (:router props)
+
+        inward $ {} :draft |
 
 defn handle-toggle (props state)
-  fn (simple-event intent set-state)
-    set-state $ {} $ :fold-done? $ not $ :fold-done? state
+  fn (simple-event intent inward)
+    inward $ {}
+      :fold-done? $ not (:fold-done? state)
 
 def todolist-component $ {} (:name :todolist)
-  :initial-state $ {} (:draft |)
-    :fold-done? true
-  :render $ fn (props state)
-    let
-        group $ :group props
-        tasks $ :tasks group
-        todo-tasks $ ->> tasks
-          filter $ fn (entry)
-            not $ :done $ val entry
-          into $ {}
+  :update-state merge
+  :get-state $ fn (props)
+    {} (:draft |)
+      :fold-done? true
 
-        done-tasks $ ->> tasks
-          filter $ fn (entry)
-            :done $ val entry
-          into $ {}
+  :render $ fn (props)
+    fn (state)
+      let
+        (group $ :group props)
+          tasks $ :tasks group
+          todo-tasks $ ->> tasks
+            filter $ fn (entry)
+              not $ :done (val entry)
 
-      [] :nav
-        {} $ :style style-todolist
-        [] :header
-          {} $ :style style-header
-          [] group-component $ {} $ :group $ :group props
-          [] :div $ {} $ :style style-space
-          [] :div
-            {} $ :style style-adder
-            [] :input $ {}
-              :value $ :draft state
-              :style style-input
-              :on-input $ handle-input props state
-              :placeholder "|Add a task..."
-              :on-keydown $ handle-keydown props state
-            [] :div $ {} (:inner-text |Add)
-              :style style-button
-              :on-click $ handle-task-add props state
+            into $ {}
 
-        [] :section
-          {} $ :style style-body
+          done-tasks $ ->> tasks
+            filter $ fn (entry)
+              :done $ val entry
+            into $ {}
+
+        [] :nav
+          {} $ :style style-todolist
+          [] :header
+            {} $ :style style-header
+            [] group-component $ {}
+              :group $ :group props
+            [] :div $ {} (:style style-space)
+            [] :div
+              {} $ :style style-adder
+              [] :input $ {}
+                :value $ :draft state
+                :style style-input
+                :on-input $ handle-input props state
+                :placeholder "|Add a task..."
+                :on-keydown $ handle-keydown props state
+              [] :div $ {} (:inner-text |Add)
+                :style style-button
+                :on-click $ handle-task-add props state
+
           [] :section
-            {} $ :style $ style-list $ count todo-tasks
-            ->> todo-tasks
-              sort $ fn (entry-a entry-b)
-                compare
-                  :id $ val entry-b
-                  :id $ val entry-a
-
-              map-indexed $ fn (index entry)
-                [] (key entry)
-                  [] task-component $ {}
-                    :task $ val entry
-                    :index index
-
-              into $ sorted-map
-
-          [] :div
-            {} $ :style style-section
-            if
-              > (count done-tasks)
-                , 0
-              [] :span $ {} (:style style-button)
-                :inner-text |Toggle
-                :on-click $ handle-toggle props state
-
-          if
-            not $ :fold-done? state
+            {} $ :style style-body
             [] :section
-              {} $ :style $ style-list $ count done-tasks
-              ->> done-tasks
+              {} $ :style
+                style-list $ count todo-tasks
+              ->> todo-tasks
                 sort $ fn (entry-a entry-b)
                   compare
                     :id $ val entry-b
@@ -156,3 +140,31 @@ def todolist-component $ {} (:name :todolist)
                       :index index
 
                 into $ sorted-map
+
+            [] :div
+              {} $ :style style-section
+              if
+                > (count done-tasks)
+                  , 0
+                [] :span $ {} (:style style-button)
+                  :inner-text |Toggle
+                  :on-click $ handle-toggle props state
+
+            if
+              not $ :fold-done? state
+              [] :section
+                {} $ :style
+                  style-list $ count done-tasks
+                ->> done-tasks
+                  sort $ fn (entry-a entry-b)
+                    compare
+                      :id $ val entry-b
+                      :id $ val entry-a
+
+                  map-indexed $ fn (index entry)
+                    [] (key entry)
+                      [] task-component $ {}
+                        :task $ val entry
+                        :index index
+
+                  into $ sorted-map
