@@ -71,35 +71,35 @@ def style-small-hint $ {} (:font-size |12px)
 
 def style-silent $ {} (:pointer-events |none)
 
-defn on-query-change (props state)
+defn on-query-change (state)
   fn (simple-event intent inward)
     .log js/console simple-event
     inward $ {} :query (:value simple-event)
 
-defn on-group-add (props state)
+defn on-group-add (state)
   fn (simple-event intent inward)
     inward $ {} (:query |)
     .log js/console "|set state"
     intent :add-group $ :query state
 
-defn on-group-route (props state entry)
+defn on-group-route (state entry)
   fn (simple-event intent inward)
     intent :set-router $ {} (:name :table)
       :group-id $ key entry
 
-defn on-empty-route (props state)
+defn on-empty-route (state)
   fn (simple-event intent inward)
     intent :set-router $ {} (:name :table)
 
-defn on-route-code (props state)
+defn on-route-code (state)
   fn (simpe-event intent inward)
     intent :set-router $ {} (:name :code)
 
 def sidebar-component $ {} (:name :sidebar)
   :update-state merge
-  :get-state $ fn (props)
+  :get-state $ fn (groups router)
     {} $ :query |
-  :render $ fn (props)
+  :render $ fn (groups router)
     fn (state)
       let
         (match-query $ fn (entry) (let ((group $ val entry)) (string/includes? (:text group) (:query state))))
@@ -113,34 +113,31 @@ def sidebar-component $ {} (:name :sidebar)
           [] :div
             {} $ :style style-header
             [] :input $ {}
-              :on-input $ on-query-change props state
+              :on-input $ on-query-change state
               :value $ :query state
               :style style-query
               :placeholder |Seach...
             [] :div $ {} (:style style-add)
               :inner-text |Add
-              :on-click $ on-group-add props state
+              :on-click $ on-group-add state
             [] :div $ {} (:style style-button)
               :inner-text |Code
-              :on-click $ on-route-code props state
+              :on-click $ on-route-code state
 
           [] :div
             {} (:style style-body)
-              :on-click $ on-empty-route props state
+              :on-click $ on-empty-route state
             [] :div
               {} $ :style
-                style-box $ count (:groups props)
-
-              ->> (:groups props)
-                filter match-query
+                style-box $ count groups
+              ->> groups (filter match-query)
                 sort by-newest-group
                 map-indexed $ fn (index entry)
                   [] (key entry)
                     let
                       (group $ val entry)
                         tasks $ :tasks group
-                        selected? $ =
-                          :group-id $ :router props
+                        selected? $ = (:group-id router)
                           :id group
                         todo-size $ count
                           ->> tasks $ filter
@@ -150,7 +147,7 @@ def sidebar-component $ {} (:name :sidebar)
                       [] :nav
                         {}
                           :style $ style-group index selected?
-                          :on-click $ on-group-route props state entry
+                          :on-click $ on-group-route state entry
                         [] :span $ {}
                           :inner-text $ :text group
                           :style style-silent

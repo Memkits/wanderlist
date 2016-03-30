@@ -48,23 +48,20 @@ defn handle-remove (task)
 
 def task-component $ {} (:name :task)
   :update-state merge
-  :get-state $ fn (props)
+  :get-state $ fn (task index)
     {}
-  :render $ fn (props)
+  :render $ fn (task index)
     fn (state)
       let
-        (task $ :task props)
-          done? $ :done task
+        (done? $ :done task)
         [] :section
-          {} $ :style
-            style-task $ :index props
+          {} $ :style (style-task index)
           [] :div $ {}
             :style $ style-done done?
             :on-click $ handle-toggle task
           [] :input $ {}
-            :value $ :text (:task props)
+            :value $ :text task
             :on-input $ handle-change task state
             :style style-input
-
           [] :div $ {} (:style style-remove)
             :on-click $ handle-remove task

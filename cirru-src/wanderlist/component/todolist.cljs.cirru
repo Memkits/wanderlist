@@ -52,19 +52,18 @@ def style-section $ {} (:margin-top |16px)
 def style-hint $ {}
   :color $ hsl 0 0 60
 
-defn handle-input (props state)
+defn handle-input (state)
   fn (simple-event intent inward)
     inward $ {} :draft (:value simple-event)
 
-defn handle-task-add (props state)
+defn handle-task-add (router state)
   fn (simple-event intent inward)
     intent :add-task $ {}
       :text $ :draft state
-      :group-id $ :group-id (:router props)
-
+      :group-id $ :group-id router
     inward $ {} :draft |
 
-defn handle-keydown (props state)
+defn handle-keydown (router state)
   fn (simple-event intent inward)
     if
       = (:key-code simple-event)
@@ -72,26 +71,24 @@ defn handle-keydown (props state)
       do
         intent :add-task $ {}
           :text $ :draft state
-          :group-id $ :group-id (:router props)
-
+          :group-id $ :group-id router
         inward $ {} :draft |
 
-defn handle-toggle (props state)
+defn handle-toggle (state)
   fn (simple-event intent inward)
     inward $ {}
       :fold-done? $ not (:fold-done? state)
 
 def todolist-component $ {} (:name :todolist)
   :update-state merge
-  :get-state $ fn (props)
+  :get-state $ fn (router group)
     {} (:draft |)
       :fold-done? true
 
-  :render $ fn (props)
+  :render $ fn (router group)
     fn (state)
       let
-        (group $ :group props)
-          tasks $ :tasks group
+        (tasks $ :tasks group)
           todo-tasks $ ->> tasks
             filter $ fn (entry)
               not $ :done (val entry)
@@ -107,20 +104,19 @@ def todolist-component $ {} (:name :todolist)
           {} $ :style style-todolist
           [] :header
             {} $ :style style-header
-            [] group-component $ {}
-              :group $ :group props
+            [] group-component group
             [] :div $ {} (:style style-space)
             [] :div
               {} $ :style style-adder
               [] :input $ {}
                 :value $ :draft state
                 :style style-input
-                :on-input $ handle-input props state
+                :on-input $ handle-input state
                 :placeholder "|Add a task..."
-                :on-keydown $ handle-keydown props state
+                :on-keydown $ handle-keydown router state
               [] :div $ {} (:inner-text |Add)
                 :style style-button
-                :on-click $ handle-task-add props state
+                :on-click $ handle-task-add router state
 
           [] :section
             {} $ :style style-body
@@ -135,9 +131,8 @@ def todolist-component $ {} (:name :todolist)
 
                 map-indexed $ fn (index entry)
                   [] (key entry)
-                    [] task-component $ {}
-                      :task $ val entry
-                      :index index
+                    [] task-component (val entry)
+                      , index
 
                 into $ sorted-map
 
@@ -148,7 +143,7 @@ def todolist-component $ {} (:name :todolist)
                   , 0
                 [] :span $ {} (:style style-button)
                   :inner-text |Toggle
-                  :on-click $ handle-toggle props state
+                  :on-click $ handle-toggle state
 
             if
               not $ :fold-done? state

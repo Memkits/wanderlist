@@ -13,35 +13,36 @@ ns wanderlist.core $ :require
   [] wanderlist.util.migration :refer $ [] migrate-from-v0
   [] wanderlist.schema :as schema
 
-defonce global-states $ atom $ {}
+defonce global-states $ atom ({})
 
 defonce global-element $ atom nil
 
-defonce global-store $ atom $ let
-    stored-data $ .getItem js/localStorage |wanderlist
-  if (some? stored-data)
-    let
-        old-store $ reader/read-string stored-data
-        version $ or (:version old-store)
-          , 0
+defonce global-store $ atom
+  let
+    (stored-data $ .getItem js/localStorage |wanderlist)
+    if (some? stored-data)
+      let
+        (old-store $ reader/read-string stored-data)
+          version $ or (:version old-store)
+            , 0
 
-      case version
-        0 $ migrate-from-v0 old-store
-        1 old-store
-        , schema/store
+        case version
+          0 $ migrate-from-v0 old-store
+          1 old-store
+          , schema/store
 
-    , schema/store
+      , schema/store
 
 defn render-element ()
   .info js/console |rendering: @global-store @global-states
-  render-app
-    [] container-component $ {} :store @global-store
+  render-app ([] container-component @global-store)
     , @global-states
 
 defn intent (op-type op-data)
   .info js/console |Intent: op-type op-data
   let
-      new-store $ updater @global-store op-type op-data $ .valueOf $ js/Date.
+    (new-store $ updater @global-store op-type op-data (.valueOf $ js/Date.))
+
     reset! global-store new-store
     .info js/console "|new store:" new-store
 

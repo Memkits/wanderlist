@@ -13,13 +13,11 @@ def style-text $ {} (:border |none)
 
 def codebox-component $ {} (:name :codebox)
   :update-state merge
-  :get-state $ fn (props)
+  :get-state $ fn (store)
     {}
-  :render $ fn (props)
+  :render $ fn (store)
     fn (state)
-      let
-        (store $ :store props)
-        [] :div ({})
-          [] :textarea $ {}
-            :value $ pr-str store
-            :style style-text
+      [] :div ({})
+        [] :textarea $ {}
+          :value $ pr-str store
+          :style style-text
