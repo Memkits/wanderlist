@@ -65,7 +65,7 @@ def task-component $ {} (:name :task)
             :on-click $ handle-toggle task
           [] :input $ {}
             :value $ :text task
-            :on-input $ handle-change task state
+            :on-change $ handle-change task state
             :style style-input
             :on-keydown $ handle-keydown task
           [] :div $ {} (:style style-remove)

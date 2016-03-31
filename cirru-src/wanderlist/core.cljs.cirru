@@ -13,6 +13,10 @@ ns wanderlist.core $ :require
   [] wanderlist.util.migration :refer $ [] migrate-from-v0 migrate-from-v1
   [] wanderlist.schema :as schema
 
+defonce app-env $ reader/read-string
+  -> js/document (.querySelector |#config)
+    , .-innerHTML
+
 defonce global-states $ atom ({})
 
 defonce global-element $ atom nil
@@ -41,7 +45,12 @@ defn render-element ()
     , @global-states
 
 defn dispatch (op-type op-data)
-  .info js/console |dispatch: op-type op-data
+  .info js/console |dispatch2: op-type op-data
+  if
+    = (:env app-env)
+      , :build
+    js/ga |send |event $ name op-type
+
   let
     (new-store $ updater @global-store op-type op-data (.valueOf $ js/Date.) (.valueOf $ js/Date.))
 

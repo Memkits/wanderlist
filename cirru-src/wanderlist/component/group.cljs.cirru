@@ -22,7 +22,7 @@ defn handle-click (group state)
     dispatch :rm-group $ :id group
     dispatch :set-router $ {} (:name :table)
 
-defn handle-input (group state)
+defn handle-change (group state)
   fn (simple-event dispatch mutate)
     dispatch :update-group $ {}
       :id $ :id group
@@ -30,7 +30,10 @@ defn handle-input (group state)
 
 defn handle-keydown (group)
   fn (simple-event dispatch mutate)
-    dispatch :touch-group $ :id group
+    if
+      = (:key-code simple-event)
+        , 13
+      dispatch :touch-group $ :id group
 
 def group-component $ {} (:name :group)
   :update-state merge
@@ -43,7 +46,7 @@ def group-component $ {} (:name :group)
         [] :input $ {}
           :value $ :text group
           :style style-input
-          :on-input $ handle-input group state
+          :on-change $ handle-change group state
           :on-keydown $ handle-keydown group
         [] :div $ {} (:style style-remove)
           :on-click $ handle-click group state

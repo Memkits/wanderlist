@@ -31,12 +31,22 @@
     [:link
      {:rel "icon", :type "image/png", :href "wanderlist.png"}]
     [:style nil "body {margin: 0;}"]
+    [:script nil
+      (if (= :build (:env data))
+        "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41753901-15', 'auto');
+        ga('send', 'pageview');"
+      )
+    ]
+
     [:style
      nil
      "body * {box-sizing: border-box; scroll-behavior: smooth; }"]]
-    [:script (if (= :build (:env data))
-        "window._appConfig = {env: 'build'}"
-        "window._appConfig = {env: 'dev'}")]
+    [:script {:id "config" :type "text/edn"} (pr-str data)]
    [:body [:div#app] [:script {:src "main.js"}]]])
 
 (deftask dev []
@@ -57,6 +67,7 @@
 
 (deftask build-advanced []
     (comp
+        (compile-cirru)
         (cljs :optimizations :advanced)
         (html-entry :dsl (html-dsl {:env :build}) :html-name "index.html")))
 
