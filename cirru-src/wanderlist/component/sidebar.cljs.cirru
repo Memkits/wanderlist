@@ -109,8 +109,8 @@ def sidebar-component $ {} (:name :sidebar)
         (match-query $ fn (entry) (let ((group $ val entry)) (string/includes? (:text group) (:query state))))
           by-newest-group $ fn (group-a group-b)
             compare
-              :id $ val group-b
-              :id $ val group-a
+              :touched-time $ val group-b
+              :touched-time $ val group-a
 
         [] :div
           {} $ :style style-sidebar

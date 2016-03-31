@@ -28,6 +28,10 @@ defn handle-input (group state)
       :id $ :id group
       :text $ :value simple-event
 
+defn handle-keydown (group)
+  fn (simple-event intent inward)
+    intent :touch-group $ :id group
+
 def group-component $ {} (:name :group)
   :update-state merge
   :get-state $ fn (group)
@@ -40,5 +44,6 @@ def group-component $ {} (:name :group)
           :value $ :text group
           :style style-input
           :on-input $ handle-input group state
+          :on-keydown $ handle-keydown group
         [] :div $ {} (:style style-remove)
           :on-click $ handle-click group state

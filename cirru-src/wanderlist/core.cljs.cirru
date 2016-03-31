@@ -10,7 +10,7 @@ ns wanderlist.core $ :require
   [] wanderlist.component.container :refer $ [] container-component
   [] wanderlist.updater.core :refer $ [] updater
   [] cljs.reader :as reader
-  [] wanderlist.util.migration :refer $ [] migrate-from-v0
+  [] wanderlist.util.migration :refer $ [] migrate-from-v0 migrate-from-v1
   [] wanderlist.schema :as schema
 
 defonce global-states $ atom ({})
@@ -27,8 +27,10 @@ defonce global-store $ atom
             , 0
 
         case version
-          0 $ migrate-from-v0 old-store
-          1 old-store
+          0 $ -> old-store (migrate-from-v0)
+            migrate-from-v1
+          1 $ migrate-from-v1 old-store
+          2 old-store
           , schema/store
 
       , schema/store
@@ -41,7 +43,7 @@ defn render-element ()
 defn intent (op-type op-data)
   .info js/console |Intent: op-type op-data
   let
-    (new-store $ updater @global-store op-type op-data (.valueOf $ js/Date.))
+    (new-store $ updater @global-store op-type op-data (.valueOf $ js/Date.) (.valueOf $ js/Date.))
 
     reset! global-store new-store
     .info js/console "|new store:" new-store

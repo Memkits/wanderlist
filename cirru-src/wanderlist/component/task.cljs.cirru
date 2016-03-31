@@ -46,6 +46,12 @@ defn handle-remove (task)
   fn (simple-event intent inward)
     intent :rm-task task
 
+defn handle-keydown (task)
+  fn (simple-event intent inward)
+    if
+      = 13 $ :key-code simple-event
+      intent :touch-task task
+
 def task-component $ {} (:name :task)
   :update-state merge
   :get-state $ fn (task index)
@@ -63,5 +69,6 @@ def task-component $ {} (:name :task)
             :value $ :text task
             :on-input $ handle-change task state
             :style style-input
+            :on-keydown $ handle-keydown task
           [] :div $ {} (:style style-remove)
             :on-click $ handle-remove task

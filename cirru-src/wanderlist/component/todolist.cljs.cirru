@@ -136,8 +136,8 @@ def todolist-component $ {} (:name :todolist)
               ->> todo-tasks
                 sort $ fn (entry-a entry-b)
                   compare
-                    :id $ val entry-b
-                    :id $ val entry-a
+                    :touched-time $ val entry-b
+                    :touched-time $ val entry-a
 
                 map-indexed $ fn (index entry)
                   [] (key entry)
@@ -163,8 +163,8 @@ def todolist-component $ {} (:name :todolist)
                 ->> done-tasks
                   sort $ fn (entry-a entry-b)
                     compare
-                      :id $ val entry-b
-                      :id $ val entry-a
+                      :touched-time $ val entry-b
+                      :touched-time $ val entry-a
 
                   map-indexed $ fn (index entry)
                     [] (key entry)
