@@ -168,8 +168,7 @@ def todolist-component $ {} (:name :todolist)
 
                   map-indexed $ fn (index entry)
                     [] (key entry)
-                      [] task-component $ {}
-                        :task $ val entry
-                        :index index
+                      [] task-component (val entry)
+                        , index
 
                   into $ sorted-map
