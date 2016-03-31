@@ -7,12 +7,13 @@ ns wanderlist.component.container $ :require
   [] wanderlist.component.codebox :refer $ [] codebox-component
 
 def style-app $ {}
-  :background-color $ hsl 20 20 95
+  :background-color $ hsl 240 40 96
   :width |100%
   :height |100%
   :position |absolute
   :display |flex
   :font-family |Verdana
+  :padding |16px
 
 def style-left-column $ {} (:width |34%)
   :display |flex
@@ -24,13 +25,16 @@ def style-right-column $ {} (:width |66%)
 
 def style-placeholder $ {} (:width |100%)
   :height |100%
-  :background-color $ hsl 180 40 90
+  :background-color $ hsl 180 40 98
   :display |flex
   :justify-content |center
   :align-items |center
   :color $ hsl 0 0 80
   :font-size |40px
   :font-weight |light
+
+def style-gap $ {} (:width |16px)
+  :flex-shrink |0
 
 def container-component $ {} (:name :container)
   :update-state merge
@@ -41,13 +45,14 @@ def container-component $ {} (:name :container)
       let
         (router $ :router store)
           group-id $ :group-id router
-        [] :nav
+        [] :div
           {} $ :style style-app
           [] :div
             {} $ :style style-left-column
             [] sidebar-component (:groups store)
               , router
 
+          [] :div $ {} (:style style-gap)
           [] :div
             {} $ :style style-right-column
             case (:name router)

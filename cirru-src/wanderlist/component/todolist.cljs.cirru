@@ -3,13 +3,18 @@ ns wanderlist.component.todolist $ :require
   [] hsl.core :refer $ [] hsl
   [] wanderlist.component.task :refer $ [] task-component
   [] wanderlist.component.group :refer $ [] group-component
+  [] wanderlist.style.widget :as widget
+  [] wanderlist.style.layout :as layout
 
 def style-todolist $ {}
-  :background-color $ hsl 40 40 96
+  :background-color $ hsl 0 0 100
   :width |100%
   :height |100%
   :display |flex
   :flex-direction |column
+  :box-shadow $ str "|0 0 4px "
+    hsl 0 0 0 0.1
+  :padding |16px
 
 def style-header $ {} (:display |flex)
   :flex-direction |column
@@ -36,13 +41,13 @@ def style-body $ {} (:flex |1)
   :overflow |auto
   :padding-bottom |200px
 
-def style-button $ {} (:padding "|0 16px")
-  :background-color $ hsl 200 40 60
-  :line-height |32px
-  :font-size |16px
-  :color |white
-  :display |inline-block
-  :cursor |pointer
+def style-button $ merge widget/button
+  {} (:padding "|0 16px")
+    :background-color $ hsl 220 100 80
+    :font-size |16px
+    :color |white
+    :display |inline-block
+    :width |auto
 
 def style-space $ {} (:width |100%)
   :height |8px
@@ -110,7 +115,7 @@ def todolist-component $ {} (:name :todolist)
               :done $ val entry
             into $ {}
 
-        [] :nav
+        [] :div
           {} $ :style style-todolist
           [] :header
             {} $ :style style-header
@@ -128,6 +133,8 @@ def todolist-component $ {} (:name :todolist)
                 :style style-button
                 :on-click $ handle-task-add router state
 
+          [] :div $ {}
+            :style $ layout/vspace 16
           [] :section
             {} $ :style style-body
             [] :section

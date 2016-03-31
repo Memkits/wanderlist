@@ -2,6 +2,7 @@
 ns wanderlist.component.task $ :require
   [] clojure.string :as string
   [] hsl.core :refer $ [] hsl
+  [] wanderlist.style.widget :as widget
 
 defn style-task (index)
   {} (:display |flex)
@@ -13,12 +14,10 @@ defn style-task (index)
     :transition-duration |300ms
 
 defn style-done (done?)
-  {} (:width |32px)
-    :height |32px
+  merge widget/button $ {}
     :background-color $ if done?
-      hsl 200 10 90
-      hsl 20 80 70
-    :cursor |pointer
+      hsl 100 20 60
+      hsl 20 90 80
 
 def style-input $ {} (:outline |none)
   :border |none
@@ -26,10 +25,9 @@ def style-input $ {} (:outline |none)
   :font-size |16px
   :flex |1
 
-def style-remove $ {} (:width |32px)
-  :height |32px
-  :background-color $ hsl 0 80 40
-  :cursor |pointer
+def style-remove $ merge widget/button
+  {} $ :background-color
+    hsl 0 100 70
 
 defn handle-change (task state)
   fn (simple-event dispatch mutate)

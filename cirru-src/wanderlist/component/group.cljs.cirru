@@ -1,6 +1,7 @@
 
 ns wanderlist.component.group $ :require
-  hsl.core :refer $ [] hsl
+  [] hsl.core :refer $ [] hsl
+  [] wanderlist.style.widget :as widget
 
 def style-group $ {} (:width |100%)
   :display |flex
@@ -12,10 +13,9 @@ def style-input $ {} (:border |none)
   :font-size |16px
   :width |400px
 
-def style-remove $ {} (:width |32px)
-  :height |32px
-  :background-color $ hsl 0 80 60
-  :cursor |pointer
+def style-remove $ merge widget/button
+  {} $ :background-color
+    hsl 0 100 70
 
 defn handle-click (group state)
   fn (simple-event dispatch mutate)

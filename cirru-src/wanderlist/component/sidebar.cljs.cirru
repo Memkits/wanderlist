@@ -2,16 +2,19 @@
 ns wanderlist.component.sidebar $ :require
   [] clojure.string :as string
   [] hsl.core :refer $ [] hsl
+  [] wanderlist.style.layout :as layout
+  [] wanderlist.style.widget :as widget
 
 def style-sidebar $ {}
-  :background-color $ hsl 40 30 96
+  :background-color $ hsl 0 0 100
   :display |flex
   :flex-direction |column
   :height |100%
+  :box-shadow $ str "|0px 0px 4px "
+    hsl 0 0 0 0.1
+  :padding |16px
 
-def style-header $ {}
-  :background-color $ hsl 0 0 50
-  :display |flex
+def style-header $ {} (:display |flex)
 
 def style-query $ {} (:font-size |16px)
   :padding "|0 8px"
@@ -21,38 +24,40 @@ def style-query $ {} (:font-size |16px)
   :width |100%
   :flex |1
 
-def style-add $ {} (:line-height |32px)
-  :color $ hsl 0 0 100
-  :background-color $ hsl 200 80 60
-  :padding "|0 16px"
-  :font-family |Verdana
-  :cursor |pointer
+def style-add $ merge widget/button
+  {}
+    :background-color $ hsl 220 100 80
+    :padding "|0 16px"
+    :font-family |Verdana
+    :width |auto
 
-def style-button $ {} (:line-height |32px)
-  :color $ hsl 200 40 100
-  :background-color $ hsl 120 80 60
-  :cursor |pointer
-  :padding "|0 16px"
+def style-button $ merge widget/button
+  {}
+    :background-color $ hsl 120 40 84
+    :padding "|0 16px"
+    :width |auto
 
 def style-body $ {} (:flex |1)
-  :background-color $ hsl 0 0 94
+  :background-color $ hsl 0 0 0 0
   :position |relative
   :overflow |auto
 
-defn style-group (index selected?)
+defn style-group (index selected? todo?)
   {} (:padding "|0px 8px")
-    :color $ hsl 0 0 40
-    :line-height |32px
+    :color $ if todo?
+      hsl 0 0 20
+      hsl 0 0 70
+    :line-height |40px
     :cursor |pointer
     :position |absolute
     :top $ str
-      + 8 $ * 32 index
+      + 8 $ * 40 index
       , |px
     :width |100%
     :transition-duration |300ms
     :cursor |pointer
     :background-color $ if selected?
-      hsl 160 50 84
+      hsl 200 20 94
       , |transparent
 
 def style-space $ {} (:width |8px)
@@ -62,7 +67,8 @@ def style-space $ {} (:width |8px)
 
 defn style-box (n)
   {} (:width |100%)
-    :height $ str (* n 34)
+    :height $ str
+      + 80 $ * n 40
       , |px
 
 def style-small-hint $ {} (:font-size |12px)
@@ -124,10 +130,14 @@ def sidebar-component $ {} (:name :sidebar)
             [] :div $ {} (:style style-add)
               :inner-text |Add
               :on-click $ on-group-add state
+            [] :div $ {}
+              :style $ layout/hspace 16
             [] :div $ {} (:style style-button)
               :inner-text |Code
               :on-click $ on-route-code state
 
+          [] :div $ {}
+            :style $ layout/vspace 16
           [] :div
             {} (:style style-body)
               :on-click $ on-empty-route state
@@ -146,12 +156,13 @@ def sidebar-component $ {} (:name :sidebar)
                         todo-size $ count
                           ->> tasks $ filter
                             fn (entry)
-                              not $ :done (val entry)
+                              not $ :done group
 
-                      [] :nav
+                      [] :div
                         {}
-                          :style $ style-group index selected?
+                          :style $ style-group index selected? (> todo-size 0)
                           :on-click $ on-group-route state entry
+
                         [] :span $ {}
                           :inner-text $ :text group
                           :style style-silent
