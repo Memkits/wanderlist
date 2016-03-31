@@ -18,19 +18,19 @@ def style-remove $ {} (:width |32px)
   :cursor |pointer
 
 defn handle-click (group state)
-  fn (simple-event intent inward)
-    intent :rm-group $ :id group
-    intent :set-router $ {} (:name :table)
+  fn (simple-event dispatch mutate)
+    dispatch :rm-group $ :id group
+    dispatch :set-router $ {} (:name :table)
 
 defn handle-input (group state)
-  fn (simple-event intent inward)
-    intent :update-group $ {}
+  fn (simple-event dispatch mutate)
+    dispatch :update-group $ {}
       :id $ :id group
       :text $ :value simple-event
 
 defn handle-keydown (group)
-  fn (simple-event intent inward)
-    intent :touch-group $ :id group
+  fn (simple-event dispatch mutate)
+    dispatch :touch-group $ :id group
 
 def group-component $ {} (:name :group)
   :update-state merge

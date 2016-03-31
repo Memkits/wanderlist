@@ -32,25 +32,25 @@ def style-remove $ {} (:width |32px)
   :cursor |pointer
 
 defn handle-change (task state)
-  fn (simple-event intent inward)
-    intent :update-task $ {}
+  fn (simple-event dispatch mutate)
+    dispatch :update-task $ {}
       :group-id $ :group-id task
       :id $ :id task
       :text $ :value simple-event
 
 defn handle-toggle (task)
-  fn (simple-event intent inward)
-    intent :toggle-task task
+  fn (simple-event dispatch mutate)
+    dispatch :toggle-task task
 
 defn handle-remove (task)
-  fn (simple-event intent inward)
-    intent :rm-task task
+  fn (simple-event dispatch mutate)
+    dispatch :rm-task task
 
 defn handle-keydown (task)
-  fn (simple-event intent inward)
+  fn (simple-event dispatch mutate)
     if
       = 13 $ :key-code simple-event
-      intent :touch-task task
+      dispatch :touch-task task
 
 def task-component $ {} (:name :task)
   :update-state merge

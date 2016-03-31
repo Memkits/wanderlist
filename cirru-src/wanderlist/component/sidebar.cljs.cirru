@@ -72,32 +72,32 @@ def style-small-hint $ {} (:font-size |12px)
 def style-silent $ {} (:pointer-events |none)
 
 defn on-query-change (state)
-  fn (simple-event intent inward)
+  fn (simple-event dispatch mutate)
     .log js/console simple-event
-    inward $ {} :query (:value simple-event)
+    mutate $ {} :query (:value simple-event)
 
 defn on-group-add (state)
-  fn (simple-event intent inward)
+  fn (simple-event dispatch mutate)
     if
       >
         count $ :query state
         , 0
       do
-        intent :add-group $ :query state
-        inward $ {} (:query |)
+        dispatch :add-group $ :query state
+        mutate $ {} (:query |)
 
 defn on-group-route (state entry)
-  fn (simple-event intent inward)
-    intent :set-router $ {} (:name :table)
+  fn (simple-event dispatch mutate)
+    dispatch :set-router $ {} (:name :table)
       :group-id $ key entry
 
 defn on-empty-route (state)
-  fn (simple-event intent inward)
-    intent :set-router $ {} (:name :table)
+  fn (simple-event dispatch mutate)
+    dispatch :set-router $ {} (:name :table)
 
 defn on-route-code (state)
-  fn (simpe-event intent inward)
-    intent :set-router $ {} (:name :code)
+  fn (simpe-event dispatch mutate)
+    dispatch :set-router $ {} (:name :code)
 
 def sidebar-component $ {} (:name :sidebar)
   :update-state merge

@@ -53,23 +53,23 @@ def style-hint $ {}
   :color $ hsl 0 0 60
 
 defn handle-input (state)
-  fn (simple-event intent inward)
-    inward $ {} :draft (:value simple-event)
+  fn (simple-event dispatch mutate)
+    mutate $ {} :draft (:value simple-event)
 
 defn handle-task-add (router state)
-  fn (simple-event intent inward)
+  fn (simple-event dispatch mutate)
     if
       >
         count $ :draft state
         , 0
       do
-        intent :add-task $ {}
+        dispatch :add-task $ {}
           :text $ :draft state
           :group-id $ :group-id router
-        inward $ {} (:draft |)
+        mutate $ {} (:draft |)
 
 defn handle-keydown (router state)
-  fn (simple-event intent inward)
+  fn (simple-event dispatch mutate)
     if
       and
         = (:key-code simple-event)
@@ -79,14 +79,14 @@ defn handle-keydown (router state)
           , 0
 
       do
-        intent :add-task $ {}
+        dispatch :add-task $ {}
           :text $ :draft state
           :group-id $ :group-id router
-        inward $ {} :draft |
+        mutate $ {} :draft |
 
 defn handle-toggle (state)
-  fn (simple-event intent inward)
-    inward $ {}
+  fn (simple-event dispatch mutate)
+    mutate $ {}
       :fold-done? $ not (:fold-done? state)
 
 def todolist-component $ {} (:name :todolist)

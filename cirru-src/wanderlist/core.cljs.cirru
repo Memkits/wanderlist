@@ -40,8 +40,8 @@ defn render-element ()
   render-app ([] container-component @global-store)
     , @global-states
 
-defn intent (op-type op-data)
-  .info js/console |Intent: op-type op-data
+defn dispatch (op-type op-data)
+  .info js/console |dispatch: op-type op-data
   let
     (new-store $ updater @global-store op-type op-data (.valueOf $ js/Date.) (.valueOf $ js/Date.))
 
@@ -54,7 +54,7 @@ defn get-root ()
 declare rerender-app
 
 defn get-deliver-event ()
-  build-deliver-event global-element intent global-states
+  build-deliver-event global-element dispatch global-states
 
 defn mount-app ()
   let

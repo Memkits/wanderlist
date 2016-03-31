@@ -39,11 +39,6 @@
         "window._appConfig = {env: 'dev'}")]
    [:body [:div#app] [:script {:src "main.js"}]]])
 
-(deftask gen-static []
-  (comp
-    (cljs)
-    (html-entry :dsl (html-dsl {:env :dev}) :html-name "index.html")))
-
 (deftask dev []
   (comp
     (html-entry :dsl (html-dsl {:env :dev}) :html-name "index.html")
@@ -52,7 +47,15 @@
     (reload :on-jsload 'wanderlist.core/on-jsload)
     (cljs)))
 
-(deftask build-app []
+(deftask compile-cirru []
+  (cirru-sepal :paths ["cirru-src"]))
+
+(deftask build-simple []
+  (comp
+    (cljs)
+    (html-entry :dsl (html-dsl {:env :dev}) :html-name "index.html")))
+
+(deftask build-advanced []
     (comp
         (cljs :optimizations :advanced)
         (html-entry :dsl (html-dsl {:env :build}) :html-name "index.html")))
@@ -65,5 +68,5 @@
 
 (deftask send-tiye []
     (comp
-        (build-app)
+        (build-advanced)
         (rsync)))
