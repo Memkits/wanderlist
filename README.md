@@ -1,11 +1,13 @@
 # wanderlist
 
-Demo http://repo.tiye.me/Memkits/wanderlist/public/
+Demo http://repo.tiye.me/Memkits/wanderlist/
+
+This project is based on [ClojureScript](http://github.com/clojure/clojurescript/wiki/), [Boot](http://boot-clj.com), [Cirru](http://cirru.org), etc.
 
 ### Develop
 
 ```bash
-boot gen-static
+boot build-simple
 # open target/index.html
 ```
 
@@ -16,7 +18,4 @@ boot dev
 
 ## License
 
-Copyright © 2016 jiyinyiyong
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+MIT

@@ -156,7 +156,7 @@ def sidebar-component $ {} (:name :sidebar)
                         todo-size $ count
                           ->> tasks $ filter
                             fn (entry)
-                              not $ :done group
+                              not $ :done (val entry)
 
                       [] :div
                         {}
