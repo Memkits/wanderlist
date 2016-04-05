@@ -105,10 +105,17 @@ defn on-route-code (state)
   fn (simpe-event dispatch mutate)
     dispatch :set-router $ {} (:name :code)
 
+defn on-show-empty (state)
+  fn (simpe-event dispatch mutate)
+    mutate $ {}
+      :show-0? $ not (:show-0? state)
+
 def sidebar-component $ {} (:name :sidebar)
   :update-state merge
   :get-state $ fn (groups router)
-    {} $ :query |
+    {} (:query |)
+      :show-0? false
+
   :render $ fn (groups router)
     fn (state)
       let
@@ -135,6 +142,11 @@ def sidebar-component $ {} (:name :sidebar)
             [] :div $ {} (:style style-button)
               :inner-text |Code
               :on-click $ on-route-code state
+            [] :div $ {}
+              :style $ layout/hspace 16
+            [] :div $ {} (:style style-button)
+              :inner-text |All
+              :on-click $ on-show-empty state
 
           [] :div $ {}
             :style $ layout/vspace 16
@@ -146,6 +158,23 @@ def sidebar-component $ {} (:name :sidebar)
                 style-box $ count groups
               ->> groups (filter match-query)
                 sort by-newest-group
+                filter $ fn (entry)
+                  if (:show-0? state)
+                    , true
+                    let
+                      (group $ val entry)
+                        tasks $ :tasks group
+                      >
+                        count $ filter
+                          fn (entry)
+                            let
+                              (task $ val entry)
+                              and $ not (:done task)
+
+                          , tasks
+
+                        , 0
+
                 map-indexed $ fn (index entry)
                   [] (key entry)
                     let
