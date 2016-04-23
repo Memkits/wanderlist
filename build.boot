@@ -14,7 +14,7 @@
                  [org.clojure/core.async "0.2.374"]
                  [binaryage/devtools "0.5.2"]
                  [mvc-works/hsl "0.1.2"]
-                 [mvc-works/respo "0.1.13"]
+                 [mvc-works/respo "0.1.15"]
                  [mvc-works/respo-client "0.1.11"]])
 
 (require '[adzerk.boot-cljs :refer [cljs]]

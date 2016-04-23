@@ -31,28 +31,28 @@ def style-remove $ merge widget/button
     hsl 0 100 70
 
 defn handle-change (task state)
-  fn (simple-event dispatch mutate)
+  fn (simple-event dispatch)
     dispatch :update-task $ {}
       :group-id $ :group-id task
       :id $ :id task
       :text $ :value simple-event
 
 defn handle-toggle (task)
-  fn (simple-event dispatch mutate)
+  fn (simple-event dispatch)
     dispatch :toggle-task task
 
 defn handle-remove (task)
-  fn (simple-event dispatch mutate)
+  fn (simple-event dispatch)
     dispatch :rm-task task
 
 defn handle-keydown (task)
-  fn (simple-event dispatch mutate)
+  fn (simple-event dispatch)
     if
       = 13 $ :key-code simple-event
       dispatch :touch-task task
 
 defn render (task index)
-  fn (state)
+  fn (state mutate)
     let
       (done? $ :done task)
       section

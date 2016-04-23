@@ -13,7 +13,7 @@ def style-text $ {} (:border |none)
   :line-height |24px
 
 defn render (store)
-  fn (state)
+  fn (state mutate)
     div ({})
       textarea $ {}
         :style style-text

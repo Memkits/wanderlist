@@ -78,13 +78,13 @@ def style-small-hint $ {} (:font-size |12px)
 
 def style-silent $ {} (:pointer-events |none)
 
-defn on-query-change (state)
-  fn (simple-event dispatch mutate)
+defn on-query-change (state mutate)
+  fn (simple-event dispatch)
     .log js/console simple-event
     mutate $ {} :query (:value simple-event)
 
-defn on-group-add (state)
-  fn (simple-event dispatch mutate)
+defn on-group-add (state mutate)
+  fn (simple-event dispatch)
     if
       >
         count $ :query state
@@ -94,20 +94,20 @@ defn on-group-add (state)
         mutate $ {} (:query |)
 
 defn on-group-route (state entry)
-  fn (simple-event dispatch mutate)
+  fn (simple-event dispatch)
     dispatch :set-router $ {} (:name :table)
       :group-id $ key entry
 
 defn on-empty-route (state)
-  fn (simple-event dispatch mutate)
+  fn (simple-event dispatch)
     dispatch :set-router $ {} (:name :table)
 
 defn on-route-code (state)
-  fn (simpe-event dispatch mutate)
+  fn (simpe-event dispatch)
     dispatch :set-router $ {} (:name :code)
 
-defn on-show-empty (state)
-  fn (simpe-event dispatch mutate)
+defn on-show-empty (state mutate)
+  fn (simpe-event dispatch)
     mutate $ {}
       :show-0? $ not (:show-0? state)
 
@@ -116,7 +116,7 @@ defn init-state (groups router)
     :show-0? false
 
 defn render (groups router)
-  fn (state)
+  fn (state mutate)
     let
       (match-query $ fn (entry) (let ((group $ val entry)) (string/includes? (:text group) (:query state))))
         by-newest-group $ fn (group-a group-b)
@@ -130,28 +130,28 @@ defn render (groups router)
           {} $ :style style-header
           input $ {} (:style style-query)
             :event $ {}
-              :input $ on-query-change state
+              :input $ on-query-change state mutate
             :attrs $ {}
               :value $ :query state
               :placeholder |Seach...
 
-          div $ {} (:style style-add)
+          span $ {} (:style style-add)
             :event $ {}
-              :click $ on-group-add state
+              :click $ on-group-add state mutate
             :attrs $ {} (:inner-text |Add)
 
           div $ {}
             :style $ layout/hspace 16
-          div $ {} (:style style-button)
+          span $ {} (:style style-button)
             :event $ {}
               :click $ on-route-code state
             :attrs $ {} (:inner-text |Code)
 
           div $ {}
             :style $ layout/hspace 16
-          div $ {} (:style style-button)
+          span $ {} (:style style-button)
             :event $ {}
-              :click $ on-show-empty state
+              :click $ on-show-empty state mutate
             :attrs $ {} (:inner-text |All)
 
         div $ {}

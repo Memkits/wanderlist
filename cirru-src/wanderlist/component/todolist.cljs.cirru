@@ -58,12 +58,12 @@ def style-section $ {} (:margin-top |16px)
 def style-hint $ {}
   :color $ hsl 0 0 60
 
-defn handle-input (state)
-  fn (simple-event dispatch mutate)
+defn handle-input (state mutate)
+  fn (simple-event dispatch)
     mutate $ {} :draft (:value simple-event)
 
-defn handle-task-add (router state)
-  fn (simple-event dispatch mutate)
+defn handle-task-add (router state mutate)
+  fn (simple-event dispatch)
     if
       >
         count $ :draft state
@@ -74,8 +74,8 @@ defn handle-task-add (router state)
           :group-id $ :group-id router
         mutate $ {} (:draft |)
 
-defn handle-keydown (router state)
-  fn (simple-event dispatch mutate)
+defn handle-keydown (router state mutate)
+  fn (simple-event dispatch)
     if
       and
         = (:key-code simple-event)
@@ -90,8 +90,8 @@ defn handle-keydown (router state)
           :group-id $ :group-id router
         mutate $ {} :draft |
 
-defn handle-toggle (state)
-  fn (simple-event dispatch mutate)
+defn handle-toggle (state mutate)
+  fn (simple-event dispatch)
     mutate $ {}
       :fold-done? $ not (:fold-done? state)
 
@@ -100,7 +100,7 @@ defn init-state (router group)
     :fold-done? true
 
 defn render (router group)
-  fn (state)
+  fn (state mutate)
     let
       (tasks $ :tasks group)
         todo-tasks $ ->> tasks
@@ -124,15 +124,15 @@ defn render (router group)
             {} $ :style style-adder
             input $ {} (:style style-input)
               :event $ {}
-                :input $ handle-input state
-                :keydown $ handle-keydown router state
+                :input $ handle-input state mutate
+                :keydown $ handle-keydown router state mutate
               :attrs $ {}
                 :value $ :draft state
                 :placeholder "|Add a task..."
 
-            div $ {} (:style style-button)
+            span $ {} (:style style-button)
               :event $ {}
-                :click $ handle-task-add router state
+                :click $ handle-task-add router state mutate
               :attrs $ {} (:inner-text |Add)
 
         div $ {}
@@ -162,7 +162,7 @@ defn render (router group)
                 , 0
               span $ {} (:style style-button)
                 :event $ {}
-                  :click $ handle-toggle state
+                  :click $ handle-toggle state mutate
                 :attrs $ {} (:inner-text |Toggle)
 
           if

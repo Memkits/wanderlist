@@ -38,7 +38,7 @@ def style-gap $ {} (:width |16px)
   :flex-shrink |0
 
 defn render (store)
-  fn (state)
+  fn (state mutate)
     let
       (router $ :router store)
         group-id $ :group-id router

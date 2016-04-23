@@ -19,25 +19,25 @@ def style-remove $ merge widget/button
     hsl 0 100 70
 
 defn handle-click (group state)
-  fn (simple-event dispatch mutate)
+  fn (simple-event dispatch)
     dispatch :rm-group $ :id group
     dispatch :set-router $ {} (:name :table)
 
 defn handle-change (group state)
-  fn (simple-event dispatch mutate)
+  fn (simple-event dispatch)
     dispatch :update-group $ {}
       :id $ :id group
       :text $ :value simple-event
 
 defn handle-keydown (group)
-  fn (simple-event dispatch mutate)
+  fn (simple-event dispatch)
     if
       = (:key-code simple-event)
         , 13
       dispatch :touch-group $ :id group
 
 defn render (group)
-  fn (state)
+  fn (state mutate)
     section
       {} $ :style style-group
       input $ {}

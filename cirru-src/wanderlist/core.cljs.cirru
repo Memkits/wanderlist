@@ -2,7 +2,7 @@
 ns wanderlist.core $ :require
   [] clojure.string :as string
   [] respo.renderer.expander :refer $ [] render-app
-  [] respo.controller.deliver :refer $ [] build-deliver-event
+  [] respo.controller.deliver :refer $ [] build-deliver-event mutate-factory
   [] respo.renderer.differ :refer $ [] find-element-diffs
   [] respo.util.format :refer $ [] purify-element
   [] respo-client.controller.client :refer $ [] initialize-instance activate-instance patch-instance
@@ -39,10 +39,12 @@ defonce global-store $ atom
 
       , schema/store
 
+def build-mutate $ mutate-factory global-element global-states
+
 defn render-element ()
   .info js/console |rendering: @global-store @global-states
   render-app (container-component @global-store)
-    , @global-states
+    , @global-states build-mutate
 
 defn dispatch (op-type op-data)
   .info js/console |dispatch2: op-type op-data
@@ -63,7 +65,7 @@ defn get-root ()
 declare rerender-app
 
 defn get-deliver-event ()
-  build-deliver-event global-element dispatch global-states
+  build-deliver-event global-element dispatch
 
 defn mount-app ()
   let
