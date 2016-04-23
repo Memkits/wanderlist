@@ -122,19 +122,18 @@ defn render (router group)
           div $ {} (:style style-space)
           div
             {} $ :style style-adder
-            input $ {}
-              :style style-input
+            input $ {} (:style style-input)
               :event $ {}
                 :input $ handle-input state
                 :keydown $ handle-keydown router state
               :attrs $ {}
                 :value $ :draft state
                 :placeholder "|Add a task..."
+
             div $ {} (:style style-button)
               :event $ {}
                 :click $ handle-task-add router state
-              :attrs $ {}
-                :inner-text |Add
+              :attrs $ {} (:inner-text |Add)
 
         div $ {}
           :style $ layout/vspace 16
@@ -164,8 +163,7 @@ defn render (router group)
               span $ {} (:style style-button)
                 :event $ {}
                   :click $ handle-toggle state
-                :value $ {}
-                  :inner-text |Toggle
+                :attrs $ {} (:inner-text |Toggle)
 
           if
             not $ :fold-done? state
@@ -185,4 +183,4 @@ defn render (router group)
 
                 into $ sorted-map
 
-def todolist-component $ create-comp :todolist init-state nil render
+def todolist-component $ create-comp :todolist init-state merge render

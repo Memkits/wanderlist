@@ -128,32 +128,31 @@ defn render (groups router)
         {} $ :style style-sidebar
         div
           {} $ :style style-header
-          input $ {}
-            :style style-query
+          input $ {} (:style style-query)
             :event $ {}
               :input $ on-query-change state
             :attrs $ {}
               :value $ :query state
               :placeholder |Seach...
+
           div $ {} (:style style-add)
             :event $ {}
               :click $ on-group-add state
-            :attrs $ {}
-              :inner-text |Add
+            :attrs $ {} (:inner-text |Add)
+
           div $ {}
             :style $ layout/hspace 16
           div $ {} (:style style-button)
             :event $ {}
               :click $ on-route-code state
-            :attrs $ {}
-              :inner-text |Code
+            :attrs $ {} (:inner-text |Code)
+
           div $ {}
             :style $ layout/hspace 16
           div $ {} (:style style-button)
             :event $ {}
               :click $ on-show-empty state
-            :attrs $ {}
-              :inner-text |All
+            :attrs $ {} (:inner-text |All)
 
         div $ {}
           :style $ layout/vspace 16
@@ -161,6 +160,7 @@ defn render (groups router)
           {} (:style style-body)
             :event $ {}
               :click $ on-empty-route state
+
           div
             {} $ :style
               style-box $ count groups
@@ -201,16 +201,15 @@ defn render (groups router)
                         :event $ {}
                           :click $ on-group-route state entry
 
-                      span $ {}
-                        :style style-silent
+                      span $ {} (:style style-silent)
                         :attrs $ {}
                           :inner-text $ :text group
+
                       div $ {} (:style style-space)
-                      span $ {}
-                        :style style-small-hint
-                        :event $ {}
+                      span $ {} (:style style-small-hint)
+                        :attrs $ {}
                           :inner-text $ str todo-size
 
               into $ sorted-map
 
-def sidebar-component $ create-comp :sidebar init-state nil render
+def sidebar-component $ create-comp :sidebar init-state merge render

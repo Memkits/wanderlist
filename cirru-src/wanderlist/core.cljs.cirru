@@ -98,7 +98,7 @@ defn -main ()
 
 defn save-local-storage ()
   .setItem js/localStorage |wanderlist $ pr-str @global-store
-  .log js/console $ pr-str @global-store
+  -- .log js/console $ pr-str @global-store
 
 set! (.-onload js/window)
   , -main
