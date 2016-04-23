@@ -2,6 +2,7 @@
 ns wanderlist.component.container $ :require
   [] clojure.string :as string
   [] hsl.core :refer $ [] hsl
+  [] respo.alias :refer $ [] create-comp div textarea span
   [] wanderlist.component.sidebar :refer $ [] sidebar-component
   [] wanderlist.component.todolist :refer $ [] todolist-component
   [] wanderlist.component.codebox :refer $ [] codebox-component
@@ -36,33 +37,31 @@ def style-placeholder $ {} (:width |100%)
 def style-gap $ {} (:width |16px)
   :flex-shrink |0
 
-def container-component $ {} (:name :container)
-  :update-state merge
-  :get-state $ fn (store)
-    {}
-  :render $ fn (store)
-    fn (state)
-      let
-        (router $ :router store)
-          group-id $ :group-id router
-        [] :div
-          {} $ :style style-app
-          [] :div
-            {} $ :style style-left-column
-            [] sidebar-component (:groups store)
-              , router
+defn render (store)
+  fn (state)
+    let
+      (router $ :router store)
+        group-id $ :group-id router
+      div
+        {} $ :style style-app
+        div
+          {} :style style-left-column
+          sidebar-component (:groups store)
+            , router
 
-          [] :div $ {} (:style style-gap)
-          [] :div
-            {} $ :style style-right-column
-            case (:name router)
-              :table $ if (some? group-id)
-                [] todolist-component router $ get (:groups store)
-                  , group-id
-                [] :div
-                  {} $ :style style-placeholder
-                  [] :span $ {} (:inner-text "|Select a group?")
+        div $ {} (:style style-gap)
+        div
+          {} $ :style style-right-column
+          case (:name router)
+            :table $ if (some? group-id)
+              todolist-component router $ get (:groups store)
+                , group-id
+              div
+                {} $ :style style-placeholder
+                span $ {} :attrs (:inner-text "|Select a group?")
 
-              :code $ [] codebox-component store
-              [] :div ({})
-                [] :span $ {} (:inner-text "|router not matching a page")
+            :code $ codebox-component store
+            div ({})
+              span $ {} :attrs (:inner-text "|router not matching a page")
+
+def container-component $ create-comp :container render

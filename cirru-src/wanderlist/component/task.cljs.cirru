@@ -3,6 +3,7 @@ ns wanderlist.component.task $ :require
   [] clojure.string :as string
   [] hsl.core :refer $ [] hsl
   [] wanderlist.style.widget :as widget
+  [] respo.alias :refer $ [] create-comp div input section
 
 defn style-task (index)
   {} (:display |flex)
@@ -50,23 +51,26 @@ defn handle-keydown (task)
       = 13 $ :key-code simple-event
       dispatch :touch-task task
 
-def task-component $ {} (:name :task)
-  :update-state merge
-  :get-state $ fn (task index)
-    {}
-  :render $ fn (task index)
-    fn (state)
-      let
-        (done? $ :done task)
-        [] :section
-          {} $ :style (style-task index)
-          [] :div $ {}
-            :style $ style-done done?
-            :on-click $ handle-toggle task
-          [] :input $ {}
+defn render (task index)
+  fn (state)
+    let
+      (done? $ :done task)
+      section
+        {} $ :style (style-task index)
+        div $ {}
+          :style $ style-done done?
+          :event $ {}
+            :click $ handle-toggle task
+        input $ {}
+          :style style-input
+          :event $ {}
+            :change $ handle-change task state
+            :keydown $ handle-keydown task
+          :attrs $ {}
             :value $ :text task
-            :on-change $ handle-change task state
-            :style style-input
-            :on-keydown $ handle-keydown task
-          [] :div $ {} (:style style-remove)
-            :on-click $ handle-remove task
+        div $ {} (:style style-remove)
+          :event $ {}
+            :click $ handle-remove task
+
+def task-component $ create-comp :task render
+

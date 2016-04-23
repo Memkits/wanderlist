@@ -1,6 +1,7 @@
 
 ns wanderlist.component.codebox $ :require
   [] clojure.string :as string
+  [] respo.alias :refer $ [] create-comp div textarea
 
 def style-text $ {} (:border |none)
   :outline |none
@@ -11,13 +12,11 @@ def style-text $ {} (:border |none)
   :font-family |Menlo
   :line-height |24px
 
-def codebox-component $ {} (:name :codebox)
-  :update-state merge
-  :get-state $ fn (store)
-    {}
-  :render $ fn (store)
-    fn (state)
-      [] :div ({})
-        [] :textarea $ {}
-          :value $ pr-str store
-          :style style-text
+defn render (store)
+  fn (state)
+    div ({})
+      textarea $ {}
+        :style style-text
+        :attrs $ {} :value $ pr-str store
+
+def codebox-component $ create-comp :codebox render

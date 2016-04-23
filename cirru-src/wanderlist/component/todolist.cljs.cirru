@@ -5,6 +5,7 @@ ns wanderlist.component.todolist $ :require
   [] wanderlist.component.group :refer $ [] group-component
   [] wanderlist.style.widget :as widget
   [] wanderlist.style.layout :as layout
+  [] respo.alias :refer $ [] create-comp div section span header input
 
 def style-todolist $ {}
   :background-color $ hsl 0 0 100
@@ -94,53 +95,84 @@ defn handle-toggle (state)
     mutate $ {}
       :fold-done? $ not (:fold-done? state)
 
-def todolist-component $ {} (:name :todolist)
-  :update-state merge
-  :get-state $ fn (router group)
-    {} (:draft |)
-      :fold-done? true
+defn init-state (router group)
+  {} (:draft |)
+    :fold-done? true
 
-  :render $ fn (router group)
-    fn (state)
-      let
-        (tasks $ :tasks group)
-          todo-tasks $ ->> tasks
-            filter $ fn (entry)
-              not $ :done (val entry)
+defn render (router group)
+  fn (state)
+    let
+      (tasks $ :tasks group)
+        todo-tasks $ ->> tasks
+          filter $ fn (entry)
+            not $ :done (val entry)
 
-            into $ {}
+          into $ {}
 
-          done-tasks $ ->> tasks
-            filter $ fn (entry)
-              :done $ val entry
-            into $ {}
+        done-tasks $ ->> tasks
+          filter $ fn (entry)
+            :done $ val entry
+          into $ {}
 
-        [] :div
-          {} $ :style style-todolist
-          [] :header
-            {} $ :style style-header
-            [] group-component group
-            [] :div $ {} (:style style-space)
-            [] :div
-              {} $ :style style-adder
-              [] :input $ {}
+      div
+        {} $ :style style-todolist
+        header
+          {} $ :style style-header
+          group-component group
+          div $ {} (:style style-space)
+          div
+            {} $ :style style-adder
+            input $ {}
+              :style style-input
+              :event $ {}
+                :input $ handle-input state
+                :keydown $ handle-keydown router state
+              :attrs $ {}
                 :value $ :draft state
-                :style style-input
-                :on-input $ handle-input state
                 :placeholder "|Add a task..."
-                :on-keydown $ handle-keydown router state
-              [] :div $ {} (:inner-text |Add)
-                :style style-button
-                :on-click $ handle-task-add router state
+            div $ {} (:style style-button)
+              :event $ {}
+                :click $ handle-task-add router state
+              :attrs $ {}
+                :inner-text |Add
 
-          [] :div $ {}
-            :style $ layout/vspace 16
-          [] :section
-            {} $ :style style-body
-            [] :section
+        div $ {}
+          :style $ layout/vspace 16
+        section
+          {} $ :style style-body
+          section
+            {} $ :style
+              style-list $ count todo-tasks
+            ->> todo-tasks
+              sort $ fn (entry-a entry-b)
+                compare
+                  :touched-time $ val entry-b
+                  :touched-time $ val entry-a
+
+              map-indexed $ fn (index entry)
+                [] (key entry)
+                  task-component (val entry)
+                    , index
+
+              into $ sorted-map
+
+          div
+            {} $ :style style-section
+            if
+              > (count done-tasks)
+                , 0
+              span $ {} (:style style-button)
+                :event $ {}
+                  :click $ handle-toggle state
+                :value $ {}
+                  :inner-text |Toggle
+
+          if
+            not $ :fold-done? state
+            section
               {} $ :style
-                style-list $ count todo-tasks
-              ->> todo-tasks
+                style-list $ count done-tasks
+              ->> done-tasks
                 sort $ fn (entry-a entry-b)
                   compare
                     :touched-time $ val entry-b
@@ -148,34 +180,9 @@ def todolist-component $ {} (:name :todolist)
 
                 map-indexed $ fn (index entry)
                   [] (key entry)
-                    [] task-component (val entry)
+                    task-component (val entry)
                       , index
 
                 into $ sorted-map
 
-            [] :div
-              {} $ :style style-section
-              if
-                > (count done-tasks)
-                  , 0
-                [] :span $ {} (:style style-button)
-                  :inner-text |Toggle
-                  :on-click $ handle-toggle state
-
-            if
-              not $ :fold-done? state
-              [] :section
-                {} $ :style
-                  style-list $ count done-tasks
-                ->> done-tasks
-                  sort $ fn (entry-a entry-b)
-                    compare
-                      :touched-time $ val entry-b
-                      :touched-time $ val entry-a
-
-                  map-indexed $ fn (index entry)
-                    [] (key entry)
-                      [] task-component (val entry)
-                        , index
-
-                  into $ sorted-map
+def todolist-component $ create-comp :todolist init-state nil render

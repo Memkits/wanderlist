@@ -2,6 +2,7 @@
 ns wanderlist.component.group $ :require
   [] hsl.core :refer $ [] hsl
   [] wanderlist.style.widget :as widget
+  [] respo.alias :refer $ [] create-comp div input section
 
 def style-group $ {} (:width |100%)
   :display |flex
@@ -35,18 +36,19 @@ defn handle-keydown (group)
         , 13
       dispatch :touch-group $ :id group
 
-def group-component $ {} (:name :group)
-  :update-state merge
-  :get-state $ fn (group)
-    {}
-  :render $ fn (group)
-    fn (state)
-      [] :section
-        {} $ :style style-group
-        [] :input $ {}
+defn render (group)
+  fn (state)
+    section
+      {} $ :style style-group
+      input $ {}
+        :style style-input
+        :event $ {}
+          :change $ handle-change group state
+          :keydown $ handle-keydown group
+        :attrs $ {}
           :value $ :text group
-          :style style-input
-          :on-change $ handle-change group state
-          :on-keydown $ handle-keydown group
-        [] :div $ {} (:style style-remove)
-          :on-click $ handle-click group state
+      div $ {} (:style style-remove)
+        :event $ {}
+          :click $ handle-click group state
+
+def group-component $ create-comp :group render

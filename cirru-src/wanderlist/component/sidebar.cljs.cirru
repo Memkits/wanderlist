@@ -4,6 +4,7 @@ ns wanderlist.component.sidebar $ :require
   [] hsl.core :refer $ [] hsl
   [] wanderlist.style.layout :as layout
   [] wanderlist.style.widget :as widget
+  [] respo.alias :refer $ [] create-comp div span input
 
 def style-sidebar $ {}
   :background-color $ hsl 0 0 100
@@ -110,94 +111,106 @@ defn on-show-empty (state)
     mutate $ {}
       :show-0? $ not (:show-0? state)
 
-def sidebar-component $ {} (:name :sidebar)
-  :update-state merge
-  :get-state $ fn (groups router)
-    {} (:query |)
-      :show-0? false
+defn init-state (groups router)
+  {} (:query |)
+    :show-0? false
 
-  :render $ fn (groups router)
-    fn (state)
-      let
-        (match-query $ fn (entry) (let ((group $ val entry)) (string/includes? (:text group) (:query state))))
-          by-newest-group $ fn (group-a group-b)
-            compare
-              :touched-time $ val group-b
-              :touched-time $ val group-a
+defn render (groups router)
+  fn (state)
+    let
+      (match-query $ fn (entry) (let ((group $ val entry)) (string/includes? (:text group) (:query state))))
+        by-newest-group $ fn (group-a group-b)
+          compare
+            :touched-time $ val group-b
+            :touched-time $ val group-a
 
-        [] :div
-          {} $ :style style-sidebar
-          [] :div
-            {} $ :style style-header
-            [] :input $ {}
-              :on-input $ on-query-change state
+      div
+        {} $ :style style-sidebar
+        div
+          {} $ :style style-header
+          input $ {}
+            :style style-query
+            :event $ {}
+              :input $ on-query-change state
+            :attrs $ {}
               :value $ :query state
-              :style style-query
               :placeholder |Seach...
-            [] :div $ {} (:style style-add)
+          div $ {} (:style style-add)
+            :event $ {}
+              :click $ on-group-add state
+            :attrs $ {}
               :inner-text |Add
-              :on-click $ on-group-add state
-            [] :div $ {}
-              :style $ layout/hspace 16
-            [] :div $ {} (:style style-button)
+          div $ {}
+            :style $ layout/hspace 16
+          div $ {} (:style style-button)
+            :event $ {}
+              :click $ on-route-code state
+            :attrs $ {}
               :inner-text |Code
-              :on-click $ on-route-code state
-            [] :div $ {}
-              :style $ layout/hspace 16
-            [] :div $ {} (:style style-button)
+          div $ {}
+            :style $ layout/hspace 16
+          div $ {} (:style style-button)
+            :event $ {}
+              :click $ on-show-empty state
+            :attrs $ {}
               :inner-text |All
-              :on-click $ on-show-empty state
 
-          [] :div $ {}
-            :style $ layout/vspace 16
-          [] :div
-            {} (:style style-body)
-              :on-click $ on-empty-route state
-            [] :div
-              {} $ :style
-                style-box $ count groups
-              ->> groups (filter match-query)
-                sort by-newest-group
-                filter $ fn (entry)
-                  if (:show-0? state)
-                    , true
-                    let
-                      (group $ val entry)
-                        tasks $ :tasks group
-                      >
-                        count $ filter
+        div $ {}
+          :style $ layout/vspace 16
+        div
+          {} (:style style-body)
+            :event $ {}
+              :click $ on-empty-route state
+          div
+            {} $ :style
+              style-box $ count groups
+            ->> groups (filter match-query)
+              sort by-newest-group
+              filter $ fn (entry)
+                if (:show-0? state)
+                  , true
+                  let
+                    (group $ val entry)
+                      tasks $ :tasks group
+                    >
+                      count $ filter
+                        fn (entry)
+                          let
+                            (task $ val entry)
+                            and $ not (:done task)
+
+                        , tasks
+
+                      , 0
+
+              map-indexed $ fn (index entry)
+                [] (key entry)
+                  let
+                    (group $ val entry)
+                      tasks $ :tasks group
+                      selected? $ = (:group-id router)
+                        :id group
+                      todo-size $ count
+                        ->> tasks $ filter
                           fn (entry)
-                            let
-                              (task $ val entry)
-                              and $ not (:done task)
+                            not $ :done (val entry)
 
-                          , tasks
+                    div
+                      {}
+                        :style $ style-group index selected? (> todo-size 0)
+                        :event $ {}
+                          :click $ on-group-route state entry
 
-                        , 0
-
-                map-indexed $ fn (index entry)
-                  [] (key entry)
-                    let
-                      (group $ val entry)
-                        tasks $ :tasks group
-                        selected? $ = (:group-id router)
-                          :id group
-                        todo-size $ count
-                          ->> tasks $ filter
-                            fn (entry)
-                              not $ :done (val entry)
-
-                      [] :div
-                        {}
-                          :style $ style-group index selected? (> todo-size 0)
-                          :on-click $ on-group-route state entry
-
-                        [] :span $ {}
+                      span $ {}
+                        :style style-silent
+                        :attrs $ {}
                           :inner-text $ :text group
-                          :style style-silent
-                        [] :div $ {} (:style style-space)
-                        [] :span $ {}
+                      div $ {} (:style style-space)
+                      span $ {}
+                        :style style-small-hint
+                        :event $ {}
                           :inner-text $ str todo-size
-                          :style style-small-hint
 
-                into $ sorted-map
+              into $ sorted-map
+
+def sidebar-component $ create-comp :sidebar init-state nil render

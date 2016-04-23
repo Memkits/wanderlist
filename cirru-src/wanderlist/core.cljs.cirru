@@ -41,7 +41,7 @@ defonce global-store $ atom
 
 defn render-element ()
   .info js/console |rendering: @global-store @global-states
-  render-app ([] container-component @global-store)
+  render-app (container-component @global-store)
     , @global-states
 
 defn dispatch (op-type op-data)
@@ -69,8 +69,10 @@ defn mount-app ()
   let
     (element $ render-element) (app-root $ get-root)
       deliver-event $ get-deliver-event
+    .log js/console |element element
     initialize-instance app-root deliver-event
-    activate-instance element app-root deliver-event
+    activate-instance (purify-element element)
+      , app-root deliver-event
     reset! global-element element
 
 defn rerender-app ()
