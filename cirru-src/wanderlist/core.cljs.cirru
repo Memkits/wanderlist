@@ -39,12 +39,12 @@ defonce global-store $ atom
 
       , schema/store
 
-def build-mutate $ mutate-factory global-element global-states
-
 defn render-element ()
   .info js/console |rendering: @global-store @global-states
-  render-app (container-component @global-store)
-    , @global-states build-mutate
+  let
+    (build-mutate $ mutate-factory global-element global-states)
+    render-app (container-component @global-store)
+      , @global-states build-mutate
 
 defn dispatch (op-type op-data)
   .info js/console |dispatch2: op-type op-data
@@ -62,32 +62,30 @@ defn dispatch (op-type op-data)
 defn get-root ()
   .querySelector js/document |#app
 
-declare rerender-app
-
-defn get-deliver-event ()
-  build-deliver-event global-element dispatch
-
 defn mount-app ()
   let
-    (element $ render-element) (app-root $ get-root)
-      deliver-event $ get-deliver-event
+    (element $ render-element)
+      deliver-event $ build-deliver-event global-element dispatch
     .log js/console |element element
-    initialize-instance app-root deliver-event
+    initialize-instance (get-root)
+      , deliver-event
     activate-instance (purify-element element)
-      , app-root deliver-event
+      get-root
+      , deliver-event
     reset! global-element element
 
 defn rerender-app ()
   let
-    (element $ render-element) (app-root $ get-root)
-      deliver-event $ get-deliver-event
+    (element $ render-element)
+      deliver-event $ build-deliver-event global-element dispatch
       changes $ find-element-diffs ([])
         []
         purify-element @global-element
         purify-element element
 
     .info js/console |Changes: changes
-    patch-instance changes app-root deliver-event
+    patch-instance changes (get-root)
+      , deliver-event
     reset! global-element element
 
 defn -main ()
