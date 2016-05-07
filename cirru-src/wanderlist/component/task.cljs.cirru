@@ -30,6 +30,11 @@ def style-remove $ merge widget/button
   {} $ :background-color
     hsl 0 100 70
 
+def style-promote $ merge widget/button
+  {}
+    :background-color $ hsl 120 50 80
+    :margin-right |8px
+
 defn handle-change (task state)
   fn (simple-event dispatch)
     dispatch :update-task $ {}
@@ -45,11 +50,9 @@ defn handle-remove (task)
   fn (simple-event dispatch)
     dispatch :rm-task task
 
-defn handle-keydown (task)
+defn handle-promote (task)
   fn (simple-event dispatch)
-    if
-      = 13 $ :key-code simple-event
-      dispatch :touch-task task
+    dispatch :touch-task task
 
 defn render (task index)
   fn (state mutate)
@@ -61,16 +64,19 @@ defn render (task index)
           :style $ style-done done?
           :event $ {}
             :click $ handle-toggle task
-        input $ {}
-          :style style-input
+
+        input $ {} (:style style-input)
           :event $ {}
             :change $ handle-change task state
-            :keydown $ handle-keydown task
           :attrs $ {}
             :value $ :text task
+
+        div $ {} (:style style-promote)
+          :event $ {}
+            :click $ handle-promote task
+
         div $ {} (:style style-remove)
           :event $ {}
             :click $ handle-remove task
 
 def task-component $ create-comp :task render
-

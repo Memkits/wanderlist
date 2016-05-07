@@ -14,6 +14,11 @@ def style-input $ {} (:border |none)
   :font-size |16px
   :width |400px
 
+def style-promote $ merge widget/button
+  {}
+    :background-color $ hsl 120 50 80
+    :margin-right |8px
+
 def style-remove $ merge widget/button
   {} $ :background-color
     hsl 0 100 70
@@ -29,24 +34,24 @@ defn handle-change (group state)
       :id $ :id group
       :text $ :value simple-event
 
-defn handle-keydown (group)
+defn handle-promote (group)
   fn (simple-event dispatch)
-    if
-      = (:key-code simple-event)
-        , 13
-      dispatch :touch-group $ :id group
+    dispatch :touch-group $ :id group
 
 defn render (group)
   fn (state mutate)
     section
       {} $ :style style-group
-      input $ {}
-        :style style-input
+      input $ {} (:style style-input)
         :event $ {}
           :change $ handle-change group state
-          :keydown $ handle-keydown group
         :attrs $ {}
           :value $ :text group
+
+      div $ {} (:style style-promote)
+        :event $ {}
+          :click $ handle-promote group
+
       div $ {} (:style style-remove)
         :event $ {}
           :click $ handle-click group state
