@@ -8,14 +8,14 @@
  :dependencies '[[adzerk/boot-cljs "1.7.170-3"      :scope "provided"]
                  [adzerk/boot-reload "0.4.6"        :scope "provided"]
                  [mvc-works/boot-html-entry "0.1.1" :scope "provided"]
-                 [cirru/boot-cirru-sepal "0.1.1"    :scope "provided"]
+                 [cirru/boot-cirru-sepal "0.1.2"    :scope "provided"]
                  [org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.8.40"]
                  [org.clojure/core.async "0.2.374"]
                  [binaryage/devtools "0.5.2"]
                  [mvc-works/hsl "0.1.2"]
-                 [mvc-works/respo "0.1.15"]
-                 [mvc-works/respo-client "0.1.11"]])
+                 [mvc-works/respo "0.1.19"]
+                 [mvc-works/respo-spa "0.1.3"]])
 
 (require '[adzerk.boot-cljs :refer [cljs]]
          '[adzerk.boot-reload :refer [reload]]
@@ -49,17 +49,18 @@
     [:script {:id "config" :type "text/edn"} (pr-str data)]
    [:body [:div#app] [:script {:src "main.js"}]]])
 
+(deftask compile-cirru []
+  (cirru-sepal :paths ["cirru-src"]))
+
 (deftask dev []
   (comp
     (html-entry :dsl (html-dsl {:env :dev}) :html-name "index.html")
+    (compile-cirru)
     (cirru-sepal :paths ["cirru-src"] :watch true)
     (watch)
     (reload :on-jsload 'wanderlist.core/on-jsload)
     (cljs)
     (target)))
-
-(deftask compile-cirru []
-  (cirru-sepal :paths ["cirru-src"]))
 
 (deftask build-simple []
   (comp

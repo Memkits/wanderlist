@@ -133,7 +133,7 @@ defn render (groups router)
               :input $ on-query-change state mutate
             :attrs $ {}
               :value $ :query state
-              :placeholder |Seach...
+              :placeholder |Search...
 
           span $ {} (:style style-add)
             :event $ {}

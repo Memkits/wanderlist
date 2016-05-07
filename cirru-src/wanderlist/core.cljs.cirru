@@ -1,11 +1,7 @@
 
 ns wanderlist.core $ :require
   [] clojure.string :as string
-  [] respo.renderer.expander :refer $ [] render-app
-  [] respo.controller.deliver :refer $ [] build-deliver-event mutate-factory
-  [] respo.renderer.differ :refer $ [] find-element-diffs
-  [] respo.util.format :refer $ [] purify-element
-  [] respo-client.controller.client :refer $ [] initialize-instance activate-instance patch-instance
+  [] respo-spa.core :refer $ [] render
   [] devtools.core :as devtools
   [] wanderlist.component.container :refer $ [] container-component
   [] wanderlist.updater.core :refer $ [] updater
@@ -18,8 +14,6 @@ defonce app-env $ reader/read-string
     , .-innerHTML
 
 defonce global-states $ atom ({})
-
-defonce global-element $ atom nil
 
 defonce global-store $ atom
   let
@@ -39,15 +33,8 @@ defonce global-store $ atom
 
       , schema/store
 
-defn render-element ()
-  .info js/console |rendering: @global-store @global-states
-  let
-    (build-mutate $ mutate-factory global-element global-states)
-    render-app (container-component @global-store)
-      , @global-states build-mutate
-
 defn dispatch (op-type op-data)
-  .info js/console |dispatch2: op-type op-data
+  -- .info js/console |dispatch2: op-type op-data
   if
     = (:env app-env)
       , :build
@@ -57,44 +44,21 @@ defn dispatch (op-type op-data)
     (new-store $ updater @global-store op-type op-data (.valueOf $ js/Date.) (.valueOf $ js/Date.))
 
     reset! global-store new-store
-    .info js/console "|new store:" new-store
+    -- .info js/console "|new store:" new-store
 
 defn get-root ()
   .querySelector js/document |#app
 
-defn mount-app ()
-  let
-    (element $ render-element)
-      deliver-event $ build-deliver-event global-element dispatch
-    .log js/console |element element
-    initialize-instance (get-root)
-      , deliver-event
-    activate-instance (purify-element element)
-      get-root
-      , deliver-event
-    reset! global-element element
-
-defn rerender-app ()
-  let
-    (element $ render-element)
-      deliver-event $ build-deliver-event global-element dispatch
-      changes $ find-element-diffs ([])
-        []
-        purify-element @global-element
-        purify-element element
-
-    .info js/console |Changes: changes
-    patch-instance changes (get-root)
-      , deliver-event
-    reset! global-element element
+defn render-app ()
+  render (container-component @global-store) (get-root) dispatch global-states
 
 defn -main ()
   devtools/enable-feature! :sanity-hints :dirac
   devtools/install!
-  .info js/console "|app started"
-  mount-app
-  add-watch global-store :rerender rerender-app
-  add-watch global-states :rerender rerender-app
+  println "|app started"
+  render-app
+  add-watch global-store :rerender render-app
+  add-watch global-states :rerender render-app
 
 defn save-local-storage ()
   .setItem js/localStorage |wanderlist $ pr-str @global-store
@@ -107,5 +71,5 @@ set! (.-onbeforeunload js/window)
   , save-local-storage
 
 defn on-jsload ()
-  .info js/console |Reload!
-  rerender-app
+  println "|code updated."
+  render-app
