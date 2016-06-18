@@ -33,7 +33,7 @@
        schema/store))))
 
 (defn dispatch [op-type op-data]
-  (comment .info js/console "dispatch2:" op-type op-data)
+  (comment println "dispatch:" op-type op-data)
   (if (= (:env app-env) :build) (js/ga "send" "event" (name op-type)))
   (let [new-store (updater
                     @global-store

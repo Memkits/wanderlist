@@ -68,4 +68,6 @@
           {:style style-remove,
            :event {:click (handle-remove task)}})))))
 
+(enable-console-print!)
+
 (def task-component (create-comp :task render))

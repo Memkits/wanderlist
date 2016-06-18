@@ -4,7 +4,8 @@
             [hsl.core :refer [hsl]]
             [wanderlist.style.layout :as layout]
             [wanderlist.style.widget :as widget]
-            [respo.alias :refer [create-comp div span input]]))
+            [respo.alias :refer [create-comp div span input]]
+            [wanderlist.component.group-line :refer [comp-group-line]]))
 
 (def style-sidebar
  {:box-shadow (str "0px 0px 4px " (hsl 0 0 0 0.1)),
@@ -46,17 +47,6 @@
   :flex "1",
   :position "relative"})
 
-(defn style-group [index selected? todo?]
-  {:line-height "40px",
-   :color (if todo? (hsl 0 0 20) (hsl 0 0 70)),
-   :top (str (+ 8 (* 40 index)) "px"),
-   :background-color (if selected? (hsl 200 20 94) "transparent"),
-   :width "100%",
-   :cursor "pointer",
-   :padding "0px 8px",
-   :position "absolute",
-   :transition-duration "300ms"})
-
 (def style-space
  {:width "8px",
   :display "inline-block",
@@ -65,24 +55,15 @@
 
 (defn style-box [n] {:width "100%", :height (str (+ 80 (* n 40)) "px")})
 
-(def style-small-hint
- {:color (hsl 0 0 70), :font-size "12px", :pointer-events "none"})
-
-(def style-silent {:pointer-events "none"})
-
 (defn on-query-change [state mutate]
   (fn [simple-event dispatch]
-    (.log js/console simple-event)
+    (comment println simple-event)
     (mutate {:query (:value simple-event)})))
 
 (defn on-group-add [state mutate]
   (fn [simple-event dispatch]
     (if (> (count (:query state)) 0)
       (do (dispatch :add-group (:query state)) (mutate {:query ""})))))
-
-(defn on-group-route [state entry]
-  (fn [simple-event dispatch]
-    (dispatch :set-router {:group-id (key entry), :name :table})))
 
 (defn on-empty-route [state]
   (fn [simple-event dispatch] (dispatch :set-router {:name :table})))
@@ -92,12 +73,14 @@
 
 (defn init-state [groups router] {:query ""})
 
+(println "sidebar change")
+
 (defn render [groups router]
   (fn [state mutate]
     (let [match-query (fn [entry]
                         (let [group (val entry)]
                           (string/includes?
-                            (:text group)
+                            (or (:text group) "")
                             (:query state))))
           by-newest-group (fn [group-a group-b]
                             (compare
@@ -137,36 +120,10 @@
                                       selected?
                                       (=
                                         (:group-id router)
-                                        (:id group))
-                                      todo-size
-                                      (count
-                                        (->>
-                                          tasks
-                                          (filter
-                                            (fn 
-                                              [entry]
-                                              (not
-                                                (:done
-                                                  (val entry)))))))]
-                                     (div
-                                       {:style
-                                        (style-group
-                                          index
-                                          selected?
-                                          (> todo-size 0)),
-                                        :event
-                                        {:click
-                                         (on-group-route state entry)}}
-                                       (span
-                                         {:style style-silent,
-                                          :attrs
-                                          {:inner-text (:text group)}})
-                                       (div {:style style-space})
-                                       (span
-                                         {:style style-small-hint,
-                                          :attrs
-                                          {:inner-text
-                                           (str todo-size)}})))]))
-              (into (sorted-map)))))))))
+                                        (:id group))]
+                                     (comp-group-line
+                                       group
+                                       index
+                                       selected?))])))))))))
 
 (def sidebar-component (create-comp :sidebar init-state merge render))
