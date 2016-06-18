@@ -102,7 +102,7 @@ defn init-state (router group)
 defn render (router group)
   fn (state mutate)
     let
-      (tasks $ :tasks group)
+        tasks $ :tasks group
         todo-tasks $ ->> tasks
           filter $ fn (entry)
             not $ :done (val entry)
@@ -152,8 +152,6 @@ defn render (router group)
                 [] (key entry)
                   task-component (val entry)
                     , index
-
-              into $ sorted-map
 
           div
             {} $ :style style-section

@@ -1,8 +1,7 @@
 
 ns wanderlist.core $ :require
   [] clojure.string :as string
-  [] respo-spa.core :refer $ [] render
-  [] devtools.core :as devtools
+  [] respo.core :refer $ [] render
   [] wanderlist.component.container :refer $ [] container-component
   [] wanderlist.updater.core :refer $ [] updater
   [] cljs.reader :as reader
@@ -17,10 +16,10 @@ defonce global-states $ atom ({})
 
 defonce global-store $ atom
   let
-    (stored-data $ .getItem js/localStorage |wanderlist)
+      stored-data $ .getItem js/localStorage |wanderlist
     if (some? stored-data)
       let
-        (old-store $ reader/read-string stored-data)
+          old-store $ reader/read-string stored-data
           version $ or (:version old-store)
             , 0
 
@@ -41,7 +40,8 @@ defn dispatch (op-type op-data)
     js/ga |send |event $ name op-type
 
   let
-    (new-store $ updater @global-store op-type op-data (.valueOf $ js/Date.) (.valueOf $ js/Date.))
+      new-store $ updater @global-store op-type op-data (.valueOf $ js/Date.)
+        .valueOf $ js/Date.
 
     reset! global-store new-store
     -- .info js/console "|new store:" new-store
@@ -50,11 +50,12 @@ defn get-root ()
   .querySelector js/document |#app
 
 defn render-app ()
-  render (container-component @global-store) (get-root) dispatch global-states
+  render (container-component @global-store)
+    get-root
+    , dispatch global-states
 
 defn -main ()
-  devtools/enable-feature! :sanity-hints :dirac
-  devtools/install!
+  enable-console-print!
   println "|app started"
   render-app
   add-watch global-store :rerender render-app
