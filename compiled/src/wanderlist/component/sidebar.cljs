@@ -90,11 +90,7 @@
 (defn on-route-code [state]
   (fn [simpe-event dispatch] (dispatch :set-router {:name :code})))
 
-(defn on-show-empty [state mutate]
-  (fn [simpe-event dispatch]
-    (mutate {:show-0? (not (:show-0? state))})))
-
-(defn init-state [groups router] {:show-0? false, :query ""})
+(defn init-state [groups router] {:query ""})
 
 (defn render [groups router]
   (fn [state mutate]
@@ -123,12 +119,7 @@
           (span
             {:style style-button,
              :event {:click (on-route-code state)},
-             :attrs {:inner-text "Code"}})
-          (div {:style (layout/hspace 16)})
-          (span
-            {:style style-button,
-             :event {:click (on-show-empty state mutate)},
-             :attrs {:inner-text "All"}}))
+             :attrs {:inner-text "Code"}}))
         (div {:style (layout/vspace 16)})
         (div
           {:style style-body, :event {:click (on-empty-route state)}}
@@ -138,19 +129,6 @@
               groups
               (filter match-query)
               (sort by-newest-group)
-              (filter
-                (fn [entry]
-                  (if (:show-0? state)
-                    true
-                    (let [group (val entry) tasks (:tasks group)]
-                      (>
-                        (count
-                          (filter
-                            (fn [entry]
-                              (let [task (val entry)]
-                                (and (not (:done task)))))
-                            tasks))
-                        0)))))
               (map-indexed
                 (fn [index entry] [(key entry)
                                    (let 
