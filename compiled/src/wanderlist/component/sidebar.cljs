@@ -73,8 +73,6 @@
 
 (defn init-state [groups router] {:query ""})
 
-(println "sidebar change")
-
 (defn render [groups router]
   (fn [state mutate]
     (let [match-query (fn [entry]

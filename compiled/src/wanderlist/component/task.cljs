@@ -59,7 +59,7 @@
            :event {:click (handle-toggle task)}})
         (input
           {:style style-input,
-           :event {:change (handle-change task state)},
+           :event {:input (handle-change task state)},
            :attrs {:value (:text task)}})
         (div
           {:style style-promote,

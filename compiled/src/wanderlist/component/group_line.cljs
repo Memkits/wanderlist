@@ -44,7 +44,6 @@
 
 (defn on-group-route [state group-id]
   (fn [simple-event dispatch]
-    (println "with log")
     (dispatch :set-router {:group-id group-id, :name :table})))
 
 (defn handle-click [group state]
