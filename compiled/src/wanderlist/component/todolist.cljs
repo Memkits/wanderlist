@@ -2,7 +2,6 @@
 (ns wanderlist.component.todolist
   (:require [hsl.core :refer [hsl]]
             [wanderlist.component.task :refer [task-component]]
-            [wanderlist.component.group :refer [group-component]]
             [wanderlist.style.widget :as widget]
             [wanderlist.style.layout :as layout]
             [respo.alias :refer [create-comp
@@ -55,37 +54,37 @@
 
 (def style-hint {:color (hsl 0 0 60)})
 
-(defn handle-input [state mutate]
-  (fn [simple-event dispatch] (mutate {:draft (:value simple-event)})))
+(defn handle-input [simple-event dispatch! mutate!]
+  (mutate! {:draft (:value simple-event)}))
 
-(defn handle-task-add [router state mutate]
-  (fn [simple-event dispatch]
+(defn handle-task-add [router state]
+  (fn [e dispatch! mutate!]
     (if (> (count (:draft state)) 0)
       (do
-        (dispatch
+        (dispatch!
           :add-task
           {:group-id (:group-id router), :text (:draft state)})
-        (mutate {:draft ""})))))
+        (mutate! {:draft ""})))))
 
-(defn handle-keydown [router state mutate]
-  (fn [simple-event dispatch]
+(defn handle-keydown [router state]
+  (fn [simple-event dispatch! mutate!]
     (if (and
           (= (:key-code simple-event) 13)
           (> (count (:draft state)) 0))
       (do
-        (dispatch
+        (dispatch!
           :add-task
           {:group-id (:group-id router), :text (:draft state)})
-        (mutate {:draft ""})))))
+        (mutate! {:draft ""})))))
 
-(defn handle-toggle [state mutate]
-  (fn [simple-event dispatch]
-    (mutate {:fold-done? (not (:fold-done? state))})))
+(defn handle-toggle [state]
+  (fn [simple-event dispatch! mutate!]
+    (mutate! {:fold-done? (not (:fold-done? state))})))
 
 (defn init-state [router group] {:draft "", :fold-done? true})
 
 (defn render [router group]
-  (fn [state mutate]
+  (fn [state mutate!]
     (let [tasks (:tasks group)
           todo-tasks (->>
                        tasks
@@ -99,20 +98,19 @@
         {:style style-todolist}
         (header
           {:style style-header}
-          (group-component group)
           (div {:style style-space})
           (div
             {:style style-adder}
             (input
               {:style style-input,
                :event
-               {:keydown (handle-keydown router state mutate),
-                :input (handle-input state mutate)},
+               {:keydown (handle-keydown router state),
+                :input handle-input},
                :attrs
                {:placeholder "Add a task...", :value (:draft state)}})
             (span
               {:style style-button,
-               :event {:click (handle-task-add router state mutate)},
+               :event {:click (handle-task-add router state)},
                :attrs {:inner-text "Add"}})))
         (div {:style (layout/vspace 16)})
         (section
@@ -136,7 +134,7 @@
             (if (> (count done-tasks) 0)
               (span
                 {:style style-button,
-                 :event {:click (handle-toggle state mutate)},
+                 :event {:click (handle-toggle state)},
                  :attrs {:inner-text "Toggle"}})))
           (if (not (:fold-done? state))
             (section

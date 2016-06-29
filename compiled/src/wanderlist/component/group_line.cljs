@@ -1,6 +1,6 @@
 
 (ns wanderlist.component.group-line
-  (:require [respo.alias :refer [create-comp div span]]
+  (:require [respo.alias :refer [create-comp div span input]]
             [hsl.core :refer [hsl]]
             [wanderlist.style.widget :as widget]
             [respo.component.space :refer [comp-space]]))
@@ -18,7 +18,13 @@
    :position "absolute",
    :transition-duration "300ms"})
 
-(def style-silent {:pointer-events "none"})
+(def style-input
+ {:line-height 2,
+  :font-size 16,
+  :background-color "transparent",
+  :flex 1,
+  :outline "none",
+  :border "none"})
 
 (def style-small-hint
  {:color (hsl 0 0 70), :font-size "12px", :pointer-events "none"})
@@ -40,22 +46,25 @@
     :display "inline-block",
     :height "24px"}))
 
-(def style-space {:flex 1})
-
 (defn on-group-route [state group-id]
-  (fn [simple-event dispatch]
-    (dispatch :set-router {:group-id group-id, :name :table})))
+  (fn [simple-event dispatch! mutate!]
+    (dispatch! :set-router {:group-id group-id, :name :table})))
 
 (defn handle-click [group state]
-  (fn [simple-event dispatch]
-    (dispatch :rm-group (:id group))
-    (dispatch :set-router {:name :table})))
+  (fn [simple-event dispatch! mutate!]
+    (dispatch! :rm-group (:id group))
+    (dispatch! :set-router {:name :table})))
 
 (defn handle-promote [group]
-  (fn [simple-event dispatch] (dispatch :touch-group (:id group))))
+  (fn [simple-event dispatch! mutate!]
+    (dispatch! :touch-group (:id group))))
+
+(defn on-edit [group-id]
+  (fn [e dispatch! mutate!]
+    (dispatch! :update-group {:id group-id, :text (:value e)})))
 
 (defn render [group index selected? todo-size]
-  (fn [state mutate]
+  (fn [state mutate!]
     (let [todo-size (count
                       (->>
                         (:tasks group)
@@ -65,12 +74,14 @@
         {:style (style-group index selected? (> todo-size 0)),
          :event {:click (on-group-route state (:id group))}}
         (span
-          {:style style-silent, :attrs {:inner-text (:text group)}})
-        (comp-space 20 nil)
-        (span
           {:style style-small-hint,
            :attrs {:inner-text (str todo-size)}})
-        (div {:style style-space})
+        (comp-space 8 0)
+        (input
+          {:style style-input,
+           :event {:input (on-edit (:id group))},
+           :attrs {:value (:text group)}})
+        (comp-space 20 nil)
         (div
           {:style style-promote,
            :event {:click (handle-promote group)}})

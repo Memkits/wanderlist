@@ -55,32 +55,29 @@
 
 (defn style-box [n] {:width "100%", :height (str (+ 80 (* n 40)) "px")})
 
-(defn on-query-change [state mutate]
-  (fn [simple-event dispatch]
+(defn on-query-change [state]
+  (fn [simple-event dispatch! mutate!]
     (comment println simple-event)
-    (mutate {:query (:value simple-event)})))
+    (mutate! {:query (:value simple-event)})))
 
-(defn on-group-add [state mutate]
-  (fn [simple-event dispatch]
+(defn on-group-add [state]
+  (fn [simple-event dispatch! mutate!]
     (if (> (count (:query state)) 0)
-      (do (dispatch :add-group (:query state)) (mutate {:query ""})))))
+      (do
+        (dispatch! :add-group (:query state))
+        (mutate! {:query ""})))))
 
-(defn on-empty-route [state]
-  (fn [simple-event dispatch] (dispatch :set-router {:name :table})))
+(defn on-empty-route [e dispatch! mutate!]
+  (dispatch! :set-router {:name :table}))
 
-(defn on-route-code [state]
-  (fn [simpe-event dispatch] (dispatch :set-router {:name :code})))
+(defn on-route-code [simpe-event dispatch!]
+  (dispatch! :set-router {:name :code}))
 
 (defn init-state [groups router] {:query ""})
 
 (defn render [groups router]
-  (fn [state mutate]
-    (let [match-query (fn [entry]
-                        (let [group (val entry)]
-                          (string/includes?
-                            (or (:text group) "")
-                            (:query state))))
-          by-newest-group (fn [group-a group-b]
+  (fn [state mutate!]
+    (let [by-newest-group (fn [group-a group-b]
                             (compare
                               (:touched-time (val group-b))
                               (:touched-time (val group-a))))]
@@ -90,25 +87,23 @@
           {:style style-header}
           (input
             {:style style-query,
-             :event {:input (on-query-change state mutate)},
-             :attrs {:placeholder "Search...", :value (:query state)}})
+             :event {:input (on-query-change state)},
+             :attrs {:placeholder "group...", :value (:query state)}})
           (span
             {:style style-add,
-             :event {:click (on-group-add state mutate)},
+             :event {:click (on-group-add state)},
              :attrs {:inner-text "Add"}})
           (div {:style (layout/hspace 16)})
           (span
             {:style style-button,
-             :event {:click (on-route-code state)},
+             :event {:click on-route-code},
              :attrs {:inner-text "Code"}}))
-        (div {:style (layout/vspace 16)})
         (div
-          {:style style-body, :event {:click (on-empty-route state)}}
+          {:style style-body, :event {:click on-empty-route}}
           (div
             {:style (style-box (count groups))}
             (->>
               groups
-              (filter match-query)
               (sort by-newest-group)
               (map-indexed
                 (fn [index entry] [(key entry)

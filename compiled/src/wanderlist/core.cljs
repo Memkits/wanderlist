@@ -1,7 +1,7 @@
 
 (ns wanderlist.core
   (:require [clojure.string :as string]
-            [respo.core :refer [render]]
+            [respo.core :refer [render!]]
             [wanderlist.component.container :refer [container-component]]
             [wanderlist.updater.core :refer [updater]]
             [cljs.reader :as reader]
@@ -46,8 +46,8 @@
 
 (defn get-root [] (.querySelector js/document "#app"))
 
-(defn render-app []
-  (render
+(defn render-app! []
+  (render!
     (container-component @global-store)
     (get-root)
     dispatch
@@ -56,16 +56,16 @@
 (defn -main []
   (enable-console-print!)
   (println "app started")
-  (render-app)
-  (add-watch global-store :rerender render-app)
-  (add-watch global-states :rerender render-app))
+  (render-app!)
+  (add-watch global-store :rerender render-app!)
+  (add-watch global-states :rerender render-app!))
 
-(defn save-local-storage []
+(defn save-local-storage! []
   (.setItem js/localStorage "wanderlist" (pr-str @global-store))
   (comment .log js/console (pr-str @global-store)))
 
 (set! (.-onload js/window) -main)
 
-(set! (.-onbeforeunload js/window) save-local-storage)
+(set! (.-onbeforeunload js/window) save-local-storage!)
 
-(defn on-jsload [] (println "code updated.") (render-app))
+(defn on-jsload [] (println "code updated.") (render-app!))

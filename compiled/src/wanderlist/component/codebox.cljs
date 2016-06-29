@@ -14,7 +14,7 @@
   :height "100%"})
 
 (defn render [store]
-  (fn [state mutate]
+  (fn [state mutate!]
     (div
       {}
       (textarea {:style style-text, :attrs {:value (pr-str store)}}))))

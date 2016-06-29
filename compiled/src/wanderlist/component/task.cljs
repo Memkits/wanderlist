@@ -32,25 +32,25 @@
    widget/button
    {:background-color (hsl 120 50 80), :margin-right "8px"}))
 
-(defn handle-change [task state]
-  (fn [simple-event dispatch]
-    (dispatch
+(defn handle-change [task]
+  (fn [simple-event dispatch! mutate!]
+    (dispatch!
       :update-task
       {:group-id (:group-id task),
        :id (:id task),
        :text (:value simple-event)})))
 
 (defn handle-toggle [task]
-  (fn [simple-event dispatch] (dispatch :toggle-task task)))
+  (fn [simple-event dispatch! mutate!] (dispatch! :toggle-task task)))
 
 (defn handle-remove [task]
-  (fn [simple-event dispatch] (dispatch :rm-task task)))
+  (fn [simple-event dispatch! mutate!] (dispatch! :rm-task task)))
 
 (defn handle-promote [task]
-  (fn [simple-event dispatch] (dispatch :touch-task task)))
+  (fn [simple-event dispatch! mutate!] (dispatch! :touch-task task)))
 
 (defn render [task index]
-  (fn [state mutate]
+  (fn [state mutate!]
     (let [done? (:done task)]
       (section
         {:style (style-task index)}
@@ -59,7 +59,7 @@
            :event {:click (handle-toggle task)}})
         (input
           {:style style-input,
-           :event {:input (handle-change task state)},
+           :event {:input (handle-change task)},
            :attrs {:value (:text task)}})
         (div
           {:style style-promote,
@@ -67,7 +67,5 @@
         (div
           {:style style-remove,
            :event {:click (handle-remove task)}})))))
-
-(enable-console-print!)
 
 (def task-component (create-comp :task render))
