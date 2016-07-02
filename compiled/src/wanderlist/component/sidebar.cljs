@@ -106,7 +106,7 @@
               groups
               (sort by-newest-group)
               (map-indexed
-                (fn [index entry] [(key entry)
+                (fn [index entry] [index
                                    (let 
                                      [group (val entry)
                                       tasks (:tasks group)

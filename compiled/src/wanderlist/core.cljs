@@ -1,7 +1,7 @@
 
 (ns wanderlist.core
   (:require [clojure.string :as string]
-            [respo.core :refer [render!]]
+            [respo.core :refer [render! clear-cache!]]
             [wanderlist.component.container :refer [container-component]]
             [wanderlist.updater.core :refer [updater]]
             [cljs.reader :as reader]
@@ -68,4 +68,7 @@
 
 (set! (.-onbeforeunload js/window) save-local-storage!)
 
-(defn on-jsload [] (println "code updated.") (render-app!))
+(defn on-jsload []
+  (println "code updated.")
+  (clear-cache!)
+  (render-app!))

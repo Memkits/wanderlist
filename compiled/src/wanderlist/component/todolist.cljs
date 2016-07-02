@@ -125,7 +125,7 @@
                     (:touched-time (val entry-b))
                     (:touched-time (val entry-a)))))
               (map-indexed
-                (fn [index entry] [(key entry)
+                (fn [index entry] [index
                                    (task-component
                                      (val entry)
                                      index)]))))
@@ -150,7 +150,6 @@
                   (fn [index entry] [(key entry)
                                      (task-component
                                        (val entry)
-                                       index)]))
-                (into (sorted-map))))))))))
+                                       index)]))))))))))
 
 (def todolist-component (create-comp :todolist init-state merge render))
