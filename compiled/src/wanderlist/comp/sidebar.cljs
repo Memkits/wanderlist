@@ -1,11 +1,11 @@
 
-(ns wanderlist.component.sidebar
+(ns wanderlist.comp.sidebar
   (:require [clojure.string :as string]
             [hsl.core :refer [hsl]]
             [wanderlist.style.layout :as layout]
             [wanderlist.style.widget :as widget]
             [respo.alias :refer [create-comp div span input]]
-            [wanderlist.component.group-line :refer [comp-group-line]]))
+            [wanderlist.comp.group-line :refer [comp-group-line]]))
 
 (def style-sidebar
  {:box-shadow (str "0px 0px 4px " (hsl 0 0 0 0.1)),
@@ -55,19 +55,19 @@
 
 (defn style-box [n] {:width "100%", :height (str (+ 80 (* n 40)) "px")})
 
-(defn on-query-change [state]
-  (fn [simple-event dispatch! mutate!]
+(defn on-query-change [state mutate!]
+  (fn [simple-event dispatch!]
     (comment println simple-event)
     (mutate! {:query (:value simple-event)})))
 
-(defn on-group-add [state]
-  (fn [simple-event dispatch! mutate!]
+(defn on-group-add [state mutate!]
+  (fn [simple-event dispatch!]
     (if (> (count (:query state)) 0)
       (do
         (dispatch! :add-group (:query state))
         (mutate! {:query ""})))))
 
-(defn on-empty-route [e dispatch! mutate!]
+(defn on-empty-route [e dispatch!]
   (dispatch! :set-router {:name :table}))
 
 (defn on-route-code [simpe-event dispatch!]
@@ -87,11 +87,11 @@
           {:style style-header}
           (input
             {:style style-query,
-             :event {:input (on-query-change state)},
+             :event {:input (on-query-change state mutate!)},
              :attrs {:placeholder "group...", :value (:query state)}})
           (span
             {:style style-add,
-             :event {:click (on-group-add state)},
+             :event {:click (on-group-add state mutate!)},
              :attrs {:inner-text "Add"}})
           (div {:style (layout/hspace 16)})
           (span
@@ -106,9 +106,9 @@
               groups
               (sort by-newest-group)
               (map-indexed
-                (fn [index entry] [index
+                (fn [index entry] [(first entry)
                                    (let 
-                                     [group (val entry)
+                                     [group (last entry)
                                       tasks (:tasks group)
                                       selected?
                                       (=

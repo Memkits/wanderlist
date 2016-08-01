@@ -1,5 +1,5 @@
 
-(ns wanderlist.component.codebox
+(ns wanderlist.comp.codebox
   (:require [clojure.string :as string]
             [respo.alias :refer [create-comp div textarea]]))
 

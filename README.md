@@ -21,7 +21,7 @@ boot dev
 ```
 
 ```bash
-boot advanced
+boot build-advanced
 # open target/index.html
 ```
 

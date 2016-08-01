@@ -1,5 +1,5 @@
 
-(ns wanderlist.component.task
+(ns wanderlist.comp.task
   (:require [clojure.string :as string]
             [hsl.core :refer [hsl]]
             [wanderlist.style.widget :as widget]

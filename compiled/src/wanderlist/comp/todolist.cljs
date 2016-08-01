@@ -1,7 +1,7 @@
 
-(ns wanderlist.component.todolist
+(ns wanderlist.comp.todolist
   (:require [hsl.core :refer [hsl]]
-            [wanderlist.component.task :refer [task-component]]
+            [wanderlist.comp.task :refer [task-component]]
             [wanderlist.style.widget :as widget]
             [wanderlist.style.layout :as layout]
             [respo.alias :refer [create-comp
@@ -54,11 +54,12 @@
 
 (def style-hint {:color (hsl 0 0 60)})
 
-(defn handle-input [simple-event dispatch! mutate!]
-  (mutate! {:draft (:value simple-event)}))
+(defn handle-input [mutate!]
+  (fn [simple-event dispatch!]
+    (mutate! {:draft (:value simple-event)})))
 
-(defn handle-task-add [router state]
-  (fn [e dispatch! mutate!]
+(defn handle-task-add [router state mutate!]
+  (fn [e dispatch!]
     (if (> (count (:draft state)) 0)
       (do
         (dispatch!
@@ -66,8 +67,8 @@
           {:group-id (:group-id router), :text (:draft state)})
         (mutate! {:draft ""})))))
 
-(defn handle-keydown [router state]
-  (fn [simple-event dispatch! mutate!]
+(defn handle-keydown [router state mutate!]
+  (fn [simple-event dispatch!]
     (if (and
           (= (:key-code simple-event) 13)
           (> (count (:draft state)) 0))
@@ -77,8 +78,8 @@
           {:group-id (:group-id router), :text (:draft state)})
         (mutate! {:draft ""})))))
 
-(defn handle-toggle [state]
-  (fn [simple-event dispatch! mutate!]
+(defn handle-toggle [state mutate!]
+  (fn [simple-event dispatch!]
     (mutate! {:fold-done? (not (:fold-done? state))})))
 
 (defn init-state [router group] {:draft "", :fold-done? true})
@@ -104,13 +105,13 @@
             (input
               {:style style-input,
                :event
-               {:keydown (handle-keydown router state),
-                :input handle-input},
+               {:keydown (handle-keydown router state mutate!),
+                :input (handle-input mutate!)},
                :attrs
                {:placeholder "Add a task...", :value (:draft state)}})
             (span
               {:style style-button,
-               :event {:click (handle-task-add router state)},
+               :event {:click (handle-task-add router state mutate!)},
                :attrs {:inner-text "Add"}})))
         (div {:style (layout/vspace 16)})
         (section
@@ -125,7 +126,7 @@
                     (:touched-time (val entry-b))
                     (:touched-time (val entry-a)))))
               (map-indexed
-                (fn [index entry] [index
+                (fn [index entry] [(first entry)
                                    (task-component
                                      (val entry)
                                      index)]))))
@@ -134,7 +135,7 @@
             (if (> (count done-tasks) 0)
               (span
                 {:style style-button,
-                 :event {:click (handle-toggle state)},
+                 :event {:click (handle-toggle state mutate!)},
                  :attrs {:inner-text "Toggle"}})))
           (if (not (:fold-done? state))
             (section

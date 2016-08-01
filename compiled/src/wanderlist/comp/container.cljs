@@ -1,11 +1,11 @@
 
-(ns wanderlist.component.container
+(ns wanderlist.comp.container
   (:require [clojure.string :as string]
             [hsl.core :refer [hsl]]
             [respo.alias :refer [create-comp div textarea span]]
-            [wanderlist.component.sidebar :refer [sidebar-component]]
-            [wanderlist.component.todolist :refer [todolist-component]]
-            [wanderlist.component.codebox :refer [codebox-component]]))
+            [wanderlist.comp.sidebar :refer [sidebar-component]]
+            [wanderlist.comp.todolist :refer [todolist-component]]
+            [wanderlist.comp.codebox :refer [codebox-component]]))
 
 (def style-app
  {:background-color (hsl 240 40 96),

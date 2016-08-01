@@ -1,9 +1,9 @@
 
-(ns wanderlist.component.group-line
+(ns wanderlist.comp.group-line
   (:require [respo.alias :refer [create-comp div span input]]
             [hsl.core :refer [hsl]]
             [wanderlist.style.widget :as widget]
-            [respo.component.space :refer [comp-space]]))
+            [respo.comp.space :refer [comp-space]]))
 
 (defn style-group [index selected? todo?]
   {:line-height "40px",

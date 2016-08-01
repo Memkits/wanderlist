@@ -2,7 +2,7 @@
 (ns wanderlist.core
   (:require [clojure.string :as string]
             [respo.core :refer [render! clear-cache!]]
-            [wanderlist.component.container :refer [container-component]]
+            [wanderlist.comp.container :refer [container-component]]
             [wanderlist.updater.core :refer [updater]]
             [cljs.reader :as reader]
             [wanderlist.util.migration :refer [migrate-from-v0
