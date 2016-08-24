@@ -3,6 +3,8 @@
   (:require [clojure.string :as string]
             [wanderlist.schema :as schema]))
 
+(defn get-time [] (.valueOf (js/Date.)))
+
 (defn migrate-from-v0 [old-store]
   (merge
     schema/store
@@ -24,8 +26,6 @@
                   (into {})))])))
        (into {})),
      :version 1}))
-
-(defn get-time [] (.valueOf (js/Date.)))
 
 (defn upgrade-tasks [tasks]
   (->>

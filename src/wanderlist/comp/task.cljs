@@ -12,10 +12,8 @@
    :position "absolute",
    :transition-duration "300ms"})
 
-(defn style-done [done?]
-  (merge
-    widget/button
-    {:background-color (if done? (hsl 100 20 60) (hsl 20 90 80))}))
+(defn handle-toggle [task]
+  (fn [simple-event dispatch! mutate!] (dispatch! :toggle-task task)))
 
 (def style-input
  {:font-size "16px",
@@ -24,13 +22,24 @@
   :outline "none",
   :border "none"})
 
-(def style-remove
- (merge widget/button {:background-color (hsl 0 100 70)}))
-
 (def style-promote
  (merge
    widget/button
    {:background-color (hsl 120 50 80), :margin-right "8px"}))
+
+(defn handle-promote [task]
+  (fn [simple-event dispatch! mutate!] (dispatch! :touch-task task)))
+
+(defn style-done [done?]
+  (merge
+    widget/button
+    {:background-color (if done? (hsl 100 20 60) (hsl 20 90 80))}))
+
+(def style-remove
+ (merge widget/button {:background-color (hsl 0 100 70)}))
+
+(defn handle-remove [task]
+  (fn [simple-event dispatch! mutate!] (dispatch! :rm-task task)))
 
 (defn handle-change [task]
   (fn [simple-event dispatch! mutate!]
@@ -39,15 +48,6 @@
       {:group-id (:group-id task),
        :id (:id task),
        :text (:value simple-event)})))
-
-(defn handle-toggle [task]
-  (fn [simple-event dispatch! mutate!] (dispatch! :toggle-task task)))
-
-(defn handle-remove [task]
-  (fn [simple-event dispatch! mutate!] (dispatch! :rm-task task)))
-
-(defn handle-promote [task]
-  (fn [simple-event dispatch! mutate!] (dispatch! :touch-task task)))
 
 (defn render [task index]
   (fn [state mutate!]

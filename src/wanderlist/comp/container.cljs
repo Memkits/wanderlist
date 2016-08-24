@@ -7,15 +7,6 @@
             [wanderlist.comp.todolist :refer [todolist-component]]
             [wanderlist.comp.codebox :refer [codebox-component]]))
 
-(def style-app
- {:background-color (hsl 240 40 96),
-  :width "100%",
-  :padding "16px",
-  :display "flex",
-  :position "absolute",
-  :font-family "Verdana",
-  :height "100%"})
-
 (def style-left-column
  {:width "34%", :display "flex", :flex-direction "column"})
 
@@ -31,6 +22,15 @@
   :width "100%",
   :justify-content "center",
   :display "flex",
+  :height "100%"})
+
+(def style-app
+ {:background-color (hsl 240 40 96),
+  :width "100%",
+  :padding "16px",
+  :display "flex",
+  :position "absolute",
+  :font-family "Verdana",
   :height "100%"})
 
 (def style-gap {:width "16px", :flex-shrink "0"})

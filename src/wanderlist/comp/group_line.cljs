@@ -5,6 +5,18 @@
             [wanderlist.style.widget :as widget]
             [respo.comp.space :refer [comp-space]]))
 
+(def style-small-hint
+ {:color (hsl 0 0 70), :font-size "12px", :pointer-events "none"})
+
+(defn on-group-route [state group-id]
+  (fn [simple-event dispatch! mutate!]
+    (dispatch! :set-router {:group-id group-id, :name :table})))
+
+(defn handle-click [group state]
+  (fn [simple-event dispatch! mutate!]
+    (dispatch! :rm-group (:id group))
+    (dispatch! :set-router {:name :table})))
+
 (defn style-group [index selected? todo?]
   {:line-height "40px",
    :align-items "center",
@@ -26,9 +38,6 @@
   :outline "none",
   :border "none"})
 
-(def style-small-hint
- {:color (hsl 0 0 70), :font-size "12px", :pointer-events "none"})
-
 (def style-promote
  (merge
    widget/button
@@ -38,6 +47,10 @@
     :margin-right "8px",
     :height "24px"}))
 
+(defn handle-promote [group]
+  (fn [simple-event dispatch! mutate!]
+    (dispatch! :touch-group (:id group))))
+
 (def style-remove
  (merge
    widget/button
@@ -45,19 +58,6 @@
     :width "24px",
     :display "inline-block",
     :height "24px"}))
-
-(defn on-group-route [state group-id]
-  (fn [simple-event dispatch! mutate!]
-    (dispatch! :set-router {:group-id group-id, :name :table})))
-
-(defn handle-click [group state]
-  (fn [simple-event dispatch! mutate!]
-    (dispatch! :rm-group (:id group))
-    (dispatch! :set-router {:name :table})))
-
-(defn handle-promote [group]
-  (fn [simple-event dispatch! mutate!]
-    (dispatch! :touch-group (:id group))))
 
 (defn on-edit [group-id]
   (fn [e dispatch! mutate!]

@@ -1,17 +1,18 @@
 
 (set-env!
- :dependencies '[[org.clojure/clojurescript "1.9.89"      :scope "test"]
+ :dependencies '[[org.clojure/clojurescript "1.9.216"     :scope "test"]
                  [org.clojure/clojure       "1.8.0"       :scope "test"]
                  [adzerk/boot-cljs          "1.7.228-1"   :scope "test"]
-                 [adzerk/boot-reload        "0.4.11"      :scope "test"]
-                 [cirru/boot-cirru-sepal    "0.1.9"       :scope "test"]
+                 [adzerk/boot-reload        "0.4.12"      :scope "test"]
+                 [cirru/stack-server        "0.1.8"       :scope "test"]
                  [adzerk/boot-test          "1.1.2"       :scope "test"]
                  [mvc-works/hsl             "0.1.2"]
+                 [respo/ui                  "0.1.1"]
                  [respo                     "0.3.9"]])
 
 (require '[adzerk.boot-cljs   :refer [cljs]]
          '[adzerk.boot-reload :refer [reload]]
-         '[cirru-sepal.core   :refer [transform-cirru]]
+         '[stack-server.core  :refer [start-stack-editor! transform-stack]]
          '[respo.alias        :refer [html head title script style meta' div link body]]
          '[respo.render.static-html :refer [make-html]]
          '[adzerk.boot-test   :refer :all]
@@ -27,15 +28,8 @@
        :scm         {:url "https://github.com/Memkits/wanderlist"}
        :license     {"MIT" "http://opensource.org/licenses/mit-license.php"}})
 
-(deftask compile-cirru []
-  (set-env!
-    :source-paths #{"cirru/"})
-  (comp
-    (transform-cirru)
-    (target :dir #{"compiled/"})))
-
 (defn use-text [x] {:attrs {:innerHTML x}})
-(def gaScriot "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(def gaScript "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
@@ -57,7 +51,7 @@
       (style (use-text "body * {box-sizing: border-box;}"))
       (script {:attrs {:id "config" :type "text/edn" :innerHTML (pr-str data)}})
       (if (:build? data)
-        (script {:attrs {:id "config" :type "text/edn" :innerHTML gaScriot}})))
+        (script {:attrs {:id "config" :type "text/edn" :innerHTML gaScript}})))
     (body {}
       (div {:attrs {:id "app"}})
       (script {:attrs {:src "main.js"}})))))
@@ -74,35 +68,29 @@
         (add-resource tmp)
         (commit!)))))
 
-(deftask dev []
+(deftask dev! []
   (set-env!
-    :asset-paths #{"assets"}
-    :source-paths #{"cirru/src"})
+    :asset-paths #{"assets"})
   (comp
-    (html-file :data {:build? false})
     (watch)
-    (transform-cirru)
+    (start-stack-editor!)
+    (target :dir #{"src/"})
+    (html-file :data {:build? false})
     (reload :on-jsload 'wanderlist.core/on-jsload
             :cljs-asset-path ".")
     (cljs)
     (target)))
 
-(deftask build-simple []
-  (set-env!
-    :asset-paths #{"assets"}
-    :source-paths #{"cirru/src"})
+(deftask generate-code []
   (comp
-    (transform-cirru)
-    (cljs :optimizations :simple)
-    (html-file :data {:build? false})
-    (target)))
+    (transform-stack :filename "stack-sepal.ir")
+    (target :dir #{"src/"})))
 
 (deftask build-advanced []
   (set-env!
-    :asset-paths #{"assets"}
-    :source-paths #{"cirru/src"})
+    :asset-paths #{"assets"})
   (comp
-    (transform-cirru)
+    (transform-stack :filename "stack-sepal.ir")
     (cljs :optimizations :advanced)
     (html-file :data {:build? true})
     (target)))
@@ -112,16 +100,9 @@
     (sh "rsync" "-r" "target/" "tiye.me:repo/Memkits/wanderlist" "--exclude" "main.out" "--delete")
     fileset))
 
-(deftask send-tiye []
-  (comp
-    (build-simple)
-    (rsync)))
-
 (deftask build []
-  (set-env!
-    :source-paths #{"cirru/src"})
   (comp
-    (transform-cirru)
+    (transform-stack :filename "stack-sepal.ir")
     (pom)
     (jar)
     (install)
@@ -136,8 +117,7 @@
 
 (deftask watch-test []
   (set-env!
-    :source-paths #{"cirru/src" "cirru/test"})
+    :source-paths #{"src" "test"})
   (comp
     (watch)
-    (transform-cirru)
     (test :namespaces '#{wanderlist.test})))

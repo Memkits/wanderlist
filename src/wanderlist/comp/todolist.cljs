@@ -7,36 +7,23 @@
             [respo.alias :refer [create-comp
                                  div section span header input]]))
 
-(def style-todolist
- {:box-shadow (str "0 0 4px " (hsl 0 0 0 0.1)),
-  :background-color (hsl 0 0 100),
-  :width "100%",
-  :padding "16px",
-  :display "flex",
-  :flex-direction "column",
-  :height "100%"})
+(defn handle-task-add [router state mutate!]
+  (fn [e dispatch!]
+    (if (> (count (:draft state)) 0)
+      (do
+        (dispatch!
+          :add-task
+          {:group-id (:group-id router), :text (:draft state)})
+        (mutate! {:draft ""})))))
 
 (def style-header
  {:display "flex", :flex-direction "column", :height "auto"})
 
-(def style-adder {:display "flex"})
+(defn handle-toggle [state mutate!]
+  (fn [simple-event dispatch!]
+    (mutate! {:fold-done? (not (:fold-done? state))})))
 
-(def style-input
- {:font-size "16px",
-  :flex "1",
-  :padding "0px 8px",
-  :outline "none",
-  :border "none",
-  :height "32px"})
-
-(defn style-list [size]
-  {:display "flex",
-   :position "relative",
-   :transition-duration "300ms",
-   :flex-direction "column",
-   :height (str (* 40 size) "px")})
-
-(def style-body {:overflow "auto", :flex "1", :padding-bottom "200px"})
+(def style-space {:width "100%", :height "8px"})
 
 (def style-button
  (merge
@@ -48,24 +35,43 @@
     :padding "0 16px",
     :display "inline-block"}))
 
-(def style-space {:width "100%", :height "8px"})
+(def style-body {:overflow "auto", :flex "1", :padding-bottom "200px"})
 
-(def style-section {:margin-top "16px"})
+(defn style-list [size]
+  {:display "flex",
+   :position "relative",
+   :transition-duration "300ms",
+   :flex-direction "column",
+   :height (str (* 40 size) "px")})
 
-(def style-hint {:color (hsl 0 0 60)})
+(def style-adder {:display "flex"})
 
 (defn handle-input [mutate!]
   (fn [simple-event dispatch!]
     (mutate! {:draft (:value simple-event)})))
 
-(defn handle-task-add [router state mutate!]
-  (fn [e dispatch!]
-    (if (> (count (:draft state)) 0)
-      (do
-        (dispatch!
-          :add-task
-          {:group-id (:group-id router), :text (:draft state)})
-        (mutate! {:draft ""})))))
+(def style-hint {:color (hsl 0 0 60)})
+
+(def style-input
+ {:font-size "16px",
+  :flex "1",
+  :padding "0px 8px",
+  :outline "none",
+  :border "none",
+  :height "32px"})
+
+(defn init-state [router group] {:draft "", :fold-done? true})
+
+(def style-section {:margin-top "16px"})
+
+(def style-todolist
+ {:box-shadow (str "0 0 4px " (hsl 0 0 0 0.1)),
+  :background-color (hsl 0 0 100),
+  :width "100%",
+  :padding "16px",
+  :display "flex",
+  :flex-direction "column",
+  :height "100%"})
 
 (defn handle-keydown [router state mutate!]
   (fn [simple-event dispatch!]
@@ -77,12 +83,6 @@
           :add-task
           {:group-id (:group-id router), :text (:draft state)})
         (mutate! {:draft ""})))))
-
-(defn handle-toggle [state mutate!]
-  (fn [simple-event dispatch!]
-    (mutate! {:fold-done? (not (:fold-done? state))})))
-
-(defn init-state [router group] {:draft "", :fold-done? true})
 
 (defn render [router group]
   (fn [state mutate!]

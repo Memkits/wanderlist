@@ -9,12 +9,6 @@
                                                migrate-from-v1]]
             [wanderlist.schema :as schema]))
 
-(defonce app-env
- (reader/read-string
-   (-> js/document (.querySelector "#config") .-innerHTML)))
-
-(defonce global-states (atom {}))
-
 (defonce global-store
  (atom
    (let [stored-data (.getItem js/localStorage "wanderlist")]
@@ -32,6 +26,18 @@
            schema/store))
        schema/store))))
 
+(defonce global-states (atom {}))
+
+(defn get-root [] (.querySelector js/document "#app"))
+
+(defonce app-env
+ (reader/read-string
+   (-> js/document (.querySelector "#config") .-innerHTML)))
+
+(defn save-local-storage! []
+  (.setItem js/localStorage "wanderlist" (pr-str @global-store))
+  (comment .log js/console (pr-str @global-store)))
+
 (defn dispatch [op-type op-data]
   (comment println "dispatch:" op-type op-data)
   (if (= (:env app-env) :build) (js/ga "send" "event" (name op-type)))
@@ -44,14 +50,17 @@
     (reset! global-store new-store)
     (comment .info js/console "new store:" new-store)))
 
-(defn get-root [] (.querySelector js/document "#app"))
-
 (defn render-app! []
   (render!
     (container-component @global-store)
     (get-root)
     dispatch
     global-states))
+
+(defn on-jsload []
+  (println "code updated.")
+  (clear-cache!)
+  (render-app!))
 
 (defn -main []
   (enable-console-print!)
@@ -60,15 +69,6 @@
   (add-watch global-store :rerender render-app!)
   (add-watch global-states :rerender render-app!))
 
-(defn save-local-storage! []
-  (.setItem js/localStorage "wanderlist" (pr-str @global-store))
-  (comment .log js/console (pr-str @global-store)))
-
 (set! (.-onload js/window) -main)
 
 (set! (.-onbeforeunload js/window) save-local-storage!)
-
-(defn on-jsload []
-  (println "code updated.")
-  (clear-cache!)
-  (render-app!))

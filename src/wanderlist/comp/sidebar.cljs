@@ -7,24 +7,20 @@
             [respo.alias :refer [create-comp div span input]]
             [wanderlist.comp.group-line :refer [comp-group-line]]))
 
-(def style-sidebar
- {:box-shadow (str "0px 0px 4px " (hsl 0 0 0 0.1)),
-  :background-color (hsl 0 0 100),
-  :padding "16px",
-  :display "flex",
-  :flex-direction "column",
-  :height "100%"})
+(defn on-query-change [state mutate!]
+  (fn [simple-event dispatch!]
+    (comment println simple-event)
+    (mutate! {:query (:value simple-event)})))
 
 (def style-header {:display "flex"})
 
-(def style-query
- {:line-height "32px",
-  :font-size "16px",
-  :width "100%",
-  :flex "1",
-  :padding "0 8px",
-  :outline "none",
-  :border "none"})
+(def style-space
+ {:width "8px",
+  :display "inline-block",
+  :pointer-events "none",
+  :height "100%"})
+
+(defn style-box [n] {:width "100%", :height (str (+ 80 (* n 40)) "px")})
 
 (def style-add
  (merge
@@ -41,24 +37,23 @@
     :width "auto",
     :padding "0 16px"}))
 
+(def style-query
+ {:line-height "32px",
+  :font-size "16px",
+  :width "100%",
+  :flex "1",
+  :padding "0 8px",
+  :outline "none",
+  :border "none"})
+
 (def style-body
  {:overflow "auto",
   :background-color (hsl 0 0 0 0),
   :flex "1",
   :position "relative"})
 
-(def style-space
- {:width "8px",
-  :display "inline-block",
-  :pointer-events "none",
-  :height "100%"})
-
-(defn style-box [n] {:width "100%", :height (str (+ 80 (* n 40)) "px")})
-
-(defn on-query-change [state mutate!]
-  (fn [simple-event dispatch!]
-    (comment println simple-event)
-    (mutate! {:query (:value simple-event)})))
+(defn on-route-code [simpe-event dispatch!]
+  (dispatch! :set-router {:name :code}))
 
 (defn on-group-add [state mutate!]
   (fn [simple-event dispatch!]
@@ -67,13 +62,18 @@
         (dispatch! :add-group (:query state))
         (mutate! {:query ""})))))
 
+(defn init-state [groups router] {:query ""})
+
+(def style-sidebar
+ {:box-shadow (str "0px 0px 4px " (hsl 0 0 0 0.1)),
+  :background-color (hsl 0 0 100),
+  :padding "16px",
+  :display "flex",
+  :flex-direction "column",
+  :height "100%"})
+
 (defn on-empty-route [e dispatch!]
   (dispatch! :set-router {:name :table}))
-
-(defn on-route-code [simpe-event dispatch!]
-  (dispatch! :set-router {:name :code}))
-
-(defn init-state [groups router] {:query ""})
 
 (defn render [groups router]
   (fn [state mutate!]

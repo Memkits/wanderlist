@@ -10,5 +10,4 @@ pom.xml.asc
 .hgignore
 .hg/
 
-/src
 /.nrepl-history
