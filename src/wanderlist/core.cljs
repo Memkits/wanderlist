@@ -26,17 +26,9 @@
            schema/store))
        schema/store))))
 
-(defonce global-states (atom {}))
-
-(defn get-root [] (.querySelector js/document "#app"))
-
 (defonce app-env
  (reader/read-string
    (-> js/document (.querySelector "#config") .-innerHTML)))
-
-(defn save-local-storage! []
-  (.setItem js/localStorage "wanderlist" (pr-str @global-store))
-  (comment .log js/console (pr-str @global-store)))
 
 (defn dispatch [op-type op-data]
   (comment println "dispatch:" op-type op-data)
@@ -49,6 +41,10 @@
                     (.valueOf (js/Date.)))]
     (reset! global-store new-store)
     (comment .info js/console "new store:" new-store)))
+
+(defonce global-states (atom {}))
+
+(defn get-root [] (.querySelector js/document "#app"))
 
 (defn render-app! []
   (render!
@@ -68,6 +64,10 @@
   (render-app!)
   (add-watch global-store :rerender render-app!)
   (add-watch global-states :rerender render-app!))
+
+(defn save-local-storage! []
+  (.setItem js/localStorage "wanderlist" (pr-str @global-store))
+  (comment .log js/console (pr-str @global-store)))
 
 (set! (.-onload js/window) -main)
 
