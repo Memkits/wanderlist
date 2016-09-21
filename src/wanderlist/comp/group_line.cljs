@@ -3,7 +3,8 @@
   (:require [respo.alias :refer [create-comp div span input]]
             [hsl.core :refer [hsl]]
             [wanderlist.style.widget :as widget]
-            [respo.comp.space :refer [comp-space]]))
+            [respo.comp.space :refer [comp-space]]
+            [respo-ui.style :as ui]))
 
 (def style-small-hint
  {:color (hsl 0 0 70), :font-size "12px", :pointer-events "none"})
@@ -41,7 +42,7 @@
 (def style-promote
  (merge
    widget/button
-   {:background-color (hsl 120 50 80),
+   {:color (hsl 120 50 80),
     :width "24px",
     :display "inline-block",
     :margin-right "8px",
@@ -54,7 +55,7 @@
 (def style-remove
  (merge
    widget/button
-   {:background-color (hsl 0 100 70),
+   {:color (hsl 0 100 70),
     :width "24px",
     :display "inline-block",
     :height "24px"}))
@@ -83,10 +84,12 @@
            :attrs {:value (:text group)}})
         (comp-space 20 nil)
         (div
-          {:style style-promote,
-           :event {:click (handle-promote group)}})
+          {:style (merge ui/center style-promote),
+           :event {:click (handle-promote group)},
+           :attrs {:class-name "ion-android-arrow-up"}})
         (div
-          {:style style-remove,
-           :event {:click (handle-click group state)}})))))
+          {:style (merge ui/center style-remove),
+           :event {:click (handle-click group state)},
+           :attrs {:class-name "ion-android-close"}})))))
 
 (def comp-group-line (create-comp :group-line render))

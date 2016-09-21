@@ -4,11 +4,11 @@
                  [org.clojure/clojure       "1.8.0"       :scope "test"]
                  [adzerk/boot-cljs          "1.7.228-1"   :scope "test"]
                  [adzerk/boot-reload        "0.4.12"      :scope "test"]
-                 [cirru/stack-server        "0.1.11"      :scope "test"]
+                 [cirru/stack-server        "0.1.12"      :scope "test"]
                  [adzerk/boot-test          "1.1.2"       :scope "test"]
                  [mvc-works/hsl             "0.1.2"]
-                 [respo/ui                  "0.1.1"]
-                 [respo                     "0.3.9"]])
+                 [respo/ui                  "0.1.2"]
+                 [respo                     "0.3.23"]])
 
 (require '[adzerk.boot-cljs   :refer [cljs]]
          '[adzerk.boot-reload :refer [reload]]
@@ -37,15 +37,18 @@
   ga('create', 'UA-41753901-15', 'auto');
   ga('send', 'pageview');")
 
+(def icon-style "http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css")
 (defn html-dsl [data fileset]
   (make-html
     (html {}
     (head {}
       (title (use-text "wanderlist"))
       (link {:attrs {:rel "icon" :type "image/png" :href "wanderlist.png"}})
+      (link {:attrs {:rel "stylesheet" :type "text/css" :href icon-style}})
       (if (:build? data)
         (link (:attrs {:rel "manifest" :href "manifest.json"})))
-      (meta'{:attrs {:charset "utf-8"}})
+      (meta' {:attrs {:id "ssr-stages" :content "#{}"}})
+      (meta' {:attrs {:charset "utf-8"}})
       (meta' {:attrs {:name "viewport" :content "width=device-width, initial-scale=1"}})
       (style (use-text "body {margin: 0;}"))
       (style (use-text "body * {box-sizing: border-box;}"))
@@ -61,7 +64,7 @@
   [d data VAL edn "data piece for rendering"]
   (with-pre-wrap fileset
     (let [tmp (tmp-dir!)
-          out (io/file tmp "index.html")]
+          out (io/file tmp "dev.html")]
       (empty-dir! tmp)
       (spit out (html-dsl data fileset))
       (-> fileset
