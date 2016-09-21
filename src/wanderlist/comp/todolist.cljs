@@ -29,7 +29,6 @@
  (merge
    widget/button
    {:color "white",
-    :font-size "16px",
     :background-color (hsl 220 100 80),
     :width "auto",
     :padding "0 16px",

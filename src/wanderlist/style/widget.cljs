@@ -5,12 +5,12 @@
 (def button
  (merge
    ui/button
-   {:line-height "32px",
+   {:line-height "26px",
     :color "white",
     :vertical-align "middle",
-    :width "32px",
+    :font-size "12px",
     :cursor "pointer",
     :border-radius "4px",
-    :height "32px"}))
+    :height 26}))
 
-(def icon {:min-width 32, :text-align "center"})
+(def icon {:min-width 32, :text-align "center", :cursor "pointer"})

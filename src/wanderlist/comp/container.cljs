@@ -9,6 +9,8 @@
 (def style-left-column
  {:width "34%", :display "flex", :flex-direction "column"})
 
+(def style-divider {:background-color (hsl 0 0 94), :width 1})
+
 (def style-right-column
  {:width "66%", :display "flex", :flex-direction "column"})
 
@@ -26,13 +28,10 @@
 (def style-app
  {:background-color (hsl 240 40 96),
   :width "100%",
-  :padding "16px",
   :display "flex",
   :position "absolute",
   :font-family "Verdana",
   :height "100%"})
-
-(def style-gap {:width "16px", :flex-shrink "0"})
 
 (defn render [store]
   (fn [state mutate!]
@@ -42,7 +41,7 @@
         (div
           {:style style-left-column}
           (sidebar-component (:groups store) router))
-        (div {:style style-gap})
+        (div {:style style-divider})
         (div
           {:style style-right-column}
           (case
