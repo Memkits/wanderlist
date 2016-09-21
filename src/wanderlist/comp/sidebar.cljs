@@ -1,6 +1,7 @@
 
 (ns wanderlist.comp.sidebar
   (:require [clojure.string :as string]
+            [respo-ui.style :as ui]
             [hsl.core :refer [hsl]]
             [wanderlist.style.layout :as layout]
             [wanderlist.style.widget :as widget]

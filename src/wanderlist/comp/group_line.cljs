@@ -40,25 +40,20 @@
   :border "none"})
 
 (def style-promote
- (merge
-   widget/button
-   {:color (hsl 120 50 80),
-    :width "24px",
-    :display "inline-block",
-    :margin-right "8px",
-    :height "24px"}))
+ {:color (hsl 120 50 80),
+  :width "24px",
+  :display "inline-block",
+  :height "24px"})
 
 (defn handle-promote [group]
   (fn [simple-event dispatch! mutate!]
     (dispatch! :touch-group (:id group))))
 
 (def style-remove
- (merge
-   widget/button
-   {:color (hsl 0 100 70),
-    :width "24px",
-    :display "inline-block",
-    :height "24px"}))
+ {:color (hsl 0 100 70),
+  :width "24px",
+  :display "inline-block",
+  :height "24px"})
 
 (defn on-edit [group-id]
   (fn [e dispatch! mutate!]
@@ -84,11 +79,11 @@
            :attrs {:value (:text group)}})
         (comp-space 20 nil)
         (div
-          {:style (merge ui/center style-promote),
+          {:style (merge ui/center widget/icon style-promote),
            :event {:click (handle-promote group)},
            :attrs {:class-name "ion-android-arrow-up"}})
         (div
-          {:style (merge ui/center style-remove),
+          {:style (merge ui/center widget/icon style-remove),
            :event {:click (handle-click group state)},
            :attrs {:class-name "ion-android-close"}})))))
 
