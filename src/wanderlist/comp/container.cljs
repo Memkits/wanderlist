@@ -4,8 +4,7 @@
             [hsl.core :refer [hsl]]
             [respo.alias :refer [create-comp div textarea span]]
             [wanderlist.comp.sidebar :refer [sidebar-component]]
-            [wanderlist.comp.todolist :refer [todolist-component]]
-            [wanderlist.comp.codebox :refer [codebox-component]]))
+            [wanderlist.comp.todolist :refer [todolist-component]]))
 
 (def style-left-column
  {:width "34%", :display "flex", :flex-direction "column"})
@@ -56,8 +55,6 @@
               (div
                 {:style style-placeholder}
                 (span {:attrs (:inner-text "Select a group?")})))
-            :code
-            (codebox-component store)
             (div
               {}
               (span

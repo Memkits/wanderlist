@@ -30,13 +30,6 @@
     :padding "0 16px",
     :font-family "Verdana"}))
 
-(def style-button
- (merge
-   widget/button
-   {:background-color (hsl 120 40 84),
-    :width "auto",
-    :padding "0 16px"}))
-
 (def style-query
  {:line-height "32px",
   :font-size "16px",
@@ -51,9 +44,6 @@
   :background-color (hsl 0 0 0 0),
   :flex "1",
   :position "relative"})
-
-(defn on-route-code [simpe-event dispatch!]
-  (dispatch! :set-router {:name :code}))
 
 (defn on-group-add [state mutate!]
   (fn [simple-event dispatch!]
@@ -93,11 +83,7 @@
             {:style style-add,
              :event {:click (on-group-add state mutate!)},
              :attrs {:inner-text "Add"}})
-          (div {:style (layout/hspace 16)})
-          (span
-            {:style style-button,
-             :event {:click on-route-code},
-             :attrs {:inner-text "Code"}}))
+          (div {:style (layout/hspace 16)}))
         (div
           {:style style-body, :event {:click on-empty-route}}
           (div
@@ -120,3 +106,10 @@
                                        selected?))])))))))))
 
 (def sidebar-component (create-comp :sidebar init-state merge render))
+
+(def style-button
+ (merge
+   widget/button
+   {:background-color (hsl 120 40 84),
+    :width "auto",
+    :padding "0 16px"}))
