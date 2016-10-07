@@ -63,6 +63,8 @@
   :flex-direction "column",
   :height "100%"})
 
+(defn on-hide [e dispatch!] (dispatch! :hide-sidebar nil))
+
 (defn on-empty-route [e dispatch!]
   (dispatch! :set-router {:name :table}))
 
@@ -84,7 +86,11 @@
             {:style style-add,
              :event {:click (on-group-add state mutate!)},
              :attrs {:inner-text "Add"}})
-          (div {:style (layout/hspace 16)}))
+          (div {:style (layout/hspace 16)})
+          (span
+            {:style style-add,
+             :event {:click on-hide},
+             :attrs {:inner-text "Hide"}}))
         (div
           {:style style-body, :event {:click on-empty-route}}
           (div

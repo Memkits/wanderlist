@@ -22,7 +22,7 @@
            1
            (migrate-from-v1 old-store)
            2
-           old-store
+           (merge schema/store old-store)
            schema/store))
        schema/store))))
 

@@ -60,4 +60,8 @@
       op-time)
     :set-router
     (assoc old-store :router op-data)
+    :hide-sidebar
+    (assoc old-store :show-sidebar? false)
+    :show-sidebar
+    (assoc old-store :show-sidebar? true)
     old-store))

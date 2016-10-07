@@ -4,7 +4,7 @@
                  [org.clojure/clojure       "1.8.0"       :scope "test"]
                  [adzerk/boot-cljs          "1.7.228-1"   :scope "test"]
                  [adzerk/boot-reload        "0.4.12"      :scope "test"]
-                 [cirru/stack-server        "0.1.12"      :scope "test"]
+                 [cirru/boot-stack-server   "0.1.13"      :scope "test"]
                  [adzerk/boot-test          "1.1.2"       :scope "test"]
                  [mvc-works/hsl             "0.1.2"]
                  [respo/ui                  "0.1.2"]
@@ -23,7 +23,7 @@
 (task-options!
   pom {:project     'memkits/wanderlist
        :version     +version+
-       :description "Workflow"
+       :description "Wunderlist like todolist"
        :url         "https://github.com/Memkits/wanderlist"
        :scm         {:url "https://github.com/Memkits/wanderlist"}
        :license     {"MIT" "http://opensource.org/licenses/mit-license.php"}})
@@ -37,7 +37,7 @@
   ga('create', 'UA-41753901-15', 'auto');
   ga('send', 'pageview');")
 
-(def icon-style "http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css")
+(def icon-style "https://rawgit.com/driftyco/ionicons/master/css/ionicons.min.css")
 (defn html-dsl [data fileset]
   (make-html
     (html {}
@@ -75,7 +75,7 @@
   (set-env!
     :asset-paths #{"assets"})
   (comp
-    (watch)
+    (repl)
     (start-stack-editor!)
     (target :dir #{"src/"})
     (html-file :data {:build? false})
@@ -100,7 +100,7 @@
 
 (deftask rsync []
   (with-pre-wrap fileset
-    (sh "rsync" "-r" "target/" "tiye.me:repo/Memkits/wanderlist" "--exclude" "main.out" "--delete")
+    (sh "rsync" "-r" "target/" "repo.tiye.me:repo/Memkits/wanderlist" "--exclude" "main.out" "--delete")
     fileset))
 
 (deftask build []

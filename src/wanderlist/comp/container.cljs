@@ -3,8 +3,14 @@
   (:require [clojure.string :as string]
             [hsl.core :refer [hsl]]
             [respo.alias :refer [create-comp div textarea span]]
+            [respo.comp.text :refer [comp-text]]
+            [respo.comp.debug :refer [comp-debug]]
             [wanderlist.comp.sidebar :refer [sidebar-component]]
             [wanderlist.comp.todolist :refer [todolist-component]]))
+
+(def style-hidden {:width 80, :cursor "pointer"})
+
+(defn on-show [e dispatch!] (dispatch! :show-sidebar nil))
 
 (def style-left-column
  {:width "34%", :display "flex", :flex-direction "column"})
@@ -38,9 +44,11 @@
     (let [router (:router store) group-id (:group-id router)]
       (div
         {:style style-app}
-        (div
-          {:style style-left-column}
-          (sidebar-component (:groups store) router))
+        (if (:show-sidebar? store)
+          (div
+            {:style style-left-column}
+            (sidebar-component (:groups store) router))
+          (div {:style style-hidden, :event {:click on-show}}))
         (div {:style style-divider})
         (div
           {:style style-right-column}
@@ -57,7 +65,7 @@
             (div
               {}
               (span
-                {:attrs
-                 (:inner-text "router not matching a page")}))))))))
+                {:attrs (:inner-text "router not matching a page")}))))
+        (comment 0 comp-debug (:show-sidebar? store) nil)))))
 
 (def container-component (create-comp :container render))

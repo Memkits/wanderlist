@@ -13,4 +13,5 @@
   :done-time nil,
   :text nil})
 
-(def store {:router {:name :table}, :groups {}, :version 2})
+(def store
+ {:router {:name :table}, :show-sidebar? true, :groups {}, :version 2})

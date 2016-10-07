@@ -6,7 +6,7 @@
     [planck.core :refer [spit]]))
 
 (defn use-text [x] {:attrs {:innerHTML x}})
-(def icon-style "http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css")
+(def icon-style "https://rawgit.com/driftyco/ionicons/master/css/ionicons.min.css")
 (defn html-dsl [data html-content ssr-stages]
   (make-html
     (html {}
