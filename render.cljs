@@ -1,7 +1,7 @@
 (ns ssr-stages.boot
   (:require
     [respo.alias :refer [html head title script style meta' div link body]]
-    [respo.render.static-html :refer [make-html make-string]]
+    [respo.render.html :refer [make-html make-string]]
     [wanderlist.comp.container :refer [container-component]]
     [planck.core :refer [spit]]))
 
