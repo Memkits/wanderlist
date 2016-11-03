@@ -1,9 +1,8 @@
 
-(ns wanderlist.style.widget
-  (:require [hsl.core :refer [hsl]] [respo-ui.style :as ui]))
+(ns wanderlist.style.widget (:require [hsl.core :refer [hsl]] [respo-ui.style :as ui]))
 
 (def button
- (merge
+  (merge
    ui/button
    {:line-height "26px",
     :color "white",

@@ -6,8 +6,7 @@
             [respo.comp.space :refer [comp-space]]
             [respo-ui.style :as ui]))
 
-(def style-small-hint
- {:color (hsl 0 0 70), :font-size "12px", :pointer-events "none"})
+(def style-small-hint {:color (hsl 0 0 70), :font-size "12px", :pointer-events "none"})
 
 (defn on-group-route [state group-id]
   (fn [simple-event dispatch! mutate!]
@@ -32,59 +31,46 @@
    :transition-duration "300ms"})
 
 (def style-input
- {:line-height 2,
-  :font-size 16,
-  :background-color "transparent",
-  :flex 1,
-  :outline "none",
-  :border "none"})
+  {:line-height 2,
+   :font-size 16,
+   :background-color "transparent",
+   :flex 1,
+   :outline "none",
+   :border "none"})
 
 (def style-promote
- {:color (hsl 120 50 80),
-  :width "24px",
-  :display "inline-block",
-  :height "24px"})
+  {:color (hsl 120 50 80), :width "24px", :display "inline-block", :height "24px"})
 
 (defn handle-promote [group]
-  (fn [simple-event dispatch! mutate!]
-    (dispatch! :touch-group (:id group))))
+  (fn [simple-event dispatch! mutate!] (dispatch! :touch-group (:id group))))
 
 (def style-remove
- {:color (hsl 0 100 70),
-  :width "24px",
-  :display "inline-block",
-  :height "24px"})
+  {:color (hsl 0 100 70), :width "24px", :display "inline-block", :height "24px"})
 
 (defn on-edit [group-id]
-  (fn [e dispatch! mutate!]
-    (dispatch! :update-group {:id group-id, :text (:value e)})))
+  (fn [e dispatch! mutate!] (dispatch! :update-group {:id group-id, :text (:value e)})))
 
 (defn render [group index selected? todo-size]
   (fn [state mutate!]
     (let [todo-size (count
-                      (->>
-                        (:tasks group)
-                        (filter
-                          (fn [entry] (not (:done (val entry)))))))]
+                     (->> (:tasks group) (filter (fn [entry] (not (:done (val entry)))))))]
       (div
-        {:style (style-group index selected? (> todo-size 0)),
-         :event {:click (on-group-route state (:id group))}}
-        (span
-          {:style style-small-hint,
-           :attrs {:inner-text (str todo-size)}})
-        (comp-space 8 0)
-        (input
-          {:style style-input,
-           :event {:input (on-edit (:id group))},
-           :attrs {:value (:text group)}})
-        (comp-space 20 nil)
-        (div
-          {:style (merge ui/center widget/icon style-promote),
-           :event {:click (handle-promote group)},
-           :attrs {:class-name "ion-android-arrow-up"}})
-        (div
-          {:style (merge ui/center widget/icon style-remove),
-           :event {:click (handle-click group state)},
-           :attrs {:class-name "ion-android-close"}})))))
+       {:style (style-group index selected? (> todo-size 0)),
+        :event {:click (on-group-route state (:id group))}}
+       (span {:style style-small-hint, :attrs {:inner-text (str todo-size)}})
+       (comp-space 8 0)
+       (input
+        {:style style-input,
+         :event {:input (on-edit (:id group))},
+         :attrs {:value (:text group)}})
+       (comp-space 20 nil)
+       (div
+        {:style (merge ui/center widget/icon style-promote),
+         :event {:click (handle-promote group)},
+         :attrs {:class-name "ion-android-arrow-up"}})
+       (div
+        {:style (merge ui/center widget/icon style-remove),
+         :event {:click (handle-click group state)},
+         :attrs {:class-name "ion-android-close"}})))))
 
 (def comp-group-line (create-comp :group-line render))
