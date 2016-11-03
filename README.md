@@ -22,6 +22,7 @@ To run in develop mode:
 
 ```bash
 boot dev!
+webpack # another terminal since previous one blocked
 open http://repo.cirru.org/stack-editor/ # Stack Editor
 open target/index.html # better with Nginx
 ```

@@ -45,7 +45,7 @@
        (div
         {:style (merge ui/center widget/icon (style-done done?)),
          :event {:click (handle-toggle task)},
-         :attrs {:class-name "ion-android-done"}})
+         :attrs {:class-name "ion-md-done"}})
        (input
         {:style style-input,
          :event {:input (handle-change task)},

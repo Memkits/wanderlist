@@ -45,7 +45,7 @@
       (style (use-text "body * {box-sizing: border-box;}"))
       (script {:attrs {:id "config" :type "text/edn" :innerHTML (pr-str data)}})
       (if (:build? data)
-        (script {:attrs {:id "config" :type "text/edn" :innerHTML (slurp "scrips/ga.js")}})))
+        (script {:attrs {:id "config" :type "text/edn" :innerHTML (slurp "scripts/ga.js")}})))
     (body {}
       (div {:attrs {:id "app"}})
       (script {:attrs {:src "main.js"}})))))
@@ -80,6 +80,11 @@
     (transform-stack :filename "stack-sepal.ir")
     (target :dir #{"src/"})))
 
+(deftask webpack []
+  (with-pre-wrap fileset
+    (sh "webpack")
+    fileset))
+
 (deftask build-advanced []
   (set-env!
     :asset-paths #{"assets"})
@@ -87,7 +92,8 @@
     (transform-stack :filename "stack-sepal.ir")
     (cljs :optimizations :advanced)
     (html-file :data {:build? true})
-    (target)))
+    (target)
+    (webpack)))
 
 (deftask rsync []
   (with-pre-wrap fileset
