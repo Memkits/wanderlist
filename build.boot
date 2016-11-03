@@ -29,14 +29,13 @@
        :license     {"MIT" "http://opensource.org/licenses/mit-license.php"}})
 
 (defn use-text [x] {:attrs {:innerHTML x}})
-(def icon-style "https://rawgit.com/driftyco/ionicons/master/css/ionicons.min.css")
 (defn html-dsl [data fileset]
   (make-html
     (html {}
     (head {}
       (title (use-text "wanderlist"))
       (link {:attrs {:rel "icon" :type "image/png" :href "wanderlist.png"}})
-      (link {:attrs {:rel "stylesheet" :type "text/css" :href icon-style}})
+      (link {:attrs {:rel "stylesheet" :type "text/css" :href "style.css"}})
       (if (:build? data)
         (link (:attrs {:rel "manifest" :href "manifest.json"})))
       (meta' {:attrs {:charset "utf-8"}})

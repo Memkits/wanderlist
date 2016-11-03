@@ -1,0 +1,28 @@
+{
+  "name": "wanderlist",
+  "version": "0.1.0",
+  "description": "Wanderlist ----",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Memkits/wanderlist.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Memkits/wanderlist/issues"
+  },
+  "homepage": "https://github.com/Memkits/wanderlist#readme",
+  "devDependencies": {
+    "css-loader": "^0.25.0",
+    "extract-text-webpack-plugin": "^2.0.0-beta.4",
+    "file-loader": "^0.9.0",
+    "ionicons": "^3.0.0",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
+    "webpack": "^2.1.0-beta.25"
+  }
+}

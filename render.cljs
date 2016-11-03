@@ -6,14 +6,13 @@
     [planck.core :refer [slurp spit]]))
 
 (defn use-text [x] {:attrs {:innerHTML x}})
-(def icon-style "https://rawgit.com/driftyco/ionicons/master/css/ionicons.min.css")
 (defn html-dsl [data html-content ssr-stages]
   (make-html
     (html {}
       (head {}
         (title (use-text "wanderlist"))
         (link {:attrs {:rel "icon" :type "image/png" :href "mvc-works-192x192.png"}})
-        (link {:attrs {:rel "stylesheet" :style "text/css" :href icon-style}})
+        (link {:attrs {:rel "stylesheet" :style "text/css" :href "style.css"}})
         (if (:build? data)
           (link (:attrs {:rel "manifest" :href "manifest.json"})))
         (meta' {:attrs {:charset "utf-8"}})

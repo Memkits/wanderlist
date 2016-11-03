@@ -53,10 +53,10 @@
        (div
         {:style (merge widget/icon style-promote),
          :event {:click (handle-promote task)},
-         :attrs {:class-name "ion-android-arrow-up"}})
+         :attrs {:class-name "ion-md-arrow-up"}})
        (div
         {:style (merge widget/icon style-remove),
          :event {:click (handle-remove task)},
-         :attrs {:class-name "ion-android-close"}})))))
+         :attrs {:class-name "ion-md-close"}})))))
 
 (def task-component (create-comp :task render))

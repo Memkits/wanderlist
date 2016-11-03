@@ -67,10 +67,10 @@
        (div
         {:style (merge ui/center widget/icon style-promote),
          :event {:click (handle-promote group)},
-         :attrs {:class-name "ion-android-arrow-up"}})
+         :attrs {:class-name "ion-md-arrow-up"}})
        (div
         {:style (merge ui/center widget/icon style-remove),
          :event {:click (handle-click group state)},
-         :attrs {:class-name "ion-android-close"}})))))
+         :attrs {:class-name "ion-md-close"}})))))
 
 (def comp-group-line (create-comp :group-line render))
