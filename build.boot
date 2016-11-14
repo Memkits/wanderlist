@@ -4,11 +4,11 @@
                  [org.clojure/clojurescript "1.9.293"     :scope "test"]
                  [adzerk/boot-cljs          "1.7.228-1"   :scope "test"]
                  [adzerk/boot-reload        "0.4.12"      :scope "test"]
-                 [cirru/boot-stack-server   "0.1.19"      :scope "test"]
+                 [cirru/boot-stack-server   "0.1.23"      :scope "test"]
                  [adzerk/boot-test          "1.1.2"       :scope "test"]
                  [mvc-works/hsl             "0.1.2"]
-                 [respo/ui                  "0.1.2"]
-                 [respo                     "0.3.28"]])
+                 [respo/ui                  "0.1.3"]
+                 [respo                     "0.3.32"]])
 
 (require '[adzerk.boot-cljs   :refer [cljs]]
          '[adzerk.boot-reload :refer [reload]]
@@ -73,7 +73,7 @@
     (reload :on-jsload 'wanderlist.core/on-jsload
             :cljs-asset-path ".")
     (cljs)
-    (target)))
+    (target :no-clean true)))
 
 (deftask generate-code []
   (comp
