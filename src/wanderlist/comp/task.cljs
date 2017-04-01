@@ -37,26 +37,27 @@
      :update-task
      {:group-id (:group-id task), :id (:id task), :text (:value simple-event)})))
 
-(defn render [task index]
-  (fn [state mutate!]
-    (let [done? (:done task)]
-      (section
-       {:style (style-task index)}
-       (div
-        {:style (merge ui/center widget/icon (style-done done?)),
-         :attrs {:class-name "ion-md-checkmark"},
-         :event {:click (handle-toggle task)}})
-       (input
-        {:style style-input,
-         :event {:input (handle-change task)},
-         :attrs {:value (:text task)}})
-       (div
-        {:style (merge widget/icon style-promote),
-         :attrs {:class-name "ion-md-arrow-up"},
-         :event {:click (handle-promote task)}})
-       (div
-        {:style (merge widget/icon style-remove),
-         :attrs {:class-name "ion-md-close"},
-         :event {:click (handle-remove task)}})))))
-
-(def task-component (create-comp :task render))
+(def comp-task
+  (create-comp
+   :task
+   (fn [task index]
+     (fn [state mutate!]
+       (let [done? (:done task)]
+         (section
+          {:style (style-task index)}
+          (div
+           {:style (merge ui/center widget/icon (style-done done?)),
+            :attrs {:class-name "ion-md-checkmark"},
+            :event {:click (handle-toggle task)}})
+          (input
+           {:style style-input,
+            :event {:input (handle-change task)},
+            :attrs {:value (:text task)}})
+          (div
+           {:style (merge widget/icon style-promote),
+            :attrs {:class-name "ion-md-arrow-up"},
+            :event {:click (handle-promote task)}})
+          (div
+           {:style (merge widget/icon style-remove),
+            :attrs {:class-name "ion-md-close"},
+            :event {:click (handle-remove task)}})))))))

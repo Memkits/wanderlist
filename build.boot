@@ -21,7 +21,7 @@
 (deftask dev []
   (comp
     (watch)
-    (reload :on-jsload 'wanderlist.core/on-jsload
+    (reload :on-jsload 'wanderlist.main/on-jsload!
             :cljs-asset-path ".")
     (cljs :compiler-options {:language-in :ecmascript5})
     (target :no-clean true)))

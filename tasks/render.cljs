@@ -11,7 +11,7 @@
   (make-html
     (html {}
       (head {}
-        (title {:attrs {:inner-text "wanderlist"}})
+        (title {:attrs {:inner-text "Wanderlist"}})
         (link {:attrs {:rel "icon" :type "image/png" :href "mvc-works-192x192.png"}})
         (link {:attrs {:rel "stylesheet" :style "text/css" :href "style.css"}})
         (if (:build? data)

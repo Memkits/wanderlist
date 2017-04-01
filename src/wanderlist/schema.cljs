@@ -6,4 +6,5 @@
 
 (def group {:text nil, :id nil, :tasks {}, :created-time nil, :touched-time nil})
 
-(def store {:version 2, :groups {}, :router {:name :table}, :show-sidebar? true})
+(def store
+  {:version 2, :groups {}, :router {:name :table}, :show-sidebar? true, :states {}})

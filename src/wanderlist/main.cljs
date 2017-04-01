@@ -1,5 +1,5 @@
 
-(ns wanderlist.core
+(ns wanderlist.main
   (:require [clojure.string :as string]
             [respo.core :refer [render! clear-cache!]]
             [wanderlist.comp.container :refer [comp-container]]
@@ -39,17 +39,17 @@
 
 (defn render-app! [] (render! (comp-container @ref-store) (get-root) dispatch!))
 
-(defn on-jsload [] (println "code updated.") (clear-cache!) (render-app!))
-
 (defn -main []
   (enable-console-print!)
-  (println "app started")
+  (println "App started")
   (render-app!)
   (add-watch ref-store :rerender render-app!))
 
 (defn save-local-storage! []
   (.setItem js/localStorage "wanderlist" (pr-str @ref-store))
   (comment .log js/console (pr-str @ref-store)))
+
+(defn on-jsload! [] (println "Code updated.") (clear-cache!) (render-app!))
 
 (set! (.-onload js/window) -main)
 

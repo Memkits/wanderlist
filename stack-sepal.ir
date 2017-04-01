@@ -67,43 +67,52 @@
                                                      ["fn"
                                                       ["simple-event" "dispatch!" "mutate!"]
                                                       ["dispatch!" ":touch-group" [":id" "group"]]]],
-                                   "comp-group-line" ["def" "comp-group-line" ["create-comp" ":group-line" "render"]],
-                                   "render" ["defn"
-                                             "render"
-                                             ["group" "index" "selected?" "todo-size"]
-                                             ["fn"
-                                              ["state" "mutate!"]
-                                              ["let"
-                                               [["todo-size"
-                                                 ["count"
-                                                  ["->>"
-                                                   [":tasks" "group"]
-                                                   ["filter" ["fn" ["entry"] ["not" [":done" ["val" "entry"]]]]]]]]]
-                                               ["div"
-                                                ["{}"
-                                                 [":style" ["style-group" "index" "selected?" [">" "todo-size" "0"]]]
-                                                 [":event" ["{}" [":click" ["on-group-route" "state" [":id" "group"]]]]]]
-                                                ["span"
-                                                 ["{}"
-                                                  [":style" "style-small-hint"]
-                                                  [":attrs" ["{}" [":inner-text" ["str" "todo-size"]]]]]]
-                                                ["comp-space" "8" "0"]
-                                                ["input"
-                                                 ["{}"
-                                                  [":style" "style-input"]
-                                                  [":attrs" ["{}" [":value" [":text" "group"]]]]
-                                                  [":event" ["{}" [":input" ["on-edit" [":id" "group"]]]]]]]
-                                                ["comp-space" "20" "nil"]
-                                                ["div"
-                                                 ["{}"
-                                                  [":style" ["merge" "ui/center" "widget/icon" "style-promote"]]
-                                                  [":attrs" ["{}" [":class-name" "|ion-md-arrow-up"]]]
-                                                  [":event" ["{}" [":click" ["handle-promote" "group"]]]]]]
-                                                ["div"
-                                                 ["{}"
-                                                  [":style" ["merge" "ui/center" "widget/icon" "style-remove"]]
-                                                  [":attrs" ["{}" [":class-name" "|ion-md-close"]]]
-                                                  [":event" ["{}" [":click" ["handle-click" "group" "state"]]]]]]]]]],
+                                   "comp-group-line" ["def"
+                                                      "comp-group-line"
+                                                      ["create-comp"
+                                                       ":group-line"
+                                                       ["fn"
+                                                        ["group" "index" "selected?" "todo-size"]
+                                                        ["fn"
+                                                         ["state" "mutate!"]
+                                                         ["let"
+                                                          [["todo-size"
+                                                            ["count"
+                                                             ["->>"
+                                                              [":tasks" "group"]
+                                                              ["filter"
+                                                               ["fn" ["entry"] ["not" [":done" ["val" "entry"]]]]]]]]]
+                                                          ["div"
+                                                           ["{}"
+                                                            [":style"
+                                                             ["style-group" "index" "selected?" [">" "todo-size" "0"]]]
+                                                            [":event"
+                                                             ["{}"
+                                                              [":click" ["on-group-route" "state" [":id" "group"]]]]]]
+                                                           ["span"
+                                                            ["{}"
+                                                             [":style" "style-small-hint"]
+                                                             [":attrs" ["{}" [":inner-text" ["str" "todo-size"]]]]]]
+                                                           ["comp-space" "8" "0"]
+                                                           ["input"
+                                                            ["{}"
+                                                             [":style" "style-input"]
+                                                             [":attrs" ["{}" [":value" [":text" "group"]]]]
+                                                             [":event" ["{}" [":input" ["on-edit" [":id" "group"]]]]]]]
+                                                           ["comp-space" "20" "nil"]
+                                                           ["div"
+                                                            ["{}"
+                                                             [":style"
+                                                              ["merge" "ui/center" "widget/icon" "style-promote"]]
+                                                             [":attrs" ["{}" [":class-name" "|ion-md-arrow-up"]]]
+                                                             [":event" ["{}" [":click" ["handle-promote" "group"]]]]]]
+                                                           ["div"
+                                                            ["{}"
+                                                             [":style"
+                                                              ["merge" "ui/center" "widget/icon" "style-remove"]]
+                                                             [":attrs" ["{}" [":class-name" "|ion-md-close"]]]
+                                                             [":event"
+                                                              ["{}" [":click" ["handle-click" "group" "state"]]]]]]]]]]]],
                                    "style-remove" ["def"
                                                    "style-remove"
                                                    ["{}"
@@ -138,7 +147,6 @@
                                             [":top" ["str" ["+" "8" ["*" "index" "40"]] "|px"]]
                                             [":width" "|100%"]
                                             [":transition-duration" "|300ms"]]],
-                             "task-component" ["def" "task-component" ["create-comp" ":task" "render"]],
                              "handle-toggle" ["defn"
                                               "handle-toggle"
                                               ["task"]
@@ -167,35 +175,38 @@
                                            ["done?"]
                                            ["{}"
                                             [":color" ["if" "done?" ["hsl" "100" "20" "60"] ["hsl" "20" "90" "80"]]]]],
-                             "render" ["defn"
-                                       "render"
-                                       ["task" "index"]
-                                       ["fn"
-                                        ["state" "mutate!"]
-                                        ["let"
-                                         [["done?" [":done" "task"]]]
-                                         ["section"
-                                          ["{}" [":style" ["style-task" "index"]]]
-                                          ["div"
-                                           ["{}"
-                                            [":style" ["merge" "ui/center" "widget/icon" ["style-done" "done?"]]]
-                                            [":attrs" ["{}" [":class-name" "|ion-md-checkmark"]]]
-                                            [":event" ["{}" [":click" ["handle-toggle" "task"]]]]]]
-                                          ["input"
-                                           ["{}"
-                                            [":style" "style-input"]
-                                            [":event" ["{}" [":input" ["handle-change" "task"]]]]
-                                            [":attrs" ["{}" [":value" [":text" "task"]]]]]]
-                                          ["div"
-                                           ["{}"
-                                            [":style" ["merge" "widget/icon" "style-promote"]]
-                                            [":attrs" ["{}" [":class-name" "|ion-md-arrow-up"]]]
-                                            [":event" ["{}" [":click" ["handle-promote" "task"]]]]]]
-                                          ["div"
-                                           ["{}"
-                                            [":style" ["merge" "widget/icon" "style-remove"]]
-                                            [":attrs" ["{}" [":class-name" "|ion-md-close"]]]
-                                            [":event" ["{}" [":click" ["handle-remove" "task"]]]]]]]]]],
+                             "comp-task" ["def"
+                                          "comp-task"
+                                          ["create-comp"
+                                           ":task"
+                                           ["fn"
+                                            ["task" "index"]
+                                            ["fn"
+                                             ["state" "mutate!"]
+                                             ["let"
+                                              [["done?" [":done" "task"]]]
+                                              ["section"
+                                               ["{}" [":style" ["style-task" "index"]]]
+                                               ["div"
+                                                ["{}"
+                                                 [":style" ["merge" "ui/center" "widget/icon" ["style-done" "done?"]]]
+                                                 [":attrs" ["{}" [":class-name" "|ion-md-checkmark"]]]
+                                                 [":event" ["{}" [":click" ["handle-toggle" "task"]]]]]]
+                                               ["input"
+                                                ["{}"
+                                                 [":style" "style-input"]
+                                                 [":event" ["{}" [":input" ["handle-change" "task"]]]]
+                                                 [":attrs" ["{}" [":value" [":text" "task"]]]]]]
+                                               ["div"
+                                                ["{}"
+                                                 [":style" ["merge" "widget/icon" "style-promote"]]
+                                                 [":attrs" ["{}" [":class-name" "|ion-md-arrow-up"]]]
+                                                 [":event" ["{}" [":click" ["handle-promote" "task"]]]]]]
+                                               ["div"
+                                                ["{}"
+                                                 [":style" ["merge" "widget/icon" "style-remove"]]
+                                                 [":attrs" ["{}" [":class-name" "|ion-md-close"]]]
+                                                 [":event" ["{}" [":click" ["handle-remove" "task"]]]]]]]]]]]],
                              "style-remove" ["def"
                                              "style-remove"
                                              ["merge" "ui/center" ["{}" [":color" ["hsl" "0" "100" "70"]]]]],
@@ -241,7 +252,8 @@
                                     [":version" "2"]
                                     [":groups" ["{}"]]
                                     [":router" ["{}" [":name" ":table"]]]
-                                    [":show-sidebar?" "true"]]]},
+                                    [":show-sidebar?" "true"]
+                                    [":states" ["{}"]]]]},
                    :procs []},
          "comp.container" {:ns ["ns"
                                 "wanderlist.comp.container"
@@ -251,8 +263,8 @@
                                  ["[]" "respo.alias" ":refer" ["[]" "create-comp" "div" "textarea" "span"]]
                                  ["[]" "respo.comp.text" ":refer" ["[]" "comp-text"]]
                                  ["[]" "respo.comp.debug" ":refer" ["[]" "comp-debug"]]
-                                 ["[]" "wanderlist.comp.sidebar" ":refer" ["[]" "sidebar-component"]]
-                                 ["[]" "wanderlist.comp.todolist" ":refer" ["[]" "todolist-component"]]]],
+                                 ["[]" "wanderlist.comp.sidebar" ":refer" ["[]" "comp-sidebar"]]
+                                 ["[]" "wanderlist.comp.todolist" ":refer" ["[]" "comp-todolist"]]]],
                            :defs {"style-hidden" ["def" "style-hidden" ["{}" [":width" "80"] [":cursor" "|pointer"]]],
                                   "on-show" ["defn" "on-show" ["e" "dispatch!"] ["dispatch!" ":show-sidebar" "nil"]],
                                   "style-left-column" ["def"
@@ -270,43 +282,50 @@
                                                          [":width" "|66%"]
                                                          [":display" "|flex"]
                                                          [":flex-direction" "|column"]]],
-                                  "render" ["defn"
-                                            "render"
-                                            ["store"]
-                                            ["fn"
-                                             ["state" "mutate!"]
-                                             ["let"
-                                              [["router" [":router" "store"]] ["group-id" [":group-id" "router"]]]
-                                              ["div"
-                                               ["{}" [":style" "style-app"]]
-                                               ["if"
-                                                [":show-sidebar?" "store"]
-                                                ["div"
-                                                 ["{}" [":style" "style-left-column"]]
-                                                 ["sidebar-component" [":groups" "store"] "router"]]
-                                                ["div"
-                                                 ["{}" [":event" ["{}" [":click" "on-show"]]] [":style" "style-hidden"]]]]
-                                               ["div" ["{}" [":style" "style-divider"]]]
-                                               ["div"
-                                                ["{}" [":style" "style-right-column"]]
-                                                ["case"
-                                                 [":name" "router"]
-                                                 [":table"
-                                                  ["if"
-                                                   ["some?" "group-id"]
-                                                   ["todolist-component"
-                                                    "router"
-                                                    ["get" [":groups" "store"] "group-id"]]
-                                                   ["div"
-                                                    ["{}" [":style" "style-placeholder"]]
-                                                    ["span" ["{}" ":attrs" [":inner-text" "|Select a group?"]]]]]]
-                                                 ["div"
-                                                  ["{}"]
-                                                  ["span" ["{}" ":attrs" [":inner-text" "|router not matching a page"]]]]]]
-                                               ["--" "00" "comp-debug" [":show-sidebar?" "store"] "nil"]]]]],
-                                  "container-component" ["def"
-                                                         "container-component"
-                                                         ["create-comp" ":container" "render"]],
+                                  "comp-container" ["def"
+                                                    "comp-container"
+                                                    ["create-comp"
+                                                     ":container"
+                                                     ["fn"
+                                                      ["store"]
+                                                      ["fn"
+                                                       ["state" "mutate!"]
+                                                       ["let"
+                                                        [["router" [":router" "store"]]
+                                                         ["group-id" [":group-id" "router"]]]
+                                                        ["div"
+                                                         ["{}" [":style" "style-app"]]
+                                                         ["if"
+                                                          [":show-sidebar?" "store"]
+                                                          ["div"
+                                                           ["{}" [":style" "style-left-column"]]
+                                                           ["comp-sidebar" [":groups" "store"] "router"]]
+                                                          ["div"
+                                                           ["{}"
+                                                            [":event" ["{}" [":click" "on-show"]]]
+                                                            [":style" "style-hidden"]]]]
+                                                         ["div" ["{}" [":style" "style-divider"]]]
+                                                         ["div"
+                                                          ["{}" [":style" "style-right-column"]]
+                                                          ["case"
+                                                           [":name" "router"]
+                                                           [":table"
+                                                            ["if"
+                                                             ["some?" "group-id"]
+                                                             ["comp-todolist"
+                                                              "router"
+                                                              ["get" [":groups" "store"] "group-id"]]
+                                                             ["div"
+                                                              ["{}" [":style" "style-placeholder"]]
+                                                              ["span"
+                                                               ["{}" ":attrs" [":inner-text" "|Select a group?"]]]]]]
+                                                           ["div"
+                                                            ["{}"]
+                                                            ["span"
+                                                             ["{}"
+                                                              ":attrs"
+                                                              [":inner-text" "|router not matching a page"]]]]]]
+                                                         ["--" "00" "comp-debug" [":show-sidebar?" "store"] "nil"]]]]]]],
                                   "style-placeholder" ["def"
                                                        "style-placeholder"
                                                        ["{}"
@@ -333,7 +352,7 @@
                                "wanderlist.comp.todolist"
                                [":require"
                                 ["[]" "hsl.core" ":refer" ["[]" "hsl"]]
-                                ["[]" "wanderlist.comp.task" ":refer" ["[]" "task-component"]]
+                                ["[]" "wanderlist.comp.task" ":refer" ["[]" "comp-task"]]
                                 ["[]" "wanderlist.style.widget" ":as" "widget"]
                                 ["[]" "wanderlist.style.layout" ":as" "layout"]
                                 ["[]"
@@ -406,94 +425,10 @@
                                                  [":height" "|32px"]
                                                  [":font-size" "|16px"]
                                                  [":flex" "|1"]]],
-                                 "todolist-component" ["def" "todolist-component" ["create-comp" ":todolist" "render"]],
                                  "init-state" ["defn"
                                                "init-state"
                                                ["router" "group"]
                                                ["{}" [":draft" "|"] [":fold-done?" "true"]]],
-                                 "render" ["defn"
-                                           "render"
-                                           ["router" "group"]
-                                           ["fn"
-                                            ["state" "mutate!"]
-                                            ["let"
-                                             [["tasks" [":tasks" "group"]]
-                                              ["todo-tasks"
-                                               ["->>"
-                                                "tasks"
-                                                ["filter" ["fn" ["entry"] ["not" [":done" ["val" "entry"]]]]]
-                                                ["into" ["{}"]]]]
-                                              ["done-tasks"
-                                               ["->>"
-                                                "tasks"
-                                                ["filter" ["fn" ["entry"] [":done" ["val" "entry"]]]]
-                                                ["into" ["{}"]]]]]
-                                             ["div"
-                                              ["{}" [":style" "style-todolist"]]
-                                              ["header"
-                                               ["{}" [":style" "style-header"]]
-                                               ["div" ["{}" [":style" "style-space"]]]
-                                               ["div"
-                                                ["{}" [":style" "style-adder"]]
-                                                ["input"
-                                                 ["{}"
-                                                  [":style" "style-input"]
-                                                  [":event"
-                                                   ["{}"
-                                                    [":input" ["handle-input" "mutate!"]]
-                                                    [":keydown" ["handle-keydown" "router" "state" "mutate!"]]]]
-                                                  [":attrs"
-                                                   ["{}"
-                                                    [":value" [":draft" "state"]]
-                                                    [":placeholder" "|Add a task..."]]]]]
-                                                ["span"
-                                                 ["{}"
-                                                  [":style" "style-button"]
-                                                  [":event"
-                                                   ["{}" [":click" ["handle-task-add" "router" "state" "mutate!"]]]]
-                                                  [":attrs" ["{}" [":inner-text" "|Add"]]]]]]]
-                                              ["div" ["{}" [":style" ["layout/vspace" "16"]]]]
-                                              ["section"
-                                               ["{}" [":style" "style-body"]]
-                                               ["section"
-                                                ["{}" [":style" ["style-list" ["count" "todo-tasks"]]]]
-                                                ["->>"
-                                                 "todo-tasks"
-                                                 ["sort"
-                                                  ["fn"
-                                                   ["entry-a" "entry-b"]
-                                                   ["compare"
-                                                    [":touched-time" ["val" "entry-b"]]
-                                                    [":touched-time" ["val" "entry-a"]]]]]
-                                                 ["map-indexed"
-                                                  ["fn"
-                                                   ["index" "entry"]
-                                                   ["[]" ["first" "entry"] ["task-component" ["val" "entry"] "index"]]]]]]
-                                               ["div"
-                                                ["{}" [":style" "style-section"]]
-                                                ["if"
-                                                 [">" ["count" "done-tasks"] "0"]
-                                                 ["span"
-                                                  ["{}"
-                                                   [":style" "style-button"]
-                                                   [":event" ["{}" [":click" ["handle-toggle" "state" "mutate!"]]]]
-                                                   [":attrs" ["{}" [":inner-text" "|Toggle"]]]]]]]
-                                               ["if"
-                                                ["not" [":fold-done?" "state"]]
-                                                ["section"
-                                                 ["{}" [":style" ["style-list" ["count" "done-tasks"]]]]
-                                                 ["->>"
-                                                  "done-tasks"
-                                                  ["sort"
-                                                   ["fn"
-                                                    ["entry-a" "entry-b"]
-                                                    ["compare"
-                                                     [":touched-time" ["val" "entry-b"]]
-                                                     [":touched-time" ["val" "entry-a"]]]]]
-                                                  ["map-indexed"
-                                                   ["fn"
-                                                    ["index" "entry"]
-                                                    ["[]" ["key" "entry"] ["task-component" ["val" "entry"] "index"]]]]]]]]]]]],
                                  "style-section" ["def" "style-section" ["{}" [":margin-top" "|16px"]]],
                                  "style-todolist" ["def"
                                                    "style-todolist"
@@ -505,6 +440,98 @@
                                                     [":flex-direction" "|column"]
                                                     [":box-shadow" ["str" "|0 0 4px " ["hsl" "0" "0" "0" "0.1"]]]
                                                     [":padding" "|16px"]]],
+                                 "comp-todolist" ["def"
+                                                  "comp-todolist"
+                                                  ["create-comp"
+                                                   ":todolist"
+                                                   ["fn"
+                                                    ["router" "group"]
+                                                    ["fn"
+                                                     ["state" "mutate!"]
+                                                     ["let"
+                                                      [["tasks" [":tasks" "group"]]
+                                                       ["todo-tasks"
+                                                        ["->>"
+                                                         "tasks"
+                                                         ["filter" ["fn" ["entry"] ["not" [":done" ["val" "entry"]]]]]
+                                                         ["into" ["{}"]]]]
+                                                       ["done-tasks"
+                                                        ["->>"
+                                                         "tasks"
+                                                         ["filter" ["fn" ["entry"] [":done" ["val" "entry"]]]]
+                                                         ["into" ["{}"]]]]]
+                                                      ["div"
+                                                       ["{}" [":style" "style-todolist"]]
+                                                       ["header"
+                                                        ["{}" [":style" "style-header"]]
+                                                        ["div" ["{}" [":style" "style-space"]]]
+                                                        ["div"
+                                                         ["{}" [":style" "style-adder"]]
+                                                         ["input"
+                                                          ["{}"
+                                                           [":style" "style-input"]
+                                                           [":event"
+                                                            ["{}"
+                                                             [":input" ["handle-input" "mutate!"]]
+                                                             [":keydown" ["handle-keydown" "router" "state" "mutate!"]]]]
+                                                           [":attrs"
+                                                            ["{}"
+                                                             [":value" [":draft" "state"]]
+                                                             [":placeholder" "|Add a task..."]]]]]
+                                                         ["span"
+                                                          ["{}"
+                                                           [":style" "style-button"]
+                                                           [":event"
+                                                            ["{}"
+                                                             [":click" ["handle-task-add" "router" "state" "mutate!"]]]]
+                                                           [":attrs" ["{}" [":inner-text" "|Add"]]]]]]]
+                                                       ["div" ["{}" [":style" ["layout/vspace" "16"]]]]
+                                                       ["section"
+                                                        ["{}" [":style" "style-body"]]
+                                                        ["section"
+                                                         ["{}" [":style" ["style-list" ["count" "todo-tasks"]]]]
+                                                         ["->>"
+                                                          "todo-tasks"
+                                                          ["sort"
+                                                           ["fn"
+                                                            ["entry-a" "entry-b"]
+                                                            ["compare"
+                                                             [":touched-time" ["val" "entry-b"]]
+                                                             [":touched-time" ["val" "entry-a"]]]]]
+                                                          ["map-indexed"
+                                                           ["fn"
+                                                            ["index" "entry"]
+                                                            ["[]"
+                                                             ["first" "entry"]
+                                                             ["comp-task" ["val" "entry"] "index"]]]]]]
+                                                        ["div"
+                                                         ["{}" [":style" "style-section"]]
+                                                         ["if"
+                                                          [">" ["count" "done-tasks"] "0"]
+                                                          ["span"
+                                                           ["{}"
+                                                            [":style" "style-button"]
+                                                            [":event"
+                                                             ["{}" [":click" ["handle-toggle" "state" "mutate!"]]]]
+                                                            [":attrs" ["{}" [":inner-text" "|Toggle"]]]]]]]
+                                                        ["if"
+                                                         ["not" [":fold-done?" "state"]]
+                                                         ["section"
+                                                          ["{}" [":style" ["style-list" ["count" "done-tasks"]]]]
+                                                          ["->>"
+                                                           "done-tasks"
+                                                           ["sort"
+                                                            ["fn"
+                                                             ["entry-a" "entry-b"]
+                                                             ["compare"
+                                                              [":touched-time" ["val" "entry-b"]]
+                                                              [":touched-time" ["val" "entry-a"]]]]]
+                                                           ["map-indexed"
+                                                            ["fn"
+                                                             ["index" "entry"]
+                                                             ["[]"
+                                                              ["key" "entry"]
+                                                              ["comp-task" ["val" "entry"] "index"]]]]]]]]]]]]]],
                                  "handle-keydown" ["defn"
                                                    "handle-keydown"
                                                    ["router" "state" "mutate!"]
@@ -522,6 +549,79 @@
                                                         [":group-id" [":group-id" "router"]]]]
                                                       ["mutate!" ["{}" ":draft" "|"]]]]]]},
                           :procs []},
+         "main" {:ns ["ns"
+                      "wanderlist.main"
+                      [":require"
+                       ["[]" "clojure.string" ":as" "string"]
+                       ["[]" "respo.core" ":refer" ["[]" "render!" "clear-cache!"]]
+                       ["[]" "wanderlist.comp.container" ":refer" ["[]" "comp-container"]]
+                       ["[]" "wanderlist.updater.core" ":refer" ["[]" "updater"]]
+                       ["[]" "cljs.reader" ":as" "reader"]
+                       ["[]" "wanderlist.util.migration" ":refer" ["[]" "migrate-from-v0" "migrate-from-v1"]]
+                       ["[]" "wanderlist.schema" ":as" "schema"]]],
+                 :defs {"dispatch!" ["defn"
+                                     "dispatch!"
+                                     ["op-type" "op-data"]
+                                     ["--" "println" "|dispatch:" "op-type" "op-data"]
+                                     ["if"
+                                      ["=" [":env" "app-env"] ":build"]
+                                      ["js/ga" "|send" "|event" ["name" "op-type"]]]
+                                     ["let"
+                                      [["new-store"
+                                        ["updater"
+                                         "@ref-store"
+                                         "op-type"
+                                         "op-data"
+                                         [".valueOf" ["js/Date."]]
+                                         [".valueOf" ["js/Date."]]]]]
+                                      ["reset!" "ref-store" "new-store"]
+                                      ["--" ".info" "js/console" "|new store:" "new-store"]]],
+                        "ref-store" ["defonce"
+                                     "ref-store"
+                                     ["atom"
+                                      ["let"
+                                       [["stored-data" [".getItem" "js/localStorage" "|wanderlist"]]]
+                                       ["if"
+                                        ["some?" "stored-data"]
+                                        ["let"
+                                         [["old-store" ["reader/read-string" "stored-data"]]
+                                          ["version" ["or" [":version" "old-store"] "0"]]]
+                                         ["case"
+                                          "version"
+                                          ["0" ["->" "old-store" ["migrate-from-v0"] ["migrate-from-v1"]]]
+                                          ["1" ["migrate-from-v1" "old-store"]]
+                                          ["2" ["merge" "schema/store" "old-store"]]
+                                          "schema/store"]]
+                                        "schema/store"]]]],
+                        "-main" ["defn"
+                                 "-main"
+                                 []
+                                 ["enable-console-print!"]
+                                 ["println" "|App started"]
+                                 ["render-app!"]
+                                 ["add-watch" "ref-store" ":rerender" "render-app!"]],
+                        "get-root" ["defn" "get-root" [] [".querySelector" "js/document" "|#app"]],
+                        "render-app!" ["defn"
+                                       "render-app!"
+                                       []
+                                       ["render!" ["comp-container" "@ref-store"] ["get-root"] "dispatch!"]],
+                        "app-env" ["defonce"
+                                   "app-env"
+                                   ["reader/read-string"
+                                    ["->" "js/document" [".querySelector" "|#config"] ".-innerHTML"]]],
+                        "save-local-storage!" ["defn"
+                                               "save-local-storage!"
+                                               []
+                                               [".setItem" "js/localStorage" "|wanderlist" ["pr-str" "@ref-store"]]
+                                               ["--" ".log" "js/console" ["pr-str" "@ref-store"]]],
+                        "on-jsload!" ["defn"
+                                      "on-jsload!"
+                                      []
+                                      ["println" "|Code updated."]
+                                      ["clear-cache!"]
+                                      ["render-app!"]]},
+                 :procs [["set!" [".-onload" "js/window"] "-main"]
+                         ["set!" [".-onbeforeunload" "js/window"] "save-local-storage!"]]},
          "updater.core" {:ns ["ns"
                               "wanderlist.updater.core"
                               [":require"
@@ -529,12 +629,21 @@
                                ["[]" "wanderlist.schema" ":as" "schema"]]],
                          :defs {"updater" ["defn"
                                            "updater"
-                                           ["old-store" "op-type" "op-data" "op-id" "op-time"]
+                                           ["store" "op-type" "op-data" "op-id" "op-time"]
                                            ["case"
                                             "op-type"
+                                            [":states"
+                                             ["let"
+                                              [[["[]" "cursor" "new-states"] "op-data"]]
+                                              ["update"
+                                               "store"
+                                               ":states"
+                                               ["fn"
+                                                ["states"]
+                                                ["assoc-in" "states" ["conj" "cursor" ":data"] "new-states"]]]]]
                                             [":add-group"
                                              ["update"
-                                              "old-store"
+                                              "store"
                                               ":groups"
                                               ["fn"
                                                ["task-groups"]
@@ -550,23 +659,20 @@
                                                   [":touched-time" "op-time"]]]]]]]
                                             [":rm-group"
                                              ["->"
-                                              "old-store"
+                                              "store"
                                               ["update"
                                                ":groups"
                                                ["fn" ["task-groups"] ["dissoc" "task-groups" "op-data"]]]]]
                                             [":update-group"
                                              ["assoc-in"
-                                              "old-store"
+                                              "store"
                                               ["[]" ":groups" [":id" "op-data"] ":text"]
                                               [":text" "op-data"]]]
                                             [":touch-group"
-                                             ["assoc-in"
-                                              "old-store"
-                                              ["[]" ":groups" "op-data" ":touched-time"]
-                                              "op-time"]]
+                                             ["assoc-in" "store" ["[]" ":groups" "op-data" ":touched-time"] "op-time"]]
                                             [":add-task"
                                              ["assoc-in"
-                                              "old-store"
+                                              "store"
                                               ["[]" ":groups" [":group-id" "op-data"] ":tasks" "op-id"]
                                               ["merge"
                                                "schema/task"
@@ -577,12 +683,12 @@
                                                 [":touched-time" "op-time"]]]]]
                                             [":rm-task"
                                              ["update-in"
-                                              "old-store"
+                                              "store"
                                               ["[]" ":groups" [":group-id" "op-data"] ":tasks"]
                                               ["fn" ["tasks"] ["dissoc" "tasks" [":id" "op-data"]]]]]
                                             [":update-task"
                                              ["assoc-in"
-                                              "old-store"
+                                              "store"
                                               ["[]"
                                                ":groups"
                                                [":group-id" "op-data"]
@@ -592,7 +698,7 @@
                                               [":text" "op-data"]]]
                                             [":toggle-task"
                                              ["update-in"
-                                              "old-store"
+                                              "store"
                                               ["[]" ":groups" [":group-id" "op-data"] ":tasks" [":id" "op-data"]]
                                               ["fn"
                                                ["task"]
@@ -603,7 +709,7 @@
                                                 ["assoc" ":done-time" "op-time"]]]]]
                                             [":touch-task"
                                              ["assoc-in"
-                                              "old-store"
+                                              "store"
                                               ["[]"
                                                ":groups"
                                                [":group-id" "op-data"]
@@ -611,10 +717,10 @@
                                                [":id" "op-data"]
                                                ":touched-time"]
                                               "op-time"]]
-                                            [":set-router" ["assoc" "old-store" ":router" "op-data"]]
-                                            [":hide-sidebar" ["assoc" "old-store" ":show-sidebar?" "false"]]
-                                            [":show-sidebar" ["assoc" "old-store" ":show-sidebar?" "true"]]
-                                            "old-store"]]},
+                                            [":set-router" ["assoc" "store" ":router" "op-data"]]
+                                            [":hide-sidebar" ["assoc" "store" ":show-sidebar?" "false"]]
+                                            [":show-sidebar" ["assoc" "store" ":show-sidebar?" "true"]]
+                                            "store"]]},
                          :procs []},
          "util.migration" {:ns ["ns"
                                 "wanderlist.util.migration"
@@ -723,7 +829,6 @@
                                              ["{}"
                                               [":width" "|100%"]
                                               [":height" ["str" ["+" "80" ["*" "n" "40"]] "|px"]]]],
-                                "sidebar-component" ["def" "sidebar-component" ["create-comp" ":sidebar" "render"]],
                                 "style-add" ["def"
                                              "style-add"
                                              ["merge"
@@ -769,58 +874,6 @@
                                                    ["dispatch!" ":add-group" [":query" "state"]]
                                                    ["mutate!" ["{}" [":query" "|"]]]]]]],
                                 "init-state" ["defn" "init-state" ["groups" "router"] ["{}" [":query" "|"]]],
-                                "render" ["defn"
-                                          "render"
-                                          ["groups" "router"]
-                                          ["fn"
-                                           ["state" "mutate!"]
-                                           ["let"
-                                            [["by-newest-group"
-                                              ["fn"
-                                               ["group-a" "group-b"]
-                                               ["compare"
-                                                [":touched-time" ["val" "group-b"]]
-                                                [":touched-time" ["val" "group-a"]]]]]]
-                                            ["div"
-                                             ["{}" [":style" "style-sidebar"]]
-                                             ["div"
-                                              ["{}" [":style" "style-header"]]
-                                              ["input"
-                                               ["{}"
-                                                [":style" "style-query"]
-                                                [":event" ["{}" [":input" ["on-query-change" "state" "mutate!"]]]]
-                                                [":attrs"
-                                                 ["{}" [":value" [":query" "state"]] [":placeholder" "|group..."]]]]]
-                                              ["span"
-                                               ["{}"
-                                                [":style" "style-add"]
-                                                [":event" ["{}" [":click" ["on-group-add" "state" "mutate!"]]]]
-                                                [":attrs" ["{}" [":inner-text" "|Add"]]]]]
-                                              ["div" ["{}" [":style" ["layout/hspace" "16"]]]]
-                                              ["span"
-                                               ["{}"
-                                                [":style" "style-add"]
-                                                [":event" ["{}" [":click" "on-hide"]]]
-                                                [":attrs" ["{}" [":inner-text" "|Hide"]]]]]]
-                                             ["div"
-                                              ["{}"
-                                               [":style" "style-body"]
-                                               [":event" ["{}" [":click" "on-empty-route"]]]]
-                                              ["div"
-                                               ["{}" [":style" ["style-box" ["count" "groups"]]]]
-                                               ["->>"
-                                                "groups"
-                                                ["sort" "by-newest-group"]
-                                                ["map-indexed"
-                                                 ["fn"
-                                                  ["index" "entry"]
-                                                  ["[]"
-                                                   ["first" "entry"]
-                                                   ["let"
-                                                    [["group" ["last" "entry"]]
-                                                     ["tasks" [":tasks" "group"]]
-                                                     ["selected?" ["=" [":group-id" "router"] [":id" "group"]]]]
-                                                    ["comp-group-line" "group" "index" "selected?"]]]]]]]]]]]],
                                 "style-sidebar" ["def"
                                                  "style-sidebar"
                                                  ["{}"
@@ -834,87 +887,66 @@
                                 "on-empty-route" ["defn"
                                                   "on-empty-route"
                                                   ["e" "dispatch!"]
-                                                  ["dispatch!" ":set-router" ["{}" [":name" ":table"]]]]},
+                                                  ["dispatch!" ":set-router" ["{}" [":name" ":table"]]]],
+                                "comp-sidebar" ["def"
+                                                "comp-sidebar"
+                                                ["create-comp"
+                                                 ":sidebar"
+                                                 ["fn"
+                                                  ["groups" "router"]
+                                                  ["fn"
+                                                   ["state" "mutate!"]
+                                                   ["let"
+                                                    [["by-newest-group"
+                                                      ["fn"
+                                                       ["group-a" "group-b"]
+                                                       ["compare"
+                                                        [":touched-time" ["val" "group-b"]]
+                                                        [":touched-time" ["val" "group-a"]]]]]]
+                                                    ["div"
+                                                     ["{}" [":style" "style-sidebar"]]
+                                                     ["div"
+                                                      ["{}" [":style" "style-header"]]
+                                                      ["input"
+                                                       ["{}"
+                                                        [":style" "style-query"]
+                                                        [":event"
+                                                         ["{}" [":input" ["on-query-change" "state" "mutate!"]]]]
+                                                        [":attrs"
+                                                         ["{}"
+                                                          [":value" [":query" "state"]]
+                                                          [":placeholder" "|group..."]]]]]
+                                                      ["span"
+                                                       ["{}"
+                                                        [":style" "style-add"]
+                                                        [":event" ["{}" [":click" ["on-group-add" "state" "mutate!"]]]]
+                                                        [":attrs" ["{}" [":inner-text" "|Add"]]]]]
+                                                      ["div" ["{}" [":style" ["layout/hspace" "16"]]]]
+                                                      ["span"
+                                                       ["{}"
+                                                        [":style" "style-add"]
+                                                        [":event" ["{}" [":click" "on-hide"]]]
+                                                        [":attrs" ["{}" [":inner-text" "|Hide"]]]]]]
+                                                     ["div"
+                                                      ["{}"
+                                                       [":style" "style-body"]
+                                                       [":event" ["{}" [":click" "on-empty-route"]]]]
+                                                      ["div"
+                                                       ["{}" [":style" ["style-box" ["count" "groups"]]]]
+                                                       ["->>"
+                                                        "groups"
+                                                        ["sort" "by-newest-group"]
+                                                        ["map-indexed"
+                                                         ["fn"
+                                                          ["index" "entry"]
+                                                          ["[]"
+                                                           ["first" "entry"]
+                                                           ["let"
+                                                            [["group" ["last" "entry"]]
+                                                             ["tasks" [":tasks" "group"]]
+                                                             ["selected?" ["=" [":group-id" "router"] [":id" "group"]]]]
+                                                            ["comp-group-line" "group" "index" "selected?"]]]]]]]]]]]]]]},
                          :procs []},
-         "core" {:ns ["ns"
-                      "wanderlist.core"
-                      [":require"
-                       ["[]" "clojure.string" ":as" "string"]
-                       ["[]" "respo.core" ":refer" ["[]" "render!" "clear-cache!"]]
-                       ["[]" "wanderlist.comp.container" ":refer" ["[]" "container-component"]]
-                       ["[]" "wanderlist.updater.core" ":refer" ["[]" "updater"]]
-                       ["[]" "cljs.reader" ":as" "reader"]
-                       ["[]" "wanderlist.util.migration" ":refer" ["[]" "migrate-from-v0" "migrate-from-v1"]]
-                       ["[]" "wanderlist.schema" ":as" "schema"]]],
-                 :defs {"on-jsload" ["defn"
-                                     "on-jsload"
-                                     []
-                                     ["println" "|code updated."]
-                                     ["clear-cache!"]
-                                     ["render-app!"]],
-                        "dispatch" ["defn"
-                                    "dispatch"
-                                    ["op-type" "op-data"]
-                                    ["--" "println" "|dispatch:" "op-type" "op-data"]
-                                    ["if"
-                                     ["=" [":env" "app-env"] ":build"]
-                                     ["js/ga" "|send" "|event" ["name" "op-type"]]]
-                                    ["let"
-                                     [["new-store"
-                                       ["updater"
-                                        "@global-store"
-                                        "op-type"
-                                        "op-data"
-                                        [".valueOf" ["js/Date."]]
-                                        [".valueOf" ["js/Date."]]]]]
-                                     ["reset!" "global-store" "new-store"]
-                                     ["--" ".info" "js/console" "|new store:" "new-store"]]],
-                        "global-store" ["defonce"
-                                        "global-store"
-                                        ["atom"
-                                         ["let"
-                                          [["stored-data" [".getItem" "js/localStorage" "|wanderlist"]]]
-                                          ["if"
-                                           ["some?" "stored-data"]
-                                           ["let"
-                                            [["old-store" ["reader/read-string" "stored-data"]]
-                                             ["version" ["or" [":version" "old-store"] "0"]]]
-                                            ["case"
-                                             "version"
-                                             ["0" ["->" "old-store" ["migrate-from-v0"] ["migrate-from-v1"]]]
-                                             ["1" ["migrate-from-v1" "old-store"]]
-                                             ["2" ["merge" "schema/store" "old-store"]]
-                                             "schema/store"]]
-                                           "schema/store"]]]],
-                        "-main" ["defn"
-                                 "-main"
-                                 []
-                                 ["enable-console-print!"]
-                                 ["println" "|app started"]
-                                 ["render-app!"]
-                                 ["add-watch" "global-store" ":rerender" "render-app!"]
-                                 ["add-watch" "global-states" ":rerender" "render-app!"]],
-                        "global-states" ["defonce" "global-states" ["atom" ["{}"]]],
-                        "get-root" ["defn" "get-root" [] [".querySelector" "js/document" "|#app"]],
-                        "render-app!" ["defn"
-                                       "render-app!"
-                                       []
-                                       ["render!"
-                                        ["container-component" "@global-store"]
-                                        ["get-root"]
-                                        "dispatch"
-                                        "global-states"]],
-                        "app-env" ["defonce"
-                                   "app-env"
-                                   ["reader/read-string"
-                                    ["->" "js/document" [".querySelector" "|#config"] ".-innerHTML"]]],
-                        "save-local-storage!" ["defn"
-                                               "save-local-storage!"
-                                               []
-                                               [".setItem" "js/localStorage" "|wanderlist" ["pr-str" "@global-store"]]
-                                               ["--" ".log" "js/console" ["pr-str" "@global-store"]]]},
-                 :procs [["set!" [".-onload" "js/window"] "-main"]
-                         ["set!" [".-onbeforeunload" "js/window"] "save-local-storage!"]]},
          "style.layout" {:ns ["ns" "wanderlist.style.layout" [":require" ["[]" "hsl.core" ":refer" ["[]" "hsl"]]]],
                          :defs {"vspace" ["defn" "vspace" ["x"] ["{}" [":height" ["str" "x" "|px"]]]],
                                 "hspace" ["defn" "hspace" ["x"] ["{}" [":width" ["str" "x" "|px"]]]]},

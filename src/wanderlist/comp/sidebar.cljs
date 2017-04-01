@@ -28,6 +28,9 @@
     :font-family "Verdana",
     :width "auto"}))
 
+(def style-button
+  (merge widget/button {:background-color (hsl 120 40 84), :padding "0 16px", :width "auto"}))
+
 (def style-query
   {:font-size "16px",
    :padding "0 8px",
@@ -45,6 +48,8 @@
     (if (> (count (:query state)) 0)
       (do (dispatch! :add-group (:query state)) (mutate! {:query ""})))))
 
+(defn init-state [groups router] {:query ""})
+
 (def style-sidebar
   {:background-color (hsl 0 0 100),
    :display "flex",
@@ -57,43 +62,39 @@
 
 (defn on-empty-route [e dispatch!] (dispatch! :set-router {:name :table}))
 
-(defn render [groups router]
-  (fn [state mutate!]
-    (let [by-newest-group (fn [group-a group-b]
-                            (compare
-                             (:touched-time (val group-b))
-                             (:touched-time (val group-a))))]
-      (div
-       {:style style-sidebar}
-       (div
-        {:style style-header}
-        (input
-         {:style style-query,
-          :event {:input (on-query-change state mutate!)},
-          :attrs {:value (:query state), :placeholder "group..."}})
-        (span
-         {:style style-add,
-          :event {:click (on-group-add state mutate!)},
-          :attrs {:inner-text "Add"}})
-        (div {:style (layout/hspace 16)})
-        (span {:style style-add, :event {:click on-hide}, :attrs {:inner-text "Hide"}}))
-       (div
-        {:style style-body, :event {:click on-empty-route}}
-        (div
-         {:style (style-box (count groups))}
-         (->> groups
-              (sort by-newest-group)
-              (map-indexed
-               (fn [index entry]
-                 [(first entry)
-                  (let [group (last entry)
-                        tasks (:tasks group)
-                        selected? (= (:group-id router) (:id group))]
-                    (comp-group-line group index selected?))])))))))))
-
-(def sidebar-component (create-comp :sidebar render))
-
-(def style-button
-  (merge widget/button {:background-color (hsl 120 40 84), :padding "0 16px", :width "auto"}))
-
-(defn init-state [groups router] {:query ""})
+(def comp-sidebar
+  (create-comp
+   :sidebar
+   (fn [groups router]
+     (fn [state mutate!]
+       (let [by-newest-group (fn [group-a group-b]
+                               (compare
+                                (:touched-time (val group-b))
+                                (:touched-time (val group-a))))]
+         (div
+          {:style style-sidebar}
+          (div
+           {:style style-header}
+           (input
+            {:style style-query,
+             :event {:input (on-query-change state mutate!)},
+             :attrs {:value (:query state), :placeholder "group..."}})
+           (span
+            {:style style-add,
+             :event {:click (on-group-add state mutate!)},
+             :attrs {:inner-text "Add"}})
+           (div {:style (layout/hspace 16)})
+           (span {:style style-add, :event {:click on-hide}, :attrs {:inner-text "Hide"}}))
+          (div
+           {:style style-body, :event {:click on-empty-route}}
+           (div
+            {:style (style-box (count groups))}
+            (->> groups
+                 (sort by-newest-group)
+                 (map-indexed
+                  (fn [index entry]
+                    [(first entry)
+                     (let [group (last entry)
+                           tasks (:tasks group)
+                           selected? (= (:group-id router) (:id group))]
+                       (comp-group-line group index selected?))])))))))))))

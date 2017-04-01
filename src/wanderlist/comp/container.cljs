@@ -5,8 +5,8 @@
             [respo.alias :refer [create-comp div textarea span]]
             [respo.comp.text :refer [comp-text]]
             [respo.comp.debug :refer [comp-debug]]
-            [wanderlist.comp.sidebar :refer [sidebar-component]]
-            [wanderlist.comp.todolist :refer [todolist-component]]))
+            [wanderlist.comp.sidebar :refer [comp-sidebar]]
+            [wanderlist.comp.todolist :refer [comp-todolist]]))
 
 (def style-hidden {:width 80, :cursor "pointer"})
 
@@ -37,25 +37,26 @@
    :display "flex",
    :font-family "Verdana"})
 
-(defn render [store]
-  (fn [state mutate!]
-    (let [router (:router store), group-id (:group-id router)]
-      (div
-       {:style style-app}
-       (if (:show-sidebar? store)
-         (div {:style style-left-column} (sidebar-component (:groups store) router))
-         (div {:event {:click on-show}, :style style-hidden}))
-       (div {:style style-divider})
-       (div
-        {:style style-right-column}
-        (case (:name router)
-          :table
-            (if (some? group-id)
-              (todolist-component router (get (:groups store) group-id))
-              (div
-               {:style style-placeholder}
-               (span {:attrs (:inner-text "Select a group?")})))
-          (div {} (span {:attrs (:inner-text "router not matching a page")}))))
-       (comment 0 comp-debug (:show-sidebar? store) nil)))))
-
-(def container-component (create-comp :container render))
+(def comp-container
+  (create-comp
+   :container
+   (fn [store]
+     (fn [state mutate!]
+       (let [router (:router store), group-id (:group-id router)]
+         (div
+          {:style style-app}
+          (if (:show-sidebar? store)
+            (div {:style style-left-column} (comp-sidebar (:groups store) router))
+            (div {:event {:click on-show}, :style style-hidden}))
+          (div {:style style-divider})
+          (div
+           {:style style-right-column}
+           (case (:name router)
+             :table
+               (if (some? group-id)
+                 (comp-todolist router (get (:groups store) group-id))
+                 (div
+                  {:style style-placeholder}
+                  (span {:attrs (:inner-text "Select a group?")})))
+             (div {} (span {:attrs (:inner-text "router not matching a page")}))))
+          (comment 0 comp-debug (:show-sidebar? store) nil)))))))

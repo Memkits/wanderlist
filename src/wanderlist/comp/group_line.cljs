@@ -50,27 +50,28 @@
 (defn on-edit [group-id]
   (fn [e dispatch! mutate!] (dispatch! :update-group {:id group-id, :text (:value e)})))
 
-(defn render [group index selected? todo-size]
-  (fn [state mutate!]
-    (let [todo-size (count
-                     (->> (:tasks group) (filter (fn [entry] (not (:done (val entry)))))))]
-      (div
-       {:style (style-group index selected? (> todo-size 0)),
-        :event {:click (on-group-route state (:id group))}}
-       (span {:style style-small-hint, :attrs {:inner-text (str todo-size)}})
-       (comp-space 8 0)
-       (input
-        {:style style-input,
-         :attrs {:value (:text group)},
-         :event {:input (on-edit (:id group))}})
-       (comp-space 20 nil)
-       (div
-        {:style (merge ui/center widget/icon style-promote),
-         :attrs {:class-name "ion-md-arrow-up"},
-         :event {:click (handle-promote group)}})
-       (div
-        {:style (merge ui/center widget/icon style-remove),
-         :attrs {:class-name "ion-md-close"},
-         :event {:click (handle-click group state)}})))))
-
-(def comp-group-line (create-comp :group-line render))
+(def comp-group-line
+  (create-comp
+   :group-line
+   (fn [group index selected? todo-size]
+     (fn [state mutate!]
+       (let [todo-size (count
+                        (->> (:tasks group) (filter (fn [entry] (not (:done (val entry)))))))]
+         (div
+          {:style (style-group index selected? (> todo-size 0)),
+           :event {:click (on-group-route state (:id group))}}
+          (span {:style style-small-hint, :attrs {:inner-text (str todo-size)}})
+          (comp-space 8 0)
+          (input
+           {:style style-input,
+            :attrs {:value (:text group)},
+            :event {:input (on-edit (:id group))}})
+          (comp-space 20 nil)
+          (div
+           {:style (merge ui/center widget/icon style-promote),
+            :attrs {:class-name "ion-md-arrow-up"},
+            :event {:click (handle-promote group)}})
+          (div
+           {:style (merge ui/center widget/icon style-remove),
+            :attrs {:class-name "ion-md-close"},
+            :event {:click (handle-click group state)}})))))))
