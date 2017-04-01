@@ -2,15 +2,16 @@
   (:require
     [respo.alias :refer [html head title script style meta' div link body]]
     [respo.render.html :refer [make-html make-string]]
-    [wanderlist.comp.container :refer [container-component]]
-    [planck.core :refer [slurp spit]]))
+    [wanderlist.comp.container :refer [container-component]]))
 
-(defn use-text [x] {:attrs {:innerHTML x}})
+(defn slurp [file-name]
+  (.readFileSync (js/require "fs") file-name "utf8"))
+
 (defn html-dsl [data html-content ssr-stages]
   (make-html
     (html {}
       (head {}
-        (title (use-text "wanderlist"))
+        (title {:attrs {:inner-text "wanderlist"}})
         (link {:attrs {:rel "icon" :type "image/png" :href "mvc-works-192x192.png"}})
         (link {:attrs {:rel "stylesheet" :style "text/css" :href "style.css"}})
         (if (:build? data)
@@ -18,8 +19,8 @@
         (meta' {:attrs {:charset "utf-8"}})
         (meta' {:attrs {:name "viewport" :content "width=device-width, initial-scale=1"}})
         (meta' {:attrs {:id "ssr-stages" :content (pr-str ssr-stages)}})
-        (style (use-text "body {margin: 0;}"))
-        (style (use-text "body * {box-sizing: border-box;}"))
+        (style {:attrs {:inner-text "body {margin: 0;}"}})
+        (style {:attrs {:inner-text "body * {box-sizing: border-box;}"}})
         (script {:attrs {:id "config" :type "text/edn" :innerHTML (pr-str data)}})
         (if (:build? data)
           (script {:attrs {:id "config" :type "text/edn" :innerHTML (slurp "scripts/ga.js")}})))
@@ -27,12 +28,21 @@
         (div {:attrs {:id "app" :innerHTML html-content}})
         (script {:attrs {:src "main.js"}})))))
 
-(defn generate-html [ssr-stages]
-  (let [ tree (container-component {} ssr-stages)
+(defn generate-html []
+  (let [ tree (container-component {} #{:shell})
          html-content (make-string tree)]
-    (html-dsl {:build? true} html-content ssr-stages)))
+    (html-dsl {:build? true} html-content #{:shell})))
+
+(defn generate-empty-html []
+  (html-dsl {:build? true} "" {}))
+
+(defn spit [file-name content]
+  (let [fs (js/require "fs")]
+    (.writeFileSync fs file-name content)))
 
 (defn -main []
-  (spit "target/index.html" (generate-html #{:shell})))
+  (if (= js/process.env.env "dev")
+    (spit "target/dev.html" (generate-empty-html))
+    (spit "target/index.html" (generate-html))))
 
 (-main)

@@ -10,7 +10,7 @@
   (fn [e dispatch!]
     (if (> (count (:draft state)) 0)
       (do
-       (dispatch! :add-task {:group-id (:group-id router), :text (:draft state)})
+       (dispatch! :add-task {:text (:draft state), :group-id (:group-id router)})
        (mutate! {:draft ""})))))
 
 (def style-header {:display "flex", :flex-direction "column", :height "auto"})
@@ -23,20 +23,20 @@
 (def style-button
   (merge
    widget/button
-   {:color "white",
+   {:padding "0 16px",
     :background-color (hsl 220 100 80),
-    :width "auto",
-    :padding "0 16px",
-    :display "inline-block"}))
+    :color "white",
+    :display "inline-block",
+    :width "auto"}))
 
-(def style-body {:overflow "auto", :flex "1", :padding-bottom "200px"})
+(def style-body {:flex "1", :overflow "auto", :padding-bottom "200px"})
 
 (defn style-list [size]
   {:display "flex",
-   :position "relative",
-   :transition-duration "300ms",
    :flex-direction "column",
-   :height (str (* 40 size) "px")})
+   :position "relative",
+   :height (str (* 40 size) "px"),
+   :transition-duration "300ms"})
 
 (def style-adder {:display "flex"})
 
@@ -46,31 +46,29 @@
 (def style-hint {:color (hsl 0 0 60)})
 
 (def style-input
-  {:font-size "16px",
-   :flex "1",
-   :padding "0px 8px",
-   :outline "none",
+  {:outline "none",
    :border "none",
-   :height "32px"})
-
-(defn init-state [router group] {:draft "", :fold-done? true})
+   :padding "0px 8px",
+   :height "32px",
+   :font-size "16px",
+   :flex "1"})
 
 (def style-section {:margin-top "16px"})
 
 (def style-todolist
-  {:box-shadow (str "0 0 4px " (hsl 0 0 0 0.1)),
-   :background-color (hsl 0 0 100),
+  {:background-color (hsl 0 0 100),
    :width "100%",
-   :padding "16px",
+   :height "100%",
    :display "flex",
    :flex-direction "column",
-   :height "100%"})
+   :box-shadow (str "0 0 4px " (hsl 0 0 0 0.1)),
+   :padding "16px"})
 
 (defn handle-keydown [router state mutate!]
   (fn [simple-event dispatch!]
     (if (and (= (:key-code simple-event) 13) (> (count (:draft state)) 0))
       (do
-       (dispatch! :add-task {:group-id (:group-id router), :text (:draft state)})
+       (dispatch! :add-task {:text (:draft state), :group-id (:group-id router)})
        (mutate! {:draft ""})))))
 
 (defn render [router group]
@@ -87,9 +85,9 @@
          {:style style-adder}
          (input
           {:style style-input,
-           :event {:keydown (handle-keydown router state mutate!),
-                   :input (handle-input mutate!)},
-           :attrs {:placeholder "Add a task...", :value (:draft state)}})
+           :event {:input (handle-input mutate!),
+                   :keydown (handle-keydown router state mutate!)},
+           :attrs {:value (:draft state), :placeholder "Add a task..."}})
          (span
           {:style style-button,
            :event {:click (handle-task-add router state mutate!)},
@@ -122,4 +120,6 @@
                 (map-indexed
                  (fn [index entry] [(key entry) (task-component (val entry) index)]))))))))))
 
-(def todolist-component (create-comp :todolist init-state merge render))
+(def todolist-component (create-comp :todolist render))
+
+(defn init-state [router group] {:draft "", :fold-done? true})

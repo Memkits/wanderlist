@@ -14,7 +14,7 @@
           op-id
           (merge
            schema/group
-           {:id op-id, :created-time op-time, :touched-time op-time, :text op-data}))))
+           {:id op-id, :text op-data, :created-time op-time, :touched-time op-time}))))
     :rm-group
       (-> old-store (update :groups (fn [task-groups] (dissoc task-groups op-data))))
     :update-group (assoc-in old-store [:groups (:id op-data) :text] (:text op-data))

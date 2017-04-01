@@ -1,14 +1,5 @@
-/target
-/classes
-/checkouts
-pom.xml
-pom.xml.asc
-*.jar
-*.class
-/.lein-*
-/.nrepl-port
-.hgignore
-.hg/
 
+/target
 /.nrepl-history
 /node_modules
+.lumo_cache

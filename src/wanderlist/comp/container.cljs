@@ -14,28 +14,28 @@
 
 (def style-left-column {:width "34%", :display "flex", :flex-direction "column"})
 
-(def style-divider {:background-color (hsl 0 0 94), :width 1})
+(def style-divider {:width 1, :background-color (hsl 0 0 94)})
 
 (def style-right-column {:width "66%", :display "flex", :flex-direction "column"})
 
 (def style-placeholder
-  {:align-items "center",
+  {:width "100%",
+   :height "100%",
+   :background-color (hsl 180 40 98),
+   :display "flex",
+   :justify-content "center",
+   :align-items "center",
    :color (hsl 0 0 80),
    :font-size "40px",
-   :font-weight "light",
-   :background-color (hsl 180 40 98),
-   :width "100%",
-   :justify-content "center",
-   :display "flex",
-   :height "100%"})
+   :font-weight "light"})
 
 (def style-app
   {:background-color (hsl 240 40 96),
    :width "100%",
-   :display "flex",
+   :height "100%",
    :position "absolute",
-   :font-family "Verdana",
-   :height "100%"})
+   :display "flex",
+   :font-family "Verdana"})
 
 (defn render [store]
   (fn [state mutate!]
@@ -44,7 +44,7 @@
        {:style style-app}
        (if (:show-sidebar? store)
          (div {:style style-left-column} (sidebar-component (:groups store) router))
-         (div {:style style-hidden, :event {:click on-show}}))
+         (div {:event {:click on-show}, :style style-hidden}))
        (div {:style style-divider})
        (div
         {:style style-right-column}

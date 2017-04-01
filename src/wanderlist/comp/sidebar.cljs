@@ -16,7 +16,7 @@
 (def style-header {:display "flex"})
 
 (def style-space
-  {:width "8px", :display "inline-block", :pointer-events "none", :height "100%"})
+  {:width "8px", :display "inline-block", :height "100%", :pointer-events "none"})
 
 (defn style-box [n] {:width "100%", :height (str (+ 80 (* n 40)) "px")})
 
@@ -24,36 +24,34 @@
   (merge
    widget/button
    {:background-color (hsl 220 100 80),
-    :width "auto",
     :padding "0 16px",
-    :font-family "Verdana"}))
+    :font-family "Verdana",
+    :width "auto"}))
 
 (def style-query
-  {:line-height "32px",
-   :font-size "16px",
-   :width "100%",
-   :flex "1",
+  {:font-size "16px",
    :padding "0 8px",
+   :line-height "32px",
    :outline "none",
-   :border "none"})
+   :border "none",
+   :width "100%",
+   :flex "1"})
 
 (def style-body
-  {:overflow "auto", :background-color (hsl 0 0 0 0), :flex "1", :position "relative"})
+  {:flex "1", :background-color (hsl 0 0 0 0), :position "relative", :overflow "auto"})
 
 (defn on-group-add [state mutate!]
   (fn [simple-event dispatch!]
     (if (> (count (:query state)) 0)
       (do (dispatch! :add-group (:query state)) (mutate! {:query ""})))))
 
-(defn init-state [groups router] {:query ""})
-
 (def style-sidebar
-  {:box-shadow (str "0px 0px 4px " (hsl 0 0 0 0.1)),
-   :background-color (hsl 0 0 100),
-   :padding "16px",
+  {:background-color (hsl 0 0 100),
    :display "flex",
    :flex-direction "column",
-   :height "100%"})
+   :height "100%",
+   :box-shadow (str "0px 0px 4px " (hsl 0 0 0 0.1)),
+   :padding "16px"})
 
 (defn on-hide [e dispatch!] (dispatch! :hide-sidebar nil))
 
@@ -72,7 +70,7 @@
         (input
          {:style style-query,
           :event {:input (on-query-change state mutate!)},
-          :attrs {:placeholder "group...", :value (:query state)}})
+          :attrs {:value (:query state), :placeholder "group..."}})
         (span
          {:style style-add,
           :event {:click (on-group-add state mutate!)},
@@ -93,7 +91,9 @@
                         selected? (= (:group-id router) (:id group))]
                     (comp-group-line group index selected?))])))))))))
 
-(def sidebar-component (create-comp :sidebar init-state merge render))
+(def sidebar-component (create-comp :sidebar render))
 
 (def style-button
-  (merge widget/button {:background-color (hsl 120 40 84), :width "auto", :padding "0 16px"}))
+  (merge widget/button {:background-color (hsl 120 40 84), :padding "0 16px", :width "auto"}))
+
+(defn init-state [groups router] {:query ""})

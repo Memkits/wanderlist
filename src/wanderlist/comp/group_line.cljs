@@ -6,11 +6,11 @@
             [respo.comp.space :refer [comp-space]]
             [respo-ui.style :as ui]))
 
-(def style-small-hint {:color (hsl 0 0 70), :font-size "12px", :pointer-events "none"})
+(def style-small-hint {:font-size "12px", :color (hsl 0 0 70), :pointer-events "none"})
 
 (defn on-group-route [state group-id]
   (fn [simple-event dispatch! mutate!]
-    (dispatch! :set-router {:group-id group-id, :name :table})))
+    (dispatch! :set-router {:name :table, :group-id group-id})))
 
 (defn handle-click [group state]
   (fn [simple-event dispatch! mutate!]
@@ -18,34 +18,34 @@
     (dispatch! :set-router {:name :table})))
 
 (defn style-group [index selected? todo?]
-  {:line-height "40px",
-   :align-items "center",
+  {:padding "0px 8px",
    :color (if todo? (hsl 0 0 20) (hsl 0 0 70)),
-   :top (str (+ 8 (* 40 index)) "px"),
-   :background-color (if selected? (hsl 200 20 94) "transparent"),
-   :width "100%",
+   :line-height "40px",
    :cursor "pointer",
-   :padding "0px 8px",
-   :display "flex",
    :position "absolute",
-   :transition-duration "300ms"})
+   :top (str (+ 8 (* 40 index)) "px"),
+   :width "100%",
+   :transition-duration "300ms",
+   :background-color (if selected? (hsl 200 20 94) "transparent"),
+   :display "flex",
+   :align-items "center"})
 
 (def style-input
-  {:line-height 2,
-   :font-size 16,
-   :background-color "transparent",
+  {:border "none",
    :flex 1,
    :outline "none",
-   :border "none"})
+   :font-size 16,
+   :line-height 2,
+   :background-color "transparent"})
 
 (def style-promote
-  {:color (hsl 120 50 80), :width "24px", :display "inline-block", :height "24px"})
+  {:color (hsl 120 50 80), :display "inline-block", :width "24px", :height "24px"})
 
 (defn handle-promote [group]
   (fn [simple-event dispatch! mutate!] (dispatch! :touch-group (:id group))))
 
 (def style-remove
-  {:color (hsl 0 100 70), :width "24px", :display "inline-block", :height "24px"})
+  {:color (hsl 0 100 70), :display "inline-block", :width "24px", :height "24px"})
 
 (defn on-edit [group-id]
   (fn [e dispatch! mutate!] (dispatch! :update-group {:id group-id, :text (:value e)})))
@@ -61,16 +61,16 @@
        (comp-space 8 0)
        (input
         {:style style-input,
-         :event {:input (on-edit (:id group))},
-         :attrs {:value (:text group)}})
+         :attrs {:value (:text group)},
+         :event {:input (on-edit (:id group))}})
        (comp-space 20 nil)
        (div
         {:style (merge ui/center widget/icon style-promote),
-         :event {:click (handle-promote group)},
-         :attrs {:class-name "ion-md-arrow-up"}})
+         :attrs {:class-name "ion-md-arrow-up"},
+         :event {:click (handle-promote group)}})
        (div
         {:style (merge ui/center widget/icon style-remove),
-         :event {:click (handle-click group state)},
-         :attrs {:class-name "ion-md-close"}})))))
+         :attrs {:class-name "ion-md-close"},
+         :event {:click (handle-click group state)}})))))
 
 (def comp-group-line (create-comp :group-line render))

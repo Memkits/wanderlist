@@ -1,9 +1,9 @@
 
 (ns wanderlist.schema (:require [hsl.core :refer [hsl]]))
 
-(def group {:tasks {}, :id nil, :created-time nil, :touched-time nil, :text nil})
-
 (def task
-  {:done false, :id nil, :created-time nil, :touched-time nil, :done-time nil, :text nil})
+  {:id nil, :text nil, :done false, :created-time nil, :touched-time nil, :done-time nil})
 
-(def store {:router {:name :table}, :show-sidebar? true, :groups {}, :version 2})
+(def group {:text nil, :id nil, :tasks {}, :created-time nil, :touched-time nil})
+
+(def store {:version 2, :groups {}, :router {:name :table}, :show-sidebar? true})

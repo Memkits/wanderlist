@@ -8,17 +8,17 @@
             [respo-ui.style :as ui]))
 
 (defn style-task [index]
-  {:top (str (+ 8 (* index 40)) "px"),
-   :width "100%",
-   :display "flex",
+  {:display "flex",
    :position "absolute",
+   :top (str (+ 8 (* index 40)) "px"),
+   :width "100%",
    :transition-duration "300ms"})
 
 (defn handle-toggle [task]
   (fn [simple-event dispatch! mutate!] (dispatch! :toggle-task task)))
 
 (def style-input
-  {:font-size "16px", :flex "1", :padding "0px 8px", :outline "none", :border "none"})
+  {:outline "none", :border "none", :padding "0px 8px", :font-size "16px", :flex "1"})
 
 (def style-promote (merge ui/center {:color (hsl 120 50 80)}))
 
@@ -44,19 +44,19 @@
        {:style (style-task index)}
        (div
         {:style (merge ui/center widget/icon (style-done done?)),
-         :event {:click (handle-toggle task)},
-         :attrs {:class-name "ion-md-checkmark"}})
+         :attrs {:class-name "ion-md-checkmark"},
+         :event {:click (handle-toggle task)}})
        (input
         {:style style-input,
          :event {:input (handle-change task)},
          :attrs {:value (:text task)}})
        (div
         {:style (merge widget/icon style-promote),
-         :event {:click (handle-promote task)},
-         :attrs {:class-name "ion-md-arrow-up"}})
+         :attrs {:class-name "ion-md-arrow-up"},
+         :event {:click (handle-promote task)}})
        (div
         {:style (merge widget/icon style-remove),
-         :event {:click (handle-remove task)},
-         :attrs {:class-name "ion-md-close"}})))))
+         :attrs {:class-name "ion-md-close"},
+         :event {:click (handle-remove task)}})))))
 
 (def task-component (create-comp :task render))
