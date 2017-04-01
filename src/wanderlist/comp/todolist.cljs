@@ -1,22 +1,21 @@
 
 (ns wanderlist.comp.todolist
   (:require [hsl.core :refer [hsl]]
+            [clojure.string :as string]
             [wanderlist.comp.task :refer [comp-task]]
             [wanderlist.style.widget :as widget]
             [wanderlist.style.layout :as layout]
             [respo.alias :refer [create-comp div section span header input]]))
 
-(defn handle-task-add [router state mutate!]
+(defn handle-task-add [router state]
   (fn [e dispatch!]
-    (if (> (count (:draft state)) 0)
-      (do
-       (dispatch! :add-task {:text (:draft state), :group-id (:group-id router)})
-       (mutate! {:draft ""})))))
+    (if (not (string/blank? (:draft state)))
+      (dispatch! :add-task {:text (:draft state), :group-id (:group-id router)}))))
 
 (def style-header {:display "flex", :flex-direction "column", :height "auto"})
 
-(defn handle-toggle [state mutate!]
-  (fn [simple-event dispatch!] (mutate! {:fold-done? (not (:fold-done? state))})))
+(defn handle-toggle [cursor state]
+  (fn [e dispatch!] (dispatch! :states [cursor (update state :fold-done? not)])))
 
 (def style-space {:width "100%", :height "8px"})
 
@@ -40,8 +39,8 @@
 
 (def style-adder {:display "flex"})
 
-(defn handle-input [mutate!]
-  (fn [simple-event dispatch!] (mutate! {:draft (:value simple-event)})))
+(defn handle-input [cursor state]
+  (fn [e dispatch!] (dispatch! :states [cursor (assoc state :draft (:value e))])))
 
 (def style-hint {:color (hsl 0 0 60)})
 
@@ -53,7 +52,7 @@
    :font-size "16px",
    :flex "1"})
 
-(defn init-state [router group] {:draft "", :fold-done? true})
+(def initial-state {:draft "", :fold-done? true})
 
 (def style-section {:margin-top "16px"})
 
@@ -66,19 +65,18 @@
    :box-shadow (str "0 0 4px " (hsl 0 0 0 0.1)),
    :padding "16px"})
 
-(defn handle-keydown [router state mutate!]
-  (fn [simple-event dispatch!]
-    (if (and (= (:key-code simple-event) 13) (> (count (:draft state)) 0))
-      (do
-       (dispatch! :add-task {:text (:draft state), :group-id (:group-id router)})
-       (mutate! {:draft ""})))))
+(defn handle-keydown [router state]
+  (fn [e dispatch!]
+    (if (and (= (:key-code e) 13) (> (count (:draft state)) 0))
+      (dispatch! :add-task {:text (:draft state), :group-id (:group-id router)}))))
 
 (def comp-todolist
   (create-comp
    :todolist
-   (fn [router group]
-     (fn [state mutate!]
+   (fn [states router group]
+     (fn [cursor]
        (let [tasks (:tasks group)
+             state (or (:data states) initial-state)
              todo-tasks (->> tasks
                              (filter (fn [entry] (not (:done (val entry)))))
                              (into {}))
@@ -92,12 +90,12 @@
             {:style style-adder}
             (input
              {:style style-input,
-              :event {:input (handle-input mutate!),
-                      :keydown (handle-keydown router state mutate!)},
+              :event {:input (handle-input cursor state),
+                      :keydown (handle-keydown router state)},
               :attrs {:value (:draft state), :placeholder "Add a task..."}})
             (span
              {:style style-button,
-              :event {:click (handle-task-add router state mutate!)},
+              :event {:click (handle-task-add router state)},
               :attrs {:inner-text "Add"}})))
           (div {:style (layout/vspace 16)})
           (section
@@ -115,7 +113,7 @@
             (if (> (count done-tasks) 0)
               (span
                {:style style-button,
-                :event {:click (handle-toggle state mutate!)},
+                :event {:click (handle-toggle cursor state)},
                 :attrs {:inner-text "Toggle"}})))
            (if (not (:fold-done? state))
              (section

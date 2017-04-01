@@ -8,10 +8,8 @@
             [respo.alias :refer [create-comp div span input]]
             [wanderlist.comp.group-line :refer [comp-group-line]]))
 
-(defn on-query-change [state mutate!]
-  (fn [simple-event dispatch!]
-    (comment println simple-event)
-    (mutate! {:query (:value simple-event)})))
+(defn on-query-change [cursor]
+  (fn [e dispatch!] (comment println e) (dispatch! :states [cursor (:value e)])))
 
 (def style-header {:display "flex"})
 
@@ -43,12 +41,8 @@
 (def style-body
   {:flex "1", :background-color (hsl 0 0 0 0), :position "relative", :overflow "auto"})
 
-(defn on-group-add [state mutate!]
-  (fn [simple-event dispatch!]
-    (if (> (count (:query state)) 0)
-      (do (dispatch! :add-group (:query state)) (mutate! {:query ""})))))
-
-(defn init-state [groups router] {:query ""})
+(defn on-group-add [state]
+  (fn [e dispatch!] (if (not (string/blank? state)) (do (dispatch! :add-group state)))))
 
 (def style-sidebar
   {:background-color (hsl 0 0 100),
@@ -65,9 +59,10 @@
 (def comp-sidebar
   (create-comp
    :sidebar
-   (fn [groups router]
-     (fn [state mutate!]
-       (let [by-newest-group (fn [group-a group-b]
+   (fn [states groups router]
+     (fn [cursor]
+       (let [state (:data states)
+             by-newest-group (fn [group-a group-b]
                                (compare
                                 (:touched-time (val group-b))
                                 (:touched-time (val group-a))))]
@@ -77,11 +72,11 @@
            {:style style-header}
            (input
             {:style style-query,
-             :event {:input (on-query-change state mutate!)},
-             :attrs {:value (:query state), :placeholder "group..."}})
+             :event {:input (on-query-change cursor)},
+             :attrs {:value state, :placeholder "group..."}})
            (span
             {:style style-add,
-             :event {:click (on-group-add state mutate!)},
+             :event {:click (on-group-add state)},
              :attrs {:inner-text "Add"}})
            (div {:style (layout/hspace 16)})
            (span {:style style-add, :event {:click on-hide}, :attrs {:inner-text "Hide"}}))

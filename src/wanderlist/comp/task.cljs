@@ -14,34 +14,30 @@
    :width "100%",
    :transition-duration "300ms"})
 
-(defn handle-toggle [task]
-  (fn [simple-event dispatch! mutate!] (dispatch! :toggle-task task)))
+(defn handle-toggle [task] (fn [e dispatch!] (dispatch! :toggle-task task)))
 
 (def style-input
   {:outline "none", :border "none", :padding "0px 8px", :font-size "16px", :flex "1"})
 
 (def style-promote (merge ui/center {:color (hsl 120 50 80)}))
 
-(defn handle-promote [task]
-  (fn [simple-event dispatch! mutate!] (dispatch! :touch-task task)))
+(defn handle-promote [task] (fn [e dispatch!] (dispatch! :touch-task task)))
 
 (defn style-done [done?] {:color (if done? (hsl 100 20 60) (hsl 20 90 80))})
 
 (def style-remove (merge ui/center {:color (hsl 0 100 70)}))
 
-(defn handle-remove [task] (fn [simple-event dispatch! mutate!] (dispatch! :rm-task task)))
+(defn handle-remove [task] (fn [e dispatch!] (dispatch! :rm-task task)))
 
 (defn handle-change [task]
-  (fn [simple-event dispatch! mutate!]
-    (dispatch!
-     :update-task
-     {:group-id (:group-id task), :id (:id task), :text (:value simple-event)})))
+  (fn [e dispatch!]
+    (dispatch! :update-task {:group-id (:group-id task), :id (:id task), :text (:value e)})))
 
 (def comp-task
   (create-comp
    :task
    (fn [task index]
-     (fn [state mutate!]
+     (fn [cursor]
        (let [done? (:done task)]
          (section
           {:style (style-task index)}

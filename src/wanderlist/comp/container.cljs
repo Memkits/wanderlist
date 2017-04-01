@@ -2,7 +2,7 @@
 (ns wanderlist.comp.container
   (:require [clojure.string :as string]
             [hsl.core :refer [hsl]]
-            [respo.alias :refer [create-comp div textarea span]]
+            [respo.alias :refer [create-comp div textarea span with-cursor]]
             [respo.comp.text :refer [comp-text]]
             [respo.comp.debug :refer [comp-debug]]
             [wanderlist.comp.sidebar :refer [comp-sidebar]]
@@ -41,12 +41,14 @@
   (create-comp
    :container
    (fn [store]
-     (fn [state mutate!]
-       (let [router (:router store), group-id (:group-id router)]
+     (fn [cursor]
+       (let [router (:router store), group-id (:group-id router), states (:states store)]
          (div
           {:style style-app}
           (if (:show-sidebar? store)
-            (div {:style style-left-column} (comp-sidebar (:groups store) router))
+            (div
+             {:style style-left-column}
+             (with-cursor :group (comp-sidebar (:group states) (:groups store) router)))
             (div {:event {:click on-show}, :style style-hidden}))
           (div {:style style-divider})
           (div
@@ -54,9 +56,11 @@
            (case (:name router)
              :table
                (if (some? group-id)
-                 (comp-todolist router (get (:groups store) group-id))
+                 (with-cursor
+                  :todolist
+                  (comp-todolist (:todolist states) router (get (:groups store) group-id)))
                  (div
                   {:style style-placeholder}
                   (span {:attrs (:inner-text "Select a group?")})))
              (div {} (span {:attrs (:inner-text "router not matching a page")}))))
-          (comment 0 comp-debug (:show-sidebar? store) nil)))))))
+          (comment comp-debug states nil)))))))

@@ -15,17 +15,17 @@
                                                         [":pointer-events" "|none"]]],
                                    "on-group-route" ["defn"
                                                      "on-group-route"
-                                                     ["state" "group-id"]
+                                                     ["group-id"]
                                                      ["fn"
-                                                      ["simple-event" "dispatch!" "mutate!"]
+                                                      ["e" "dispatch!"]
                                                       ["dispatch!"
                                                        ":set-router"
                                                        ["{}" [":name" ":table"] [":group-id" "group-id"]]]]],
                                    "handle-click" ["defn"
                                                    "handle-click"
-                                                   ["group" "state"]
+                                                   ["group"]
                                                    ["fn"
-                                                    ["simple-event" "dispatch!" "mutate!"]
+                                                    ["e" "dispatch!"]
                                                     ["dispatch!" ":rm-group" [":id" "group"]]
                                                     ["dispatch!" ":set-router" ["{}" [":name" ":table"]]]]],
                                    "style-group" ["defn"
@@ -65,7 +65,7 @@
                                                      "handle-promote"
                                                      ["group"]
                                                      ["fn"
-                                                      ["simple-event" "dispatch!" "mutate!"]
+                                                      ["e" "dispatch!"]
                                                       ["dispatch!" ":touch-group" [":id" "group"]]]],
                                    "comp-group-line" ["def"
                                                       "comp-group-line"
@@ -74,7 +74,7 @@
                                                        ["fn"
                                                         ["group" "index" "selected?" "todo-size"]
                                                         ["fn"
-                                                         ["state" "mutate!"]
+                                                         ["cursor"]
                                                          ["let"
                                                           [["todo-size"
                                                             ["count"
@@ -87,8 +87,7 @@
                                                             [":style"
                                                              ["style-group" "index" "selected?" [">" "todo-size" "0"]]]
                                                             [":event"
-                                                             ["{}"
-                                                              [":click" ["on-group-route" "state" [":id" "group"]]]]]]
+                                                             ["{}" [":click" ["on-group-route" [":id" "group"]]]]]]
                                                            ["span"
                                                             ["{}"
                                                              [":style" "style-small-hint"]
@@ -111,8 +110,7 @@
                                                              [":style"
                                                               ["merge" "ui/center" "widget/icon" "style-remove"]]
                                                              [":attrs" ["{}" [":class-name" "|ion-md-close"]]]
-                                                             [":event"
-                                                              ["{}" [":click" ["handle-click" "group" "state"]]]]]]]]]]]],
+                                                             [":event" ["{}" [":click" ["handle-click" "group"]]]]]]]]]]]],
                                    "style-remove" ["def"
                                                    "style-remove"
                                                    ["{}"
@@ -124,7 +122,7 @@
                                               "on-edit"
                                               ["group-id"]
                                               ["fn"
-                                               ["e" "dispatch!" "mutate!"]
+                                               ["e" "dispatch!"]
                                                ["dispatch!"
                                                 ":update-group"
                                                 ["{}" [":id" "group-id"] [":text" [":value" "e"]]]]]]},
@@ -150,9 +148,7 @@
                              "handle-toggle" ["defn"
                                               "handle-toggle"
                                               ["task"]
-                                              ["fn"
-                                               ["simple-event" "dispatch!" "mutate!"]
-                                               ["dispatch!" ":toggle-task" "task"]]],
+                                              ["fn" ["e" "dispatch!"] ["dispatch!" ":toggle-task" "task"]]],
                              "style-input" ["def"
                                             "style-input"
                                             ["{}"
@@ -167,9 +163,7 @@
                              "handle-promote" ["defn"
                                                "handle-promote"
                                                ["task"]
-                                               ["fn"
-                                                ["simple-event" "dispatch!" "mutate!"]
-                                                ["dispatch!" ":touch-task" "task"]]],
+                                               ["fn" ["e" "dispatch!"] ["dispatch!" ":touch-task" "task"]]],
                              "style-done" ["defn"
                                            "style-done"
                                            ["done?"]
@@ -182,7 +176,7 @@
                                            ["fn"
                                             ["task" "index"]
                                             ["fn"
-                                             ["state" "mutate!"]
+                                             ["cursor"]
                                              ["let"
                                               [["done?" [":done" "task"]]]
                                               ["section"
@@ -213,20 +207,18 @@
                              "handle-remove" ["defn"
                                               "handle-remove"
                                               ["task"]
-                                              ["fn"
-                                               ["simple-event" "dispatch!" "mutate!"]
-                                               ["dispatch!" ":rm-task" "task"]]],
+                                              ["fn" ["e" "dispatch!"] ["dispatch!" ":rm-task" "task"]]],
                              "handle-change" ["defn"
                                               "handle-change"
                                               ["task"]
                                               ["fn"
-                                               ["simple-event" "dispatch!" "mutate!"]
+                                               ["e" "dispatch!"]
                                                ["dispatch!"
                                                 ":update-task"
                                                 ["{}"
                                                  [":group-id" [":group-id" "task"]]
                                                  [":id" [":id" "task"]]
-                                                 [":text" [":value" "simple-event"]]]]]]},
+                                                 [":text" [":value" "e"]]]]]]},
                       :procs []},
          "schema" {:ns ["ns" "wanderlist.schema" [":require" ["[]" "hsl.core" ":refer" ["[]" "hsl"]]]],
                    :defs {"task" ["def"
@@ -260,7 +252,10 @@
                                 [":require"
                                  ["[]" "clojure.string" ":as" "string"]
                                  ["[]" "hsl.core" ":refer" ["[]" "hsl"]]
-                                 ["[]" "respo.alias" ":refer" ["[]" "create-comp" "div" "textarea" "span"]]
+                                 ["[]"
+                                  "respo.alias"
+                                  ":refer"
+                                  ["[]" "create-comp" "div" "textarea" "span" "with-cursor"]]
                                  ["[]" "respo.comp.text" ":refer" ["[]" "comp-text"]]
                                  ["[]" "respo.comp.debug" ":refer" ["[]" "comp-debug"]]
                                  ["[]" "wanderlist.comp.sidebar" ":refer" ["[]" "comp-sidebar"]]
@@ -289,17 +284,23 @@
                                                      ["fn"
                                                       ["store"]
                                                       ["fn"
-                                                       ["state" "mutate!"]
+                                                       ["cursor"]
                                                        ["let"
                                                         [["router" [":router" "store"]]
-                                                         ["group-id" [":group-id" "router"]]]
+                                                         ["group-id" [":group-id" "router"]]
+                                                         ["states" [":states" "store"]]]
                                                         ["div"
                                                          ["{}" [":style" "style-app"]]
                                                          ["if"
                                                           [":show-sidebar?" "store"]
                                                           ["div"
                                                            ["{}" [":style" "style-left-column"]]
-                                                           ["comp-sidebar" [":groups" "store"] "router"]]
+                                                           ["with-cursor"
+                                                            ":group"
+                                                            ["comp-sidebar"
+                                                             [":group" "states"]
+                                                             [":groups" "store"]
+                                                             "router"]]]
                                                           ["div"
                                                            ["{}"
                                                             [":event" ["{}" [":click" "on-show"]]]
@@ -312,9 +313,12 @@
                                                            [":table"
                                                             ["if"
                                                              ["some?" "group-id"]
-                                                             ["comp-todolist"
-                                                              "router"
-                                                              ["get" [":groups" "store"] "group-id"]]
+                                                             ["with-cursor"
+                                                              ":todolist"
+                                                              ["comp-todolist"
+                                                               [":todolist" "states"]
+                                                               "router"
+                                                               ["get" [":groups" "store"] "group-id"]]]
                                                              ["div"
                                                               ["{}" [":style" "style-placeholder"]]
                                                               ["span"
@@ -325,7 +329,7 @@
                                                              ["{}"
                                                               ":attrs"
                                                               [":inner-text" "|router not matching a page"]]]]]]
-                                                         ["--" "00" "comp-debug" [":show-sidebar?" "store"] "nil"]]]]]]],
+                                                         ["--" "comp-debug" "states" "nil"]]]]]]],
                                   "style-placeholder" ["def"
                                                        "style-placeholder"
                                                        ["{}"
@@ -352,6 +356,7 @@
                                "wanderlist.comp.todolist"
                                [":require"
                                 ["[]" "hsl.core" ":refer" ["[]" "hsl"]]
+                                ["[]" "clojure.string" ":as" "string"]
                                 ["[]" "wanderlist.comp.task" ":refer" ["[]" "comp-task"]]
                                 ["[]" "wanderlist.style.widget" ":as" "widget"]
                                 ["[]" "wanderlist.style.layout" ":as" "layout"]
@@ -361,18 +366,16 @@
                                  ["[]" "create-comp" "div" "section" "span" "header" "input"]]]],
                           :defs {"handle-task-add" ["defn"
                                                     "handle-task-add"
-                                                    ["router" "state" "mutate!"]
+                                                    ["router" "state"]
                                                     ["fn"
                                                      ["e" "dispatch!"]
                                                      ["if"
-                                                      [">" ["count" [":draft" "state"]] "0"]
-                                                      ["do"
-                                                       ["dispatch!"
-                                                        ":add-task"
-                                                        ["{}"
-                                                         [":text" [":draft" "state"]]
-                                                         [":group-id" [":group-id" "router"]]]]
-                                                       ["mutate!" ["{}" [":draft" "|"]]]]]]],
+                                                      ["not" ["string/blank?" [":draft" "state"]]]
+                                                      ["dispatch!"
+                                                       ":add-task"
+                                                       ["{}"
+                                                        [":text" [":draft" "state"]]
+                                                        [":group-id" [":group-id" "router"]]]]]]],
                                  "style-header" ["def"
                                                  "style-header"
                                                  ["{}"
@@ -381,10 +384,12 @@
                                                   [":height" "|auto"]]],
                                  "handle-toggle" ["defn"
                                                   "handle-toggle"
-                                                  ["state" "mutate!"]
+                                                  ["cursor" "state"]
                                                   ["fn"
-                                                   ["simple-event" "dispatch!"]
-                                                   ["mutate!" ["{}" [":fold-done?" ["not" [":fold-done?" "state"]]]]]]],
+                                                   ["e" "dispatch!"]
+                                                   ["dispatch!"
+                                                    ":states"
+                                                    ["[]" "cursor" ["update" "state" ":fold-done?" "not"]]]]],
                                  "style-space" ["def" "style-space" ["{}" [":width" "|100%"] [":height" "|8px"]]],
                                  "style-button" ["def"
                                                  "style-button"
@@ -411,10 +416,12 @@
                                  "style-adder" ["def" "style-adder" ["{}" [":display" "|flex"]]],
                                  "handle-input" ["defn"
                                                  "handle-input"
-                                                 ["mutate!"]
+                                                 ["cursor" "state"]
                                                  ["fn"
-                                                  ["simple-event" "dispatch!"]
-                                                  ["mutate!" ["{}" ":draft" [":value" "simple-event"]]]]],
+                                                  ["e" "dispatch!"]
+                                                  ["dispatch!"
+                                                   ":states"
+                                                   ["[]" "cursor" ["assoc" "state" ":draft" [":value" "e"]]]]]],
                                  "style-hint" ["def" "style-hint" ["{}" [":color" ["hsl" "0" "0" "60"]]]],
                                  "style-input" ["def"
                                                 "style-input"
@@ -425,10 +432,7 @@
                                                  [":height" "|32px"]
                                                  [":font-size" "|16px"]
                                                  [":flex" "|1"]]],
-                                 "init-state" ["defn"
-                                               "init-state"
-                                               ["router" "group"]
-                                               ["{}" [":draft" "|"] [":fold-done?" "true"]]],
+                                 "initial-state" ["def" "initial-state" ["{}" [":draft" "|"] [":fold-done?" "true"]]],
                                  "style-section" ["def" "style-section" ["{}" [":margin-top" "|16px"]]],
                                  "style-todolist" ["def"
                                                    "style-todolist"
@@ -445,11 +449,12 @@
                                                   ["create-comp"
                                                    ":todolist"
                                                    ["fn"
-                                                    ["router" "group"]
+                                                    ["states" "router" "group"]
                                                     ["fn"
-                                                     ["state" "mutate!"]
+                                                     ["cursor"]
                                                      ["let"
                                                       [["tasks" [":tasks" "group"]]
+                                                       ["state" ["or" [":data" "states"] "initial-state"]]
                                                        ["todo-tasks"
                                                         ["->>"
                                                          "tasks"
@@ -472,8 +477,8 @@
                                                            [":style" "style-input"]
                                                            [":event"
                                                             ["{}"
-                                                             [":input" ["handle-input" "mutate!"]]
-                                                             [":keydown" ["handle-keydown" "router" "state" "mutate!"]]]]
+                                                             [":input" ["handle-input" "cursor" "state"]]
+                                                             [":keydown" ["handle-keydown" "router" "state"]]]]
                                                            [":attrs"
                                                             ["{}"
                                                              [":value" [":draft" "state"]]
@@ -482,8 +487,7 @@
                                                           ["{}"
                                                            [":style" "style-button"]
                                                            [":event"
-                                                            ["{}"
-                                                             [":click" ["handle-task-add" "router" "state" "mutate!"]]]]
+                                                            ["{}" [":click" ["handle-task-add" "router" "state"]]]]
                                                            [":attrs" ["{}" [":inner-text" "|Add"]]]]]]]
                                                        ["div" ["{}" [":style" ["layout/vspace" "16"]]]]
                                                        ["section"
@@ -512,7 +516,7 @@
                                                            ["{}"
                                                             [":style" "style-button"]
                                                             [":event"
-                                                             ["{}" [":click" ["handle-toggle" "state" "mutate!"]]]]
+                                                             ["{}" [":click" ["handle-toggle" "cursor" "state"]]]]
                                                             [":attrs" ["{}" [":inner-text" "|Toggle"]]]]]]]
                                                         ["if"
                                                          ["not" [":fold-done?" "state"]]
@@ -534,20 +538,18 @@
                                                               ["comp-task" ["val" "entry"] "index"]]]]]]]]]]]]]],
                                  "handle-keydown" ["defn"
                                                    "handle-keydown"
-                                                   ["router" "state" "mutate!"]
+                                                   ["router" "state"]
                                                    ["fn"
-                                                    ["simple-event" "dispatch!"]
+                                                    ["e" "dispatch!"]
                                                     ["if"
                                                      ["and"
-                                                      ["=" [":key-code" "simple-event"] "13"]
+                                                      ["=" [":key-code" "e"] "13"]
                                                       [">" ["count" [":draft" "state"]] "0"]]
-                                                     ["do"
-                                                      ["dispatch!"
-                                                       ":add-task"
-                                                       ["{}"
-                                                        [":text" [":draft" "state"]]
-                                                        [":group-id" [":group-id" "router"]]]]
-                                                      ["mutate!" ["{}" ":draft" "|"]]]]]]},
+                                                     ["dispatch!"
+                                                      ":add-task"
+                                                      ["{}"
+                                                       [":text" [":draft" "state"]]
+                                                       [":group-id" [":group-id" "router"]]]]]]]},
                           :procs []},
          "main" {:ns ["ns"
                       "wanderlist.main"
@@ -562,7 +564,7 @@
                  :defs {"dispatch!" ["defn"
                                      "dispatch!"
                                      ["op-type" "op-data"]
-                                     ["--" "println" "|dispatch:" "op-type" "op-data"]
+                                     ["println" "|dispatch:" "op-type" "op-data"]
                                      ["if"
                                       ["=" [":env" "app-env"] ":build"]
                                       ["js/ga" "|send" "|event" ["name" "op-type"]]]
@@ -597,7 +599,7 @@
                                  "-main"
                                  []
                                  ["enable-console-print!"]
-                                 ["println" "|App started"]
+                                 ["println" "|App started."]
                                  ["render-app!"]
                                  ["add-watch" "ref-store" ":rerender" "render-app!"]],
                         "get-root" ["defn" "get-root" [] [".querySelector" "js/document" "|#app"]],
@@ -612,7 +614,10 @@
                         "save-local-storage!" ["defn"
                                                "save-local-storage!"
                                                []
-                                               [".setItem" "js/localStorage" "|wanderlist" ["pr-str" "@ref-store"]]
+                                               [".setItem"
+                                                "js/localStorage"
+                                                "|wanderlist"
+                                                ["pr-str" ["assoc" "@ref-store" ":states" ["{}"]]]]
                                                ["--" ".log" "js/console" ["pr-str" "@ref-store"]]],
                         "on-jsload!" ["defn"
                                       "on-jsload!"
@@ -642,21 +647,23 @@
                                                 ["states"]
                                                 ["assoc-in" "states" ["conj" "cursor" ":data"] "new-states"]]]]]
                                             [":add-group"
-                                             ["update"
+                                             ["->"
                                               "store"
-                                              ":groups"
-                                              ["fn"
-                                               ["task-groups"]
-                                               ["assoc"
-                                                "task-groups"
-                                                "op-id"
-                                                ["merge"
-                                                 "schema/group"
-                                                 ["{}"
-                                                  [":id" "op-id"]
-                                                  [":text" "op-data"]
-                                                  [":created-time" "op-time"]
-                                                  [":touched-time" "op-time"]]]]]]]
+                                              ["update"
+                                               ":groups"
+                                               ["fn"
+                                                ["task-groups"]
+                                                ["assoc"
+                                                 "task-groups"
+                                                 "op-id"
+                                                 ["merge"
+                                                  "schema/group"
+                                                  ["{}"
+                                                   [":id" "op-id"]
+                                                   [":text" "op-data"]
+                                                   [":created-time" "op-time"]
+                                                   [":touched-time" "op-time"]]]]]]
+                                              ["assoc-in" ["[]" ":states" ":group" ":data"] "|"]]]
                                             [":rm-group"
                                              ["->"
                                               "store"
@@ -671,16 +678,18 @@
                                             [":touch-group"
                                              ["assoc-in" "store" ["[]" ":groups" "op-data" ":touched-time"] "op-time"]]
                                             [":add-task"
-                                             ["assoc-in"
+                                             ["->"
                                               "store"
-                                              ["[]" ":groups" [":group-id" "op-data"] ":tasks" "op-id"]
-                                              ["merge"
-                                               "schema/task"
-                                               "op-data"
-                                               ["{}"
-                                                [":id" "op-id"]
-                                                [":created-time" "op-time"]
-                                                [":touched-time" "op-time"]]]]]
+                                              ["assoc-in"
+                                               ["[]" ":groups" [":group-id" "op-data"] ":tasks" "op-id"]
+                                               ["merge"
+                                                "schema/task"
+                                                "op-data"
+                                                ["{}"
+                                                 [":id" "op-id"]
+                                                 [":created-time" "op-time"]
+                                                 [":touched-time" "op-time"]]]]
+                                              ["assoc-in" ["[]" ":states" ":todolist" ":data" ":draft"] "|"]]]
                                             [":rm-task"
                                              ["update-in"
                                               "store"
@@ -810,11 +819,11 @@
                                ["[]" "wanderlist.comp.group-line" ":refer" ["[]" "comp-group-line"]]]],
                          :defs {"on-query-change" ["defn"
                                                    "on-query-change"
-                                                   ["state" "mutate!"]
+                                                   ["cursor"]
                                                    ["fn"
-                                                    ["simple-event" "dispatch!"]
-                                                    ["--" "println" "simple-event"]
-                                                    ["mutate!" ["{}" ":query" [":value" "simple-event"]]]]],
+                                                    ["e" "dispatch!"]
+                                                    ["--" "println" "e"]
+                                                    ["dispatch!" ":states" ["[]" "cursor" [":value" "e"]]]]],
                                 "style-header" ["def" "style-header" ["{}" [":display" "|flex"]]],
                                 "style-space" ["def"
                                                "style-space"
@@ -865,15 +874,12 @@
                                                [":overflow" "|auto"]]],
                                 "on-group-add" ["defn"
                                                 "on-group-add"
-                                                ["state" "mutate!"]
+                                                ["state"]
                                                 ["fn"
-                                                 ["simple-event" "dispatch!"]
+                                                 ["e" "dispatch!"]
                                                  ["if"
-                                                  [">" ["count" [":query" "state"]] "0"]
-                                                  ["do"
-                                                   ["dispatch!" ":add-group" [":query" "state"]]
-                                                   ["mutate!" ["{}" [":query" "|"]]]]]]],
-                                "init-state" ["defn" "init-state" ["groups" "router"] ["{}" [":query" "|"]]],
+                                                  ["not" ["string/blank?" "state"]]
+                                                  ["do" ["dispatch!" ":add-group" "state"]]]]],
                                 "style-sidebar" ["def"
                                                  "style-sidebar"
                                                  ["{}"
@@ -893,11 +899,12 @@
                                                 ["create-comp"
                                                  ":sidebar"
                                                  ["fn"
-                                                  ["groups" "router"]
+                                                  ["states" "groups" "router"]
                                                   ["fn"
-                                                   ["state" "mutate!"]
+                                                   ["cursor"]
                                                    ["let"
-                                                    [["by-newest-group"
+                                                    [["state" [":data" "states"]]
+                                                     ["by-newest-group"
                                                       ["fn"
                                                        ["group-a" "group-b"]
                                                        ["compare"
@@ -910,16 +917,13 @@
                                                       ["input"
                                                        ["{}"
                                                         [":style" "style-query"]
-                                                        [":event"
-                                                         ["{}" [":input" ["on-query-change" "state" "mutate!"]]]]
+                                                        [":event" ["{}" [":input" ["on-query-change" "cursor"]]]]
                                                         [":attrs"
-                                                         ["{}"
-                                                          [":value" [":query" "state"]]
-                                                          [":placeholder" "|group..."]]]]]
+                                                         ["{}" [":value" "state"] [":placeholder" "|group..."]]]]]
                                                       ["span"
                                                        ["{}"
                                                         [":style" "style-add"]
-                                                        [":event" ["{}" [":click" ["on-group-add" "state" "mutate!"]]]]
+                                                        [":event" ["{}" [":click" ["on-group-add" "state"]]]]
                                                         [":attrs" ["{}" [":inner-text" "|Add"]]]]]
                                                       ["div" ["{}" [":style" ["layout/hspace" "16"]]]]
                                                       ["span"

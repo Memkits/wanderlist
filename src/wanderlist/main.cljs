@@ -24,7 +24,7 @@
   (reader/read-string (-> js/document (.querySelector "#config") .-innerHTML)))
 
 (defn dispatch! [op-type op-data]
-  (comment println "dispatch:" op-type op-data)
+  (println "dispatch:" op-type op-data)
   (if (= (:env app-env) :build) (js/ga "send" "event" (name op-type)))
   (let [new-store (updater
                    @ref-store
@@ -41,12 +41,12 @@
 
 (defn -main []
   (enable-console-print!)
-  (println "App started")
+  (println "App started.")
   (render-app!)
   (add-watch ref-store :rerender render-app!))
 
 (defn save-local-storage! []
-  (.setItem js/localStorage "wanderlist" (pr-str @ref-store))
+  (.setItem js/localStorage "wanderlist" (pr-str (assoc @ref-store :states {})))
   (comment .log js/console (pr-str @ref-store)))
 
 (defn on-jsload! [] (println "Code updated.") (clear-cache!) (render-app!))

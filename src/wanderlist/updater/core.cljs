@@ -8,24 +8,29 @@
       (let [[cursor new-states] op-data]
         (update store :states (fn [states] (assoc-in states (conj cursor :data) new-states))))
     :add-group
-      (update
-       store
-       :groups
-       (fn [task-groups]
-         (assoc
-          task-groups
-          op-id
-          (merge
-           schema/group
-           {:id op-id, :text op-data, :created-time op-time, :touched-time op-time}))))
+      (-> store
+          (update
+           :groups
+           (fn [task-groups]
+             (assoc
+              task-groups
+              op-id
+              (merge
+               schema/group
+               {:id op-id, :text op-data, :created-time op-time, :touched-time op-time}))))
+          (assoc-in [:states :group :data] ""))
     :rm-group (-> store (update :groups (fn [task-groups] (dissoc task-groups op-data))))
     :update-group (assoc-in store [:groups (:id op-data) :text] (:text op-data))
     :touch-group (assoc-in store [:groups op-data :touched-time] op-time)
     :add-task
-      (assoc-in
-       store
-       [:groups (:group-id op-data) :tasks op-id]
-       (merge schema/task op-data {:id op-id, :created-time op-time, :touched-time op-time}))
+      (-> store
+          (assoc-in
+           [:groups (:group-id op-data) :tasks op-id]
+           (merge
+            schema/task
+            op-data
+            {:id op-id, :created-time op-time, :touched-time op-time}))
+          (assoc-in [:states :todolist :data :draft] ""))
     :rm-task
       (update-in
        store

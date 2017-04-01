@@ -16,23 +16,7 @@ This project is based on:
 
 ### Develop
 
-This project is based on: https://github.com/mvc-works/stack-workflow
-
-To run in develop mode:
-
-```bash
-boot dev!
-webpack # another terminal since previous one blocked
-open http://repo.cirru.org/stack-editor/ # Stack Editor
-open target/index.html # better with Nginx
-```
-
-To build app:
-
-```bash
-boot build-advanced
-# open target/index.html
-```
+This project is based on: https://github.com/mvc-works/stack-workflow#develop
 
 ## License
 
