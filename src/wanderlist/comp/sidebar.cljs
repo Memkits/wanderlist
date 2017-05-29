@@ -73,7 +73,7 @@
            (input
             {:style style-query,
              :event {:input (on-query-change cursor)},
-             :attrs {:value state, :placeholder "group..."}})
+             :attrs {:value state, :placeholder "Group..."}})
            (span
             {:style style-add,
              :event {:click (on-group-add state)},

@@ -4,8 +4,7 @@
             [hsl.core :refer [hsl]]
             [respo-ui.style :as ui]
             [wanderlist.style.widget :as widget]
-            [respo.alias :refer [create-comp div input section]]
-            [respo-ui.style :as ui]))
+            [respo.alias :refer [create-comp div input section]]))
 
 (defn style-task [index]
   {:display "flex",

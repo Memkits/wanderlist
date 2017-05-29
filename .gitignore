@@ -1,5 +1,7 @@
 
+/compiled
 /target
 /.nrepl-history
 /node_modules
 .lumo_cache
+/dist

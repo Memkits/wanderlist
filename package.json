@@ -4,7 +4,37 @@
   "description": "Wanderlist ----",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "tiye": "rsync -r dist/ repo.tiye.me:repo/Memkits/wanderlist --delete",
+    "cljs-once": "shadow-cljs --release",
+    "cljs": "shadow-cljs --dev",
+    "html-dev": "env=dev node compiled/wanderlist.render.js",
+    "html": "node compiled/wanderlist.render.js",
+    "hmr": "webpack-dev-server --config webpack.dev.coffee --hot-only",
+    "webpack": "webpack --hide-modules --progress",
+    "dev": "yarn html-dev && yarn hmr",
+    "del": "rm -rf dist/*",
+    "build": "yarn cljs-once && yarn del && yarn webpack && yarn html"
+  },
+  "shadow-cljs": {
+    "source-paths": [
+      "src",
+      "polyfill"
+    ],
+    "output-dir": "compiled",
+    "dependencies": [
+      [
+        "mvc-works/hsl",
+        "0.1.2"
+      ],
+      [
+        "respo/ui",
+        "0.1.9"
+      ],
+      [
+        "respo",
+        "0.4.2"
+      ]
+    ]
   },
   "repository": {
     "type": "git",
@@ -17,12 +47,17 @@
   },
   "homepage": "https://github.com/Memkits/wanderlist#readme",
   "devDependencies": {
-    "css-loader": "^0.25.0",
+    "coffee-script": "^1.12.6",
+    "css-loader": "^0.28.3",
     "extract-text-webpack-plugin": "^2.0.0-beta.4",
-    "file-loader": "^0.9.0",
+    "file-loader": "^0.11.1",
     "ionicons": "^3.0.0",
-    "style-loader": "^0.13.1",
+    "shadow-cljs": "^0.6.0",
+    "style-loader": "^0.18.1",
+    "uglifyjs-webpack-plugin": "^0.4.3",
     "url-loader": "^0.5.7",
-    "webpack": "^2.1.0-beta.25"
+    "webpack": "^2.1.0-beta.25",
+    "webpack-dev-server": "^2.4.5",
+    "webpack-manifest-plugin": "^1.1.0"
   }
 }

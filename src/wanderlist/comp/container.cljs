@@ -2,7 +2,8 @@
 (ns wanderlist.comp.container
   (:require [clojure.string :as string]
             [hsl.core :refer [hsl]]
-            [respo.alias :refer [create-comp div textarea span with-cursor]]
+            [respo.alias :refer [create-comp div textarea span]]
+            [respo.cursor :refer [with-cursor]]
             [respo.comp.text :refer [comp-text]]
             [respo.comp.debug :refer [comp-debug]]
             [wanderlist.comp.sidebar :refer [comp-sidebar]]

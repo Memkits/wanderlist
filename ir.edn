@@ -134,8 +134,7 @@
                             ["[]" "hsl.core" ":refer" ["[]" "hsl"]]
                             ["[]" "respo-ui.style" ":as" "ui"]
                             ["[]" "wanderlist.style.widget" ":as" "widget"]
-                            ["[]" "respo.alias" ":refer" ["[]" "create-comp" "div" "input" "section"]]
-                            ["[]" "respo-ui.style" ":as" "ui"]]],
+                            ["[]" "respo.alias" ":refer" ["[]" "create-comp" "div" "input" "section"]]]],
                       :defs {"style-task" ["defn"
                                            "style-task"
                                            ["index"]
@@ -252,10 +251,8 @@
                                 [":require"
                                  ["[]" "clojure.string" ":as" "string"]
                                  ["[]" "hsl.core" ":refer" ["[]" "hsl"]]
-                                 ["[]"
-                                  "respo.alias"
-                                  ":refer"
-                                  ["[]" "create-comp" "div" "textarea" "span" "with-cursor"]]
+                                 ["[]" "respo.alias" ":refer" ["[]" "create-comp" "div" "textarea" "span"]]
+                                 ["[]" "respo.cursor" ":refer" ["[]" "with-cursor"]]
                                  ["[]" "respo.comp.text" ":refer" ["[]" "comp-text"]]
                                  ["[]" "respo.comp.debug" ":refer" ["[]" "comp-debug"]]
                                  ["[]" "wanderlist.comp.sidebar" ":refer" ["[]" "comp-sidebar"]]
@@ -919,7 +916,7 @@
                                                         [":style" "style-query"]
                                                         [":event" ["{}" [":input" ["on-query-change" "cursor"]]]]
                                                         [":attrs"
-                                                         ["{}" [":value" "state"] [":placeholder" "|group..."]]]]]
+                                                         ["{}" [":value" "state"] [":placeholder" "|Group..."]]]]]
                                                       ["span"
                                                        ["{}"
                                                         [":style" "style-add"]
