@@ -5,15 +5,16 @@
   "main": "index.js",
   "scripts": {
     "tiye": "rsync -r dist/ repo.tiye.me:repo/Memkits/wanderlist --delete",
-    "cljs-once": "shadow-cljs -b app --release",
+    "cljs-release": "shadow-cljs -b app --release",
+    "cljs-once": "shadow-cljs -b app --once",
     "cljs": "shadow-cljs -b app --dev",
-    "html-dev": "env=dev node compiled/wanderlist.render.js",
-    "html": "node compiled/wanderlist.render.js",
+    "html-dev": "env=dev node target/wanderlist.render.js",
+    "html": "node target/wanderlist.render.js",
     "hmr": "webpack-dev-server --config webpack.dev.coffee --hot-only",
     "webpack": "webpack --hide-modules --progress",
     "dev": "yarn html-dev && yarn hmr",
     "del": "rm -rf dist/*",
-    "build": "yarn cljs-once && yarn del && yarn webpack && yarn html"
+    "build": "yarn cljs-release && yarn del && yarn webpack && yarn cljs-once && yarn html"
   },
   "repository": {
     "type": "git",
@@ -26,7 +27,6 @@
   },
   "homepage": "https://github.com/Memkits/wanderlist#readme",
   "devDependencies": {
-    "coffee-script": "^1.12.6",
     "css-loader": "^0.28.4",
     "extract-text-webpack-plugin": "^2.0.0-beta.4",
     "file-loader": "^0.11.1",
@@ -38,5 +38,8 @@
     "webpack": "^2.1.0-beta.25",
     "webpack-dev-server": "^2.4.5",
     "webpack-manifest-plugin": "^1.1.0"
+  },
+  "dependencies": {
+    "coffee-script": "^1.12.6"
   }
 }

@@ -4,5 +4,5 @@
                 [respo/ui "0.1.9"]
                 [respo "0.4.2"]]
  :builds {:app {:target :npm-module
-                :output-dir "compiled"
-                :compiler-options {:externs ["entry/externs.js"]}}}}
+                :output-dir "target/"
+                :release {:enrties [wanderlist.main]}}}}
