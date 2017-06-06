@@ -9,8 +9,7 @@ Demo http://repo.tiye.me/Memkits/wanderlist/
 This project is based on:
 
 * [ClojureScript](http://clojurescript.org)
-* [Boot](http://boot-clj.com)
-* [Cirru](http://cirru.org)
+* [shadow-cljs](https://github.com/thheller/shadow-cljs)
 * [Respo](https://github.com/Respo/respo)
 * [Stack Editor](https://github.com/Cirru/stack-editor)
 
