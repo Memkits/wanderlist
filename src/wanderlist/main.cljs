@@ -20,12 +20,8 @@
            schema/store))
        schema/store))))
 
-(defonce app-env
-  (reader/read-string (-> js/document (.querySelector "#config") .-innerHTML)))
-
 (defn dispatch! [op-type op-data]
   (println "dispatch:" op-type op-data)
-  (if (= (:env app-env) :build) (js/ga "send" "event" (name op-type)))
   (let [new-store (updater
                    @ref-store
                    op-type
