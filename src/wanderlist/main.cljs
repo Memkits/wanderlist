@@ -21,7 +21,7 @@
        schema/store))))
 
 (defn dispatch! [op-type op-data]
-  (println "dispatch:" op-type op-data)
+  (comment println "dispatch:" op-type op-data)
   (let [new-store (updater
                    @ref-store
                    op-type

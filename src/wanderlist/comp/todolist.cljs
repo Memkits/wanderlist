@@ -1,11 +1,13 @@
 
 (ns wanderlist.comp.todolist
   (:require [hsl.core :refer [hsl]]
+            [respo-ui.style :as ui]
             [clojure.string :as string]
             [wanderlist.comp.task :refer [comp-task]]
             [wanderlist.style.widget :as widget]
             [wanderlist.style.layout :as layout]
-            [respo.alias :refer [create-comp div section span header input]]))
+            [respo.alias :refer [create-comp div section span header input]]
+            (respo.comp.space :refer (comp-space))))
 
 (defn handle-task-add [router state]
   (fn [e dispatch!]
@@ -50,7 +52,9 @@
    :padding "0px 8px",
    :height "32px",
    :font-size "16px",
-   :flex "1"})
+   :flex "1",
+   :background-color (hsl 0 0 96),
+   :border-radius 4})
 
 (def initial-state {:draft "", :fold-done? true})
 
@@ -65,6 +69,11 @@
    :box-shadow (str "0 0 4px " (hsl 0 0 0 0.1)),
    :padding "16px"})
 
+(defn indexed-task [index entry] (let [[id task] entry] [id (comp-task task index)]))
+
+(defn by-touch-time [entry-a entry-b]
+  (compare (:touched-time (val entry-b)) (:touched-time (val entry-a))))
+
 (defn handle-keydown [router state]
   (fn [e dispatch!]
     (if (and (= (:key-code e) 13) (> (count (:draft state)) 0))
@@ -77,50 +86,43 @@
      (fn [cursor]
        (let [tasks (:tasks group)
              state (or (:data states) initial-state)
-             todo-tasks (->> tasks
-                             (filter (fn [entry] (not (:done (val entry)))))
-                             (into {}))
-             done-tasks (->> tasks (filter (fn [entry] (:done (val entry)))) (into {}))]
+             todo-tasks (->> tasks (filter (fn [entry] (not (:done (val entry))))))
+             done-tasks (->> tasks (filter (fn [entry] (:done (val entry)))))]
          (div
           {:style style-todolist}
           (header
            {:style style-header}
            (div {:style style-space})
            (div
-            {:style style-adder}
+            {:style (merge ui/row-center style-adder)}
             (input
-             {:style style-input,
+             {:value (:draft state),
+              :placeholder "Add a task...",
+              :style style-input,
               :event {:input (handle-input cursor state),
-                      :keydown (handle-keydown router state)},
-              :attrs {:value (:draft state), :placeholder "Add a task..."}})
+                      :keydown (handle-keydown router state)}})
+            (comp-space 8 nil)
             (span
-             {:style style-button,
-              :event {:click (handle-task-add router state)},
-              :attrs {:inner-text "Add"}})))
+             {:inner-text "Add",
+              :style style-button,
+              :event {:click (handle-task-add router state)}})))
           (div {:style (layout/vspace 16)})
           (section
            {:style style-body}
            (section
             {:style (style-list (count todo-tasks))}
-            (->> todo-tasks
-                 (sort
-                  (fn [entry-a entry-b]
-                    (compare (:touched-time (val entry-b)) (:touched-time (val entry-a)))))
-                 (map-indexed
-                  (fn [index entry] [(first entry) (comp-task (val entry) index)]))))
+            (->> todo-tasks (sort by-touch-time) (map-indexed indexed-task) (sort-by first)))
            (div
             {:style style-section}
             (if (> (count done-tasks) 0)
               (span
-               {:style style-button,
-                :event {:click (handle-toggle cursor state)},
-                :attrs {:inner-text "Toggle"}})))
+               {:inner-text "Toggle",
+                :style style-button,
+                :event {:click (handle-toggle cursor state)}})))
            (if (not (:fold-done? state))
              (section
               {:style (style-list (count done-tasks))}
               (->> done-tasks
-                   (sort
-                    (fn [entry-a entry-b]
-                      (compare (:touched-time (val entry-b)) (:touched-time (val entry-a)))))
-                   (map-indexed
-                    (fn [index entry] [(key entry) (comp-task (val entry) index)]))))))))))))
+                   (sort by-touch-time)
+                   (map-indexed indexed-task)
+                   (sort-by first)))))))))))

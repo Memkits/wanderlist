@@ -5,6 +5,7 @@
             [hsl.core :refer [hsl]]
             [wanderlist.style.layout :as layout]
             [wanderlist.style.widget :as widget]
+            (respo.comp.space :refer (comp-space))
             [respo.alias :refer [create-comp div span input]]
             [wanderlist.comp.group-line :refer [comp-group-line]]))
 
@@ -36,7 +37,9 @@
    :outline "none",
    :border "none",
    :width "100%",
-   :flex "1"})
+   :flex "1",
+   :background-color (hsl 0 0 96),
+   :border-radius 4})
 
 (def style-body
   {:flex "1", :background-color (hsl 0 0 0 0), :position "relative", :overflow "auto"})
@@ -56,29 +59,29 @@
 
 (defn on-empty-route [e dispatch!] (dispatch! :set-router {:name :table}))
 
+(defn by-newest-group [group-a group-b]
+  (compare (:touched-time (val group-b)) (:touched-time (val group-a))))
+
 (def comp-sidebar
   (create-comp
    :sidebar
    (fn [states groups router]
      (fn [cursor]
-       (let [state (:data states)
-             by-newest-group (fn [group-a group-b]
-                               (compare
-                                (:touched-time (val group-b))
-                                (:touched-time (val group-a))))]
+       (let [state (:data states)]
          (div
           {:style style-sidebar}
           (div
-           {:style style-header}
+           {:style (merge ui/row-center style-header)}
            (input
             {:style style-query,
              :event {:input (on-query-change cursor)},
              :attrs {:value state, :placeholder "Group..."}})
+           (comp-space 8 nil)
            (span
             {:style style-add,
              :event {:click (on-group-add state)},
              :attrs {:inner-text "Add"}})
-           (div {:style (layout/hspace 16)})
+           (comp-space 8 nil)
            (span {:style style-add, :event {:click on-hide}, :attrs {:inner-text "Hide"}}))
           (div
            {:style style-body, :event {:click on-empty-route}}
@@ -92,4 +95,5 @@
                      (let [group (last entry)
                            tasks (:tasks group)
                            selected? (= (:group-id router) (:id group))]
-                       (comp-group-line group index selected?))])))))))))))
+                       (comp-group-line group index selected?))]))
+                 (sort-by first))))))))))
