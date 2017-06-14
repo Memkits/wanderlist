@@ -1,12 +1,12 @@
 
-(ns wanderlist.main
+(ns app.main
   (:require [clojure.string :as string]
             [respo.core :refer [render! clear-cache!]]
-            [wanderlist.comp.container :refer [comp-container]]
-            [wanderlist.updater.core :refer [updater]]
+            [app.comp.container :refer [comp-container]]
+            [app.updater.core :refer [updater]]
             [cljs.reader :as reader]
-            [wanderlist.util.migration :refer [migrate-from-v0 migrate-from-v1]]
-            [wanderlist.schema :as schema]))
+            [app.util.migration :refer [migrate-from-v0 migrate-from-v1]]
+            [app.schema :as schema]))
 
 (defonce ref-store
   (atom

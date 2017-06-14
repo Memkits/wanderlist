@@ -1,5 +1,5 @@
 
-(ns wanderlist.style.widget (:require [hsl.core :refer [hsl]] [respo-ui.style :as ui]))
+(ns app.style.widget (:require [hsl.core :refer [hsl]] [respo-ui.style :as ui]))
 
 (def icon {:min-width 32, :text-align "center", :cursor "pointer"})
 

@@ -1,12 +1,13 @@
 
-(ns wanderlist.comp.todolist
+(ns app.comp.todolist
+  (:require-macros (respo.macros :refer (defcomp)))
   (:require [hsl.core :refer [hsl]]
             [respo-ui.style :as ui]
             [clojure.string :as string]
-            [wanderlist.comp.task :refer [comp-task]]
-            [wanderlist.style.widget :as widget]
-            [wanderlist.style.layout :as layout]
-            [respo.alias :refer [create-comp div section span header input]]
+            [app.comp.task :refer [comp-task]]
+            [app.style.widget :as widget]
+            [app.style.layout :as layout]
+            [respo.alias :refer [div section span header input]]
             (respo.comp.space :refer (comp-space))))
 
 (defn handle-task-add [router state]
@@ -79,50 +80,44 @@
     (if (and (= (:key-code e) 13) (> (count (:draft state)) 0))
       (dispatch! :add-task {:text (:draft state), :group-id (:group-id router)}))))
 
-(def comp-todolist
-  (create-comp
-   :todolist
-   (fn [states router group]
-     (fn [cursor]
-       (let [tasks (:tasks group)
-             state (or (:data states) initial-state)
-             todo-tasks (->> tasks (filter (fn [entry] (not (:done (val entry))))))
-             done-tasks (->> tasks (filter (fn [entry] (:done (val entry)))))]
-         (div
-          {:style style-todolist}
-          (header
-           {:style style-header}
-           (div {:style style-space})
-           (div
-            {:style (merge ui/row-center style-adder)}
-            (input
-             {:value (:draft state),
-              :placeholder "Add a task...",
-              :style style-input,
-              :event {:input (handle-input cursor state),
-                      :keydown (handle-keydown router state)}})
-            (comp-space 8 nil)
-            (span
-             {:inner-text "Add",
-              :style style-button,
-              :event {:click (handle-task-add router state)}})))
-          (div {:style (layout/vspace 16)})
-          (section
-           {:style style-body}
-           (section
-            {:style (style-list (count todo-tasks))}
-            (->> todo-tasks (sort by-touch-time) (map-indexed indexed-task) (sort-by first)))
-           (div
-            {:style style-section}
-            (if (> (count done-tasks) 0)
-              (span
-               {:inner-text "Toggle",
-                :style style-button,
-                :event {:click (handle-toggle cursor state)}})))
-           (if (not (:fold-done? state))
-             (section
-              {:style (style-list (count done-tasks))}
-              (->> done-tasks
-                   (sort by-touch-time)
-                   (map-indexed indexed-task)
-                   (sort-by first)))))))))))
+(defcomp
+ comp-todolist
+ (states router group)
+ (let [tasks (:tasks group)
+       state (or (:data states) initial-state)
+       todo-tasks (->> tasks (filter (fn [entry] (not (:done (val entry))))))
+       done-tasks (->> tasks (filter (fn [entry] (:done (val entry)))))]
+   (div
+    {:style style-todolist}
+    (header
+     {:style style-header}
+     (div {:style style-space})
+     (div
+      {:style (merge ui/row-center style-adder)}
+      (input
+       {:value (:draft state),
+        :placeholder "Add a task...",
+        :style style-input,
+        :event {:input (handle-input cursor state), :keydown (handle-keydown router state)}})
+      (comp-space 8 nil)
+      (span
+       {:inner-text "Add",
+        :style style-button,
+        :event {:click (handle-task-add router state)}})))
+    (div {:style (layout/vspace 16)})
+    (section
+     {:style style-body}
+     (section
+      {:style (style-list (count todo-tasks))}
+      (->> todo-tasks (sort by-touch-time) (map-indexed indexed-task) (sort-by first)))
+     (div
+      {:style style-section}
+      (if (> (count done-tasks) 0)
+        (span
+         {:inner-text "Toggle",
+          :style style-button,
+          :event {:click (handle-toggle cursor state)}})))
+     (if (not (:fold-done? state))
+       (section
+        {:style (style-list (count done-tasks))}
+        (->> done-tasks (sort by-touch-time) (map-indexed indexed-task) (sort-by first))))))))

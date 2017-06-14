@@ -1,5 +1,5 @@
 
-(ns wanderlist.schema (:require [hsl.core :refer [hsl]]))
+(ns app.schema (:require [hsl.core :refer [hsl]]))
 
 (def task
   {:id nil, :text nil, :done false, :created-time nil, :touched-time nil, :done-time nil})

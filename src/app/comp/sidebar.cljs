@@ -1,13 +1,14 @@
 
-(ns wanderlist.comp.sidebar
+(ns app.comp.sidebar
+  (:require-macros (respo.macros :refer (defcomp)))
   (:require [clojure.string :as string]
             [respo-ui.style :as ui]
             [hsl.core :refer [hsl]]
-            [wanderlist.style.layout :as layout]
-            [wanderlist.style.widget :as widget]
+            [app.style.layout :as layout]
+            [app.style.widget :as widget]
             (respo.comp.space :refer (comp-space))
-            [respo.alias :refer [create-comp div span input]]
-            [wanderlist.comp.group-line :refer [comp-group-line]]))
+            [respo.alias :refer [div span input]]
+            [app.comp.group-line :refer [comp-group-line]]))
 
 (defn on-query-change [cursor]
   (fn [e dispatch!] (comment println e) (dispatch! :states [cursor (:value e)])))
@@ -62,38 +63,34 @@
 (defn by-newest-group [group-a group-b]
   (compare (:touched-time (val group-b)) (:touched-time (val group-a))))
 
-(def comp-sidebar
-  (create-comp
-   :sidebar
-   (fn [states groups router]
-     (fn [cursor]
-       (let [state (:data states)]
-         (div
-          {:style style-sidebar}
-          (div
-           {:style (merge ui/row-center style-header)}
-           (input
-            {:style style-query,
-             :event {:input (on-query-change cursor)},
-             :attrs {:value state, :placeholder "Group..."}})
-           (comp-space 8 nil)
-           (span
-            {:style style-add,
-             :event {:click (on-group-add state)},
-             :attrs {:inner-text "Add"}})
-           (comp-space 8 nil)
-           (span {:style style-add, :event {:click on-hide}, :attrs {:inner-text "Hide"}}))
-          (div
-           {:style style-body, :event {:click on-empty-route}}
-           (div
-            {:style (style-box (count groups))}
-            (->> groups
-                 (sort by-newest-group)
-                 (map-indexed
-                  (fn [index entry]
-                    [(first entry)
-                     (let [group (last entry)
-                           tasks (:tasks group)
-                           selected? (= (:group-id router) (:id group))]
-                       (comp-group-line group index selected?))]))
-                 (sort-by first))))))))))
+(defcomp
+ comp-sidebar
+ (states groups router)
+ (let [state (:data states)]
+   (div
+    {:style style-sidebar}
+    (div
+     {:style (merge ui/row-center style-header)}
+     (input
+      {:style style-query,
+       :event {:input (on-query-change cursor)},
+       :attrs {:value state, :placeholder "Group..."}})
+     (comp-space 8 nil)
+     (span
+      {:style style-add, :event {:click (on-group-add state)}, :attrs {:inner-text "Add"}})
+     (comp-space 8 nil)
+     (span {:style style-add, :event {:click on-hide}, :attrs {:inner-text "Hide"}}))
+    (div
+     {:style style-body, :event {:click on-empty-route}}
+     (div
+      {:style (style-box (count groups))}
+      (->> groups
+           (sort by-newest-group)
+           (map-indexed
+            (fn [index entry]
+              [(first entry)
+               (let [group (last entry)
+                     tasks (:tasks group)
+                     selected? (= (:group-id router) (:id group))]
+                 (comp-group-line group index selected?))]))
+           (sort-by first)))))))

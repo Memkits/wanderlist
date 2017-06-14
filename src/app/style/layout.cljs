@@ -1,5 +1,5 @@
 
-(ns wanderlist.style.layout (:require [hsl.core :refer [hsl]]))
+(ns app.style.layout (:require [hsl.core :refer [hsl]]))
 
 (defn vspace [x] {:height (str x "px")})
 

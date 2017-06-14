@@ -17,7 +17,7 @@ module.exports = {
     path: path.join(__dirname, './dist/'),
     filename: '[name].[chunkhash:8].js'
   },
-  devtool: 'source-map',
+  // devtool: 'source-map',
   module: {
     rules: [
       {
@@ -35,11 +35,11 @@ module.exports = {
           name: 'fonts/[hash:8].[ext]'
         }
       },
-      {
-        test: /\.js$/,
-        loader: 'source-map-loader',
-        options: { enforce: 'pre' }
-      }
+      // {
+      //   test: /\.js$/,
+      //   loader: 'source-map-loader',
+      //   options: { enforce: 'pre' }
+      // }
     ]
   },
   plugins: [

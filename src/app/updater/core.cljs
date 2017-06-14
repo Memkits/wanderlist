@@ -1,6 +1,5 @@
 
-(ns wanderlist.updater.core
-  (:require [hsl.core :refer [hsl]] [wanderlist.schema :as schema]))
+(ns app.updater.core (:require [hsl.core :refer [hsl]] [app.schema :as schema]))
 
 (defn updater [store op-type op-data op-id op-time]
   (case op-type

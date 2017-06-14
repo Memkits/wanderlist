@@ -1,6 +1,5 @@
 
-(ns wanderlist.util.migration
-  (:require [clojure.string :as string] [wanderlist.schema :as schema]))
+(ns app.util.migration (:require [clojure.string :as string] [app.schema :as schema]))
 
 (defn get-time [] (.valueOf (js/Date.)))
 
