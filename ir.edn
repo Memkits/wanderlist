@@ -1,4 +1,5 @@
 {:package "app",
+ :root {:ns "main", :def "main!"},
  :files {"comp.group-line" {:ns ["ns"
                                  "app.comp.group-line"
                                  [":require-macros" ["respo.macros" ":refer" ["defcomp"]]]
@@ -341,7 +342,8 @@
                                 ["[]" "app.style.widget" ":as" "widget"]
                                 ["[]" "app.style.layout" ":as" "layout"]
                                 ["[]" "respo.alias" ":refer" ["[]" "div" "section" "span" "header" "input"]]
-                                ["respo.comp.space" ":refer" ["comp-space"]]]],
+                                ["respo.comp.space" ":refer" ["comp-space"]]
+                                ["respo.comp.debug" ":refer" ["comp-debug"]]]],
                           :defs {"handle-task-add" ["defn"
                                                     "handle-task-add"
                                                     ["router" "state"]
@@ -520,7 +522,7 @@
                       "app.main"
                       [":require"
                        ["[]" "clojure.string" ":as" "string"]
-                       ["[]" "respo.core" ":refer" ["[]" "render!" "clear-cache!"]]
+                       ["[]" "respo.core" ":refer" ["[]" "render!" "clear-cache!" "falsify-stage!" "render-element"]]
                        ["[]" "app.comp.container" ":refer" ["[]" "comp-container"]]
                        ["[]" "app.updater.core" ":refer" ["[]" "updater"]]
                        ["[]" "cljs.reader" ":as" "reader"]
@@ -533,57 +535,59 @@
                                      ["let"
                                       [["new-store"
                                         ["updater"
-                                         "@ref-store"
+                                         "@*store"
                                          "op-type"
                                          "op-data"
                                          [".valueOf" ["js/Date."]]
                                          [".valueOf" ["js/Date."]]]]]
-                                      ["reset!" "ref-store" "new-store"]
+                                      ["reset!" "*store" "new-store"]
                                       ["--" ".info" "js/console" "|new store:" "new-store"]]],
-                        "ref-store" ["defonce"
-                                     "ref-store"
-                                     ["atom"
-                                      ["let"
-                                       [["stored-data" [".getItem" "js/localStorage" "|wanderlist"]]]
-                                       ["if"
-                                        ["some?" "stored-data"]
-                                        ["let"
-                                         [["old-store" ["reader/read-string" "stored-data"]]
-                                          ["version" ["or" [":version" "old-store"] "0"]]]
-                                         ["case"
-                                          "version"
-                                          ["0" ["->" "old-store" ["migrate-from-v0"] ["migrate-from-v1"]]]
-                                          ["1" ["migrate-from-v1" "old-store"]]
-                                          ["2" ["merge" "schema/store" "old-store"]]
-                                          "schema/store"]]
-                                        "schema/store"]]]],
-                        "-main" ["defn"
-                                 "-main"
+                        "*store" ["defonce" "*store" ["atom" "schema/store"]],
+                        "main!" ["defn"
+                                 "main!"
                                  []
-                                 ["enable-console-print!"]
-                                 ["println" "|App started."]
+                                 ["if"
+                                  "server-rendered?"
+                                  ["falsify-stage!"
+                                   "mount-target"
+                                   ["render-element" ["comp-container" "@*store"]]
+                                   "dispatch!"]]
+                                 ["let"
+                                  [["stored-data" [".getItem" "js/localStorage" "|wanderlist"]]]
+                                  ["if"
+                                   ["some?" "stored-data"]
+                                   ["let"
+                                    [["old-store" ["reader/read-string" "stored-data"]]
+                                     ["version" ["or" [":version" "old-store"] "0"]]
+                                     ["realtime-store"
+                                      ["case"
+                                       "version"
+                                       ["0" ["->" "old-store" ["migrate-from-v0"] ["migrate-from-v1"]]]
+                                       ["1" ["migrate-from-v1" "old-store"]]
+                                       ["2" ["merge" "schema/store" "old-store"]]
+                                       "schema/store"]]]
+                                    ["reset!" "*store" "realtime-store"]]]]
                                  ["render-app!"]
-                                 ["add-watch" "ref-store" ":rerender" "render-app!"]],
-                        "get-root" ["defn" "get-root" [] [".querySelector" "js/document" "|#app"]],
+                                 ["add-watch" "*store" ":rerender" "render-app!"]
+                                 ["println" "|App started."]],
+                        "server-rendered?" ["def"
+                                            "server-rendered?"
+                                            ["some?" [".querySelector" "js/document" "|meta#server-rendered"]]],
                         "render-app!" ["defn"
                                        "render-app!"
                                        []
-                                       ["render!" ["comp-container" "@ref-store"] ["get-root"] "dispatch!"]],
+                                       ["render!" ["comp-container" "@*store"] "mount-target" "dispatch!"]],
+                        "reload!" ["defn" "reload!" [] ["println" "|Code updated."] ["clear-cache!"] ["render-app!"]],
                         "save-local-storage!" ["defn"
                                                "save-local-storage!"
                                                []
                                                [".setItem"
                                                 "js/localStorage"
                                                 "|wanderlist"
-                                                ["pr-str" ["assoc" "@ref-store" ":states" ["{}"]]]]
-                                               ["--" ".log" "js/console" ["pr-str" "@ref-store"]]],
-                        "on-jsload!" ["defn"
-                                      "on-jsload!"
-                                      []
-                                      ["println" "|Code updated."]
-                                      ["clear-cache!"]
-                                      ["render-app!"]]},
-                 :procs [["set!" [".-onload" "js/window"] "-main"]
+                                                ["pr-str" ["assoc" "@*store" ":states" ["{}"]]]]
+                                               ["--" ".log" "js/console" ["pr-str" "@*store"]]],
+                        "mount-target" ["def" "mount-target" [".querySelector" "js/document" "|.app"]]},
+                 :procs [["set!" [".-onload" "js/window"] "main!"]
                          ["set!" [".-onbeforeunload" "js/window"] "save-local-storage!"]]},
          "updater.core" {:ns ["ns"
                               "app.updater.core"
@@ -770,13 +774,15 @@
                           ["[]" "html" "head" "title" "script" "style" "meta'" "div" "link" "body"]]
                          ["[]" "respo.render.html" ":refer" ["[]" "make-html" "make-string"]]
                          ["[]" "app.comp.container" ":refer" ["[]" "comp-container"]]
-                         ["[]" "|fs" ":refer" ["[]" "readFileSync" "writeFileSync"]]]],
+                         ["[]" "|fs" ":refer" ["[]" "readFileSync" "writeFileSync"]]
+                         ["app.schema" ":as" "schema"]]],
                    :defs {"main!" ["defn"
                                    "main!"
                                    []
-                                   ["spit"
-                                    "|dist/index.html"
-                                    ["if" ["=" "js/process.env.env" "|dev"] ["generate-empty-html"] ["generate-html"]]]],
+                                   ["if"
+                                    ["=" "js/process.env.env" "|dev"]
+                                    ["spit" "|target/index.html" ["generate-empty-html"]]
+                                    ["spit" "|dist/index.html" ["generate-html"]]]],
                           "spit" ["defn"
                                   "spit"
                                   ["file-name" "content"]
@@ -785,12 +791,17 @@
                           "generate-empty-html" ["defn"
                                                  "generate-empty-html"
                                                  []
-                                                 ["html-dsl" ["{}" [":build?" "false"] [":main" "|/main.js"]] "|"]],
+                                                 ["html-dsl"
+                                                  ["{}"
+                                                   [":build?" "false"]
+                                                   [":main" "|/main.js"]
+                                                   [":cljs-main" "|/browser/main.js"]]
+                                                  "|"]],
                           "generate-html" ["defn"
                                            "generate-html"
                                            []
                                            ["let"
-                                            [["tree" ["comp-container" ["{}"]]]
+                                            [["tree" ["comp-container" "schema/store"]]
                                              ["html-content" ["make-string" "tree"]]
                                              ["resources"
                                               ["let"
@@ -830,13 +841,14 @@
                                             [":href" [":css" "resources"]]]]]]
                                         ["body"
                                          ["{}"]
-                                         ["div" ["{}" [":id" "|app"] [":innerHTML" "html-content"]]]
+                                         ["div" ["{}" [":class-name" "|app"] [":innerHTML" "html-content"]]]
                                          ["if"
                                           [":build?" "resources"]
                                           ["script" ["{}" [":innerHTML" ["slurp" "|entry/ga.js"]]]]]
                                          ["if"
                                           [":build?" "resources"]
-                                          ["script" ["{}" [":src" [":vendor" "resources"]]]]]
+                                          ["script" ["{}" [":src" [":vendor" "resources"]]]]
+                                          ["script" ["{}" [":src" [":cljs-main" "resources"]]]]]
                                          ["script" ["{}" [":src" [":main" "resources"]]]]]]]],
                           "icon-url" ["def" "icon-url" "|http://logo.mvc-works.org/mvc.png"]},
                    :procs [["main!"]]},
@@ -941,7 +953,7 @@
                                                 "comp-sidebar"
                                                 ["states" "groups" "router"]
                                                 ["let"
-                                                 [["state" [":data" "states"]]]
+                                                 [["state" ["or" [":data" "states"] "|"]]]
                                                  ["div"
                                                   ["{}" [":style" "style-sidebar"]]
                                                   ["div"

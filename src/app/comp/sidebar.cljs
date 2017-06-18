@@ -66,7 +66,7 @@
 (defcomp
  comp-sidebar
  (states groups router)
- (let [state (:data states)]
+ (let [state (or (:data states) "")]
    (div
     {:style style-sidebar}
     (div

@@ -8,7 +8,8 @@
             [app.style.widget :as widget]
             [app.style.layout :as layout]
             [respo.alias :refer [div section span header input]]
-            (respo.comp.space :refer (comp-space))))
+            (respo.comp.space :refer (comp-space))
+            (respo.comp.debug :refer (comp-debug))))
 
 (defn handle-task-add [router state]
   (fn [e dispatch!]

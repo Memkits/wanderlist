@@ -15,7 +15,7 @@ This project is based on:
 
 ### Develop
 
-This project is based on: https://github.com/mvc-works/stack-workflow#develop
+Workflow https://github.com/mvc-works/stack-workflow
 
 ## License
 
