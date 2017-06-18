@@ -5,7 +5,8 @@
             [hsl.core :refer [hsl]]
             [app.style.widget :as widget]
             [respo.comp.space :refer [comp-space]]
-            [respo-ui.style :as ui]))
+            [respo-ui.style :as ui]
+            (respo.comp.text :refer (comp-text))))
 
 (def style-small-hint {:font-size "12px", :color (hsl 0 0 70), :pointer-events "none"})
 
@@ -55,18 +56,16 @@
    (div
     {:style (style-group index selected? (> todo-size 0)),
      :event {:click (on-group-route (:id group))}}
-    (span {:style style-small-hint, :attrs {:inner-text (str todo-size)}})
+    (comp-text (str todo-size) style-small-hint)
     (comp-space 8 0)
     (input
-     {:style style-input,
-      :attrs {:value (:text group)},
-      :event {:input (on-edit (:id group))}})
+     {:value (:text group), :style style-input, :event {:input (on-edit (:id group))}})
     (comp-space 20 nil)
     (div
-     {:style (merge ui/center widget/icon style-promote),
-      :attrs {:class-name "ion-md-arrow-up"},
+     {:class-name "ion-md-arrow-up",
+      :style (merge ui/center widget/icon style-promote),
       :event {:click (handle-promote group)}})
     (div
-     {:style (merge ui/center widget/icon style-remove),
-      :attrs {:class-name "ion-md-close"},
+     {:class-name "ion-md-close",
+      :style (merge ui/center widget/icon style-remove),
       :event {:click (handle-click group)}}))))

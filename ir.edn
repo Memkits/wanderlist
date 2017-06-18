@@ -8,7 +8,8 @@
                                   ["[]" "hsl.core" ":refer" ["[]" "hsl"]]
                                   ["[]" "app.style.widget" ":as" "widget"]
                                   ["[]" "respo.comp.space" ":refer" ["[]" "comp-space"]]
-                                  ["[]" "respo-ui.style" ":as" "ui"]]],
+                                  ["[]" "respo-ui.style" ":as" "ui"]
+                                  ["respo.comp.text" ":refer" ["comp-text"]]]],
                             :defs {"style-small-hint" ["def"
                                                        "style-small-hint"
                                                        ["{}"
@@ -83,26 +84,23 @@
                                                          [":style"
                                                           ["style-group" "index" "selected?" [">" "todo-size" "0"]]]
                                                          [":event" ["{}" [":click" ["on-group-route" [":id" "group"]]]]]]
-                                                        ["span"
-                                                         ["{}"
-                                                          [":style" "style-small-hint"]
-                                                          [":attrs" ["{}" [":inner-text" ["str" "todo-size"]]]]]]
+                                                        ["comp-text" ["str" "todo-size"] "style-small-hint"]
                                                         ["comp-space" "8" "0"]
                                                         ["input"
                                                          ["{}"
+                                                          [":value" [":text" "group"]]
                                                           [":style" "style-input"]
-                                                          [":attrs" ["{}" [":value" [":text" "group"]]]]
                                                           [":event" ["{}" [":input" ["on-edit" [":id" "group"]]]]]]]
                                                         ["comp-space" "20" "nil"]
                                                         ["div"
                                                          ["{}"
+                                                          [":class-name" "|ion-md-arrow-up"]
                                                           [":style" ["merge" "ui/center" "widget/icon" "style-promote"]]
-                                                          [":attrs" ["{}" [":class-name" "|ion-md-arrow-up"]]]
                                                           [":event" ["{}" [":click" ["handle-promote" "group"]]]]]]
                                                         ["div"
                                                          ["{}"
+                                                          [":class-name" "|ion-md-close"]
                                                           [":style" ["merge" "ui/center" "widget/icon" "style-remove"]]
-                                                          [":attrs" ["{}" [":class-name" "|ion-md-close"]]]
                                                           [":event" ["{}" [":click" ["handle-click" "group"]]]]]]]]],
                                    "style-remove" ["def"
                                                    "style-remove"
@@ -171,23 +169,23 @@
                                             ["{}" [":style" ["style-task" "index"]]]
                                             ["div"
                                              ["{}"
+                                              [":class-name" "|ion-md-checkmark"]
                                               [":style" ["merge" "ui/center" "widget/icon" ["style-done" "done?"]]]
-                                              [":attrs" ["{}" [":class-name" "|ion-md-checkmark"]]]
                                               [":event" ["{}" [":click" ["handle-toggle" "task"]]]]]]
                                             ["input"
                                              ["{}"
+                                              [":value" [":text" "task"]]
                                               [":style" "style-input"]
-                                              [":event" ["{}" [":input" ["handle-change" "task"]]]]
-                                              [":attrs" ["{}" [":value" [":text" "task"]]]]]]
+                                              [":event" ["{}" [":input" ["handle-change" "task"]]]]]]
                                             ["div"
                                              ["{}"
+                                              [":class-name" "|ion-md-arrow-up"]
                                               [":style" ["merge" "widget/icon" "style-promote"]]
-                                              [":attrs" ["{}" [":class-name" "|ion-md-arrow-up"]]]
                                               [":event" ["{}" [":click" ["handle-promote" "task"]]]]]]
                                             ["div"
                                              ["{}"
+                                              [":class-name" "|ion-md-close"]
                                               [":style" ["merge" "widget/icon" "style-remove"]]
-                                              [":attrs" ["{}" [":class-name" "|ion-md-close"]]]
                                               [":event" ["{}" [":click" ["handle-remove" "task"]]]]]]]]],
                              "style-remove" ["def"
                                              "style-remove"
@@ -303,11 +301,8 @@
                                                             ["get" [":groups" "store"] "group-id"]]]
                                                           ["div"
                                                            ["{}" [":style" "style-placeholder"]]
-                                                           ["span" ["{}" ":attrs" [":inner-text" "|Select a group?"]]]]]]
-                                                        ["div"
-                                                         ["{}"]
-                                                         ["span"
-                                                          ["{}" ":attrs" [":inner-text" "|router not matching a page"]]]]]]
+                                                           ["comp-text" "|Select a group?" "nil"]]]]
+                                                        ["div" ["{}"] ["comp-text" "|router not matching a page" "nil"]]]]
                                                       ["--" "comp-debug" "states" "nil"]]]],
                                   "style-placeholder" ["def"
                                                        "style-placeholder"
@@ -960,21 +955,22 @@
                                                    ["{}" [":style" ["merge" "ui/row-center" "style-header"]]]
                                                    ["input"
                                                     ["{}"
+                                                     [":value" "state"]
+                                                     [":placeholder" "|Group..."]
                                                      [":style" "style-query"]
-                                                     [":event" ["{}" [":input" ["on-query-change" "cursor"]]]]
-                                                     [":attrs" ["{}" [":value" "state"] [":placeholder" "|Group..."]]]]]
+                                                     [":event" ["{}" [":input" ["on-query-change" "cursor"]]]]]]
                                                    ["comp-space" "8" "nil"]
                                                    ["span"
                                                     ["{}"
+                                                     [":inner-text" "|Add"]
                                                      [":style" "style-add"]
-                                                     [":event" ["{}" [":click" ["on-group-add" "state"]]]]
-                                                     [":attrs" ["{}" [":inner-text" "|Add"]]]]]
+                                                     [":event" ["{}" [":click" ["on-group-add" "state"]]]]]]
                                                    ["comp-space" "8" "nil"]
                                                    ["span"
                                                     ["{}"
+                                                     [":inner-text" "|Hide"]
                                                      [":style" "style-add"]
-                                                     [":event" ["{}" [":click" "on-hide"]]]
-                                                     [":attrs" ["{}" [":inner-text" "|Hide"]]]]]]
+                                                     [":event" ["{}" [":click" "on-hide"]]]]]]
                                                   ["div"
                                                    ["{}"
                                                     [":style" "style-body"]

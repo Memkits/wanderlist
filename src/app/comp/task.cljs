@@ -40,18 +40,15 @@
    (section
     {:style (style-task index)}
     (div
-     {:style (merge ui/center widget/icon (style-done done?)),
-      :attrs {:class-name "ion-md-checkmark"},
+     {:class-name "ion-md-checkmark",
+      :style (merge ui/center widget/icon (style-done done?)),
       :event {:click (handle-toggle task)}})
-    (input
-     {:style style-input,
-      :event {:input (handle-change task)},
-      :attrs {:value (:text task)}})
+    (input {:value (:text task), :style style-input, :event {:input (handle-change task)}})
     (div
-     {:style (merge widget/icon style-promote),
-      :attrs {:class-name "ion-md-arrow-up"},
+     {:class-name "ion-md-arrow-up",
+      :style (merge widget/icon style-promote),
       :event {:click (handle-promote task)}})
     (div
-     {:style (merge widget/icon style-remove),
-      :attrs {:class-name "ion-md-close"},
+     {:class-name "ion-md-close",
+      :style (merge widget/icon style-remove),
       :event {:click (handle-remove task)}}))))

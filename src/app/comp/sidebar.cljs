@@ -72,14 +72,14 @@
     (div
      {:style (merge ui/row-center style-header)}
      (input
-      {:style style-query,
-       :event {:input (on-query-change cursor)},
-       :attrs {:value state, :placeholder "Group..."}})
+      {:value state,
+       :placeholder "Group...",
+       :style style-query,
+       :event {:input (on-query-change cursor)}})
      (comp-space 8 nil)
-     (span
-      {:style style-add, :event {:click (on-group-add state)}, :attrs {:inner-text "Add"}})
+     (span {:inner-text "Add", :style style-add, :event {:click (on-group-add state)}})
      (comp-space 8 nil)
-     (span {:style style-add, :event {:click on-hide}, :attrs {:inner-text "Hide"}}))
+     (span {:inner-text "Hide", :style style-add, :event {:click on-hide}}))
     (div
      {:style style-body, :event {:click on-empty-route}}
      (div
