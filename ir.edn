@@ -2,14 +2,14 @@
  :root {:ns "main", :def "main!"},
  :files {"comp.group-line" {:ns ["ns"
                                  "app.comp.group-line"
-                                 [":require-macros" ["respo.macros" ":refer" ["defcomp"]]]
+                                 [":require-macros"
+                                  ["[]" "respo.macros" ":refer" ["[]" "defcomp" "<>" "div" "span" "input"]]]
                                  [":require"
-                                  ["[]" "respo.alias" ":refer" ["[]" "div" "span" "input"]]
+                                  ["[]" "respo.core" ":refer" ["[]" "create-comp"]]
                                   ["[]" "hsl.core" ":refer" ["[]" "hsl"]]
                                   ["[]" "app.style.widget" ":as" "widget"]
-                                  ["[]" "respo.comp.space" ":refer" ["[]" "comp-space"]]
-                                  ["[]" "respo-ui.style" ":as" "ui"]
-                                  ["respo.comp.text" ":refer" ["comp-text"]]]],
+                                  ["[]" "respo.comp.space" ":refer" ["[]" "=<"]]
+                                  ["[]" "respo-ui.style" ":as" "ui"]]],
                             :defs {"style-small-hint" ["def"
                                                        "style-small-hint"
                                                        ["{}"
@@ -84,14 +84,14 @@
                                                          [":style"
                                                           ["style-group" "index" "selected?" [">" "todo-size" "0"]]]
                                                          [":event" ["{}" [":click" ["on-group-route" [":id" "group"]]]]]]
-                                                        ["comp-text" ["str" "todo-size"] "style-small-hint"]
-                                                        ["comp-space" "8" "0"]
+                                                        ["<>" "span" ["str" "todo-size"] "style-small-hint"]
+                                                        ["=<" "8" "0"]
                                                         ["input"
                                                          ["{}"
                                                           [":value" [":text" "group"]]
                                                           [":style" "style-input"]
                                                           [":event" ["{}" [":input" ["on-edit" [":id" "group"]]]]]]]
-                                                        ["comp-space" "20" "nil"]
+                                                        ["=<" "20" "nil"]
                                                         ["div"
                                                          ["{}"
                                                           [":class-name" "|ion-md-arrow-up"]
@@ -120,13 +120,14 @@
                             :procs []},
          "comp.task" {:ns ["ns"
                            "app.comp.task"
-                           [":require-macros" ["respo.macros" ":refer" ["defcomp"]]]
+                           [":require-macros"
+                            ["[]" "respo.macros" ":refer" ["[]" "defcomp" "<>" "input" "div" "section"]]]
                            [":require"
                             ["[]" "clojure.string" ":as" "string"]
                             ["[]" "hsl.core" ":refer" ["[]" "hsl"]]
                             ["[]" "respo-ui.style" ":as" "ui"]
                             ["[]" "app.style.widget" ":as" "widget"]
-                            ["[]" "respo.alias" ":refer" ["[]" "div" "input" "section"]]]],
+                            ["[]" "respo.core" ":refer" ["[]" "create-comp"]]]],
                       :defs {"style-task" ["defn"
                                            "style-task"
                                            ["index"]
@@ -235,14 +236,13 @@
                    :procs []},
          "comp.container" {:ns ["ns"
                                 "app.comp.container"
-                                [":require-macros" ["respo.macros" ":refer" ["defcomp"]]]
+                                [":require-macros" ["respo.macros" ":refer" ["defcomp" "<>" "div" "textarea" "span"]]]
                                 [":require"
                                  ["[]" "clojure.string" ":as" "string"]
                                  ["[]" "hsl.core" ":refer" ["[]" "hsl"]]
-                                 ["[]" "respo.alias" ":refer" ["[]" "create-comp" "div" "textarea" "span"]]
+                                 ["[]" "respo.core" ":refer" ["[]" "create-comp"]]
                                  ["[]" "respo.cursor" ":refer" ["[]" "with-cursor"]]
-                                 ["[]" "respo.comp.text" ":refer" ["[]" "comp-text"]]
-                                 ["[]" "respo.comp.debug" ":refer" ["[]" "comp-debug"]]
+                                 ["[]" "respo.comp.inspect" ":refer" ["[]" "comp-inspect"]]
                                  ["[]" "app.comp.sidebar" ":refer" ["[]" "comp-sidebar"]]
                                  ["[]" "app.comp.todolist" ":refer" ["[]" "comp-todolist"]]]],
                            :defs {"style-hidden" ["def" "style-hidden" ["{}" [":width" "80"] [":cursor" "|pointer"]]],
@@ -301,9 +301,9 @@
                                                             ["get" [":groups" "store"] "group-id"]]]
                                                           ["div"
                                                            ["{}" [":style" "style-placeholder"]]
-                                                           ["comp-text" "|Select a group?" "nil"]]]]
-                                                        ["div" ["{}"] ["comp-text" "|router not matching a page" "nil"]]]]
-                                                      ["--" "comp-debug" "states" "nil"]]]],
+                                                           ["<>" "span" "|Select a group?" "nil"]]]]
+                                                        ["div" ["{}"] ["<>" "span" "|router not matching a page" "nil"]]]]
+                                                      ["--" "comp-inspect" "|States" "states" "nil"]]]],
                                   "style-placeholder" ["def"
                                                        "style-placeholder"
                                                        ["{}"
@@ -328,7 +328,11 @@
                            :procs []},
          "comp.todolist" {:ns ["ns"
                                "app.comp.todolist"
-                               [":require-macros" ["respo.macros" ":refer" ["defcomp"]]]
+                               [":require-macros"
+                                ["[]"
+                                 "respo.macros"
+                                 ":refer"
+                                 ["[]" "defcomp" "<>" "div" "section" "span" "header" "input"]]]
                                [":require"
                                 ["[]" "hsl.core" ":refer" ["[]" "hsl"]]
                                 ["[]" "respo-ui.style" ":as" "ui"]
@@ -336,9 +340,9 @@
                                 ["[]" "app.comp.task" ":refer" ["[]" "comp-task"]]
                                 ["[]" "app.style.widget" ":as" "widget"]
                                 ["[]" "app.style.layout" ":as" "layout"]
-                                ["[]" "respo.alias" ":refer" ["[]" "div" "section" "span" "header" "input"]]
-                                ["respo.comp.space" ":refer" ["comp-space"]]
-                                ["respo.comp.debug" ":refer" ["comp-debug"]]]],
+                                ["[]" "respo.core" ":refer" ["[]" "create-comp"]]
+                                ["[]" "respo.comp.space" ":refer" ["[]" "=<"]]
+                                ["[]" "respo.comp.inspect" ":refer" ["[]" "comp-inspect"]]]],
                           :defs {"handle-task-add" ["defn"
                                                     "handle-task-add"
                                                     ["router" "state"]
@@ -457,7 +461,7 @@
                                                          ["{}"
                                                           [":input" ["handle-input" "cursor" "state"]]
                                                           [":keydown" ["handle-keydown" "router" "state"]]]]]]
-                                                      ["comp-space" "8" "nil"]
+                                                      ["=<" "8" "nil"]
                                                       ["span"
                                                        ["{}"
                                                         [":inner-text" "|Add"]
@@ -517,67 +521,54 @@
                       "app.main"
                       [":require"
                        ["[]" "clojure.string" ":as" "string"]
-                       ["[]" "respo.core" ":refer" ["[]" "render!" "clear-cache!" "falsify-stage!" "render-element"]]
+                       ["[]" "respo.cursor" ":refer" ["[]" "mutate"]]
+                       ["[]" "respo.core" ":refer" ["[]" "render!" "clear-cache!" "realize-ssr!" "render-element"]]
                        ["[]" "app.comp.container" ":refer" ["[]" "comp-container"]]
                        ["[]" "app.updater.core" ":refer" ["[]" "updater"]]
                        ["[]" "cljs.reader" ":as" "reader"]
-                       ["[]" "app.util.migration" ":refer" ["[]" "migrate-from-v0" "migrate-from-v1"]]
                        ["[]" "app.schema" ":as" "schema"]]],
-                 :defs {"dispatch!" ["defn"
+                 :defs {"ssr?" ["def" "ssr?" ["some?" [".querySelector" "js/document" "|meta.respo-ssr"]]],
+                        "dispatch!" ["defn"
                                      "dispatch!"
-                                     ["op-type" "op-data"]
-                                     ["--" "println" "|dispatch:" "op-type" "op-data"]
+                                     ["op" "op-data"]
                                      ["let"
-                                      [["new-store"
-                                        ["updater"
-                                         "@*store"
-                                         "op-type"
-                                         "op-data"
-                                         [".valueOf" ["js/Date."]]
-                                         [".valueOf" ["js/Date."]]]]]
-                                      ["reset!" "*store" "new-store"]
-                                      ["--" ".info" "js/console" "|new store:" "new-store"]]],
+                                      [["now" [".valueOf" ["js/Date."]]]
+                                       ["new-store"
+                                        ["if"
+                                         ["=" ":states" "op"]
+                                         ["update" "@*store" ":states" ["mutate" "op-data"]]
+                                         ["updater" "@*store" "op" "op-data" "now" "now"]]]]
+                                      ["reset!" "*store" "new-store"]]],
                         "*store" ["defonce" "*store" ["atom" "schema/store"]],
                         "main!" ["defn"
                                  "main!"
                                  []
-                                 ["if"
-                                  "server-rendered?"
-                                  ["falsify-stage!"
-                                   "mount-target"
-                                   ["render-element" ["comp-container" "@*store"]]
-                                   "dispatch!"]]
+                                 ["if" "ssr?" ["render-app!" "realize-ssr!"]]
                                  ["let"
-                                  [["stored-data" [".getItem" "js/localStorage" "|wanderlist"]]]
+                                  [["stored-data" [".getItem" "js/window.localStorage" "|wanderlist"]]]
                                   ["if"
                                    ["some?" "stored-data"]
                                    ["let"
-                                    [["old-store" ["reader/read-string" "stored-data"]]
-                                     ["version" ["or" [":version" "old-store"] "0"]]
-                                     ["realtime-store"
-                                      ["case"
-                                       "version"
-                                       ["0" ["->" "old-store" ["migrate-from-v0"] ["migrate-from-v1"]]]
-                                       ["1" ["migrate-from-v1" "old-store"]]
-                                       ["2" ["merge" "schema/store" "old-store"]]
-                                       "schema/store"]]]
-                                    ["reset!" "*store" "realtime-store"]]]]
-                                 ["render-app!"]
-                                 ["add-watch" "*store" ":rerender" "render-app!"]
+                                    [["old-store" ["reader/read-string" "stored-data"]]]
+                                    ["reset!" "*store" ["merge" "schema/store" "old-store"]]]]]
+                                 ["render-app!" "render!"]
+                                 ["add-watch" "*store" ":rerender" ["fn" [] ["render-app!" "render!"]]]
                                  ["println" "|App started."]],
-                        "server-rendered?" ["def"
-                                            "server-rendered?"
-                                            ["some?" [".querySelector" "js/document" "|meta#server-rendered"]]],
                         "render-app!" ["defn"
                                        "render-app!"
-                                       []
-                                       ["render!" ["comp-container" "@*store"] "mount-target" "dispatch!"]],
-                        "reload!" ["defn" "reload!" [] ["println" "|Code updated."] ["clear-cache!"] ["render-app!"]],
+                                       ["renderer"]
+                                       ["renderer" "mount-target" ["comp-container" "@*store"] "dispatch!"]],
+                        "reload!" ["defn"
+                                   "reload!"
+                                   []
+                                   ["println" "|Code updated."]
+                                   ["clear-cache!"]
+                                   ["render-app!" "render!"]],
                         "save-local-storage!" ["defn"
                                                "save-local-storage!"
                                                []
                                                [".setItem"
-                                                "js/localStorage"
+                                                "js/window.localStorage"
                                                 "|wanderlist"
                                                 ["pr-str" ["assoc" "@*store" ":states" ["{}"]]]]
                                                ["--" ".log" "js/console" ["pr-str" "@*store"]]],
@@ -592,15 +583,6 @@
                                            ["store" "op-type" "op-data" "op-id" "op-time"]
                                            ["case"
                                             "op-type"
-                                            [":states"
-                                             ["let"
-                                              [[["[]" "cursor" "new-states"] "op-data"]]
-                                              ["update"
-                                               "store"
-                                               ":states"
-                                               ["fn"
-                                                ["states"]
-                                                ["assoc-in" "states" ["conj" "cursor" ":data"] "new-states"]]]]]
                                             [":add-group"
                                              ["->"
                                               "store"
@@ -686,178 +668,68 @@
                                             [":show-sidebar" ["assoc" "store" ":show-sidebar?" "true"]]
                                             "store"]]},
                          :procs []},
-         "util.migration" {:ns ["ns"
-                                "app.util.migration"
-                                [":require" ["[]" "clojure.string" ":as" "string"] ["[]" "app.schema" ":as" "schema"]]],
-                           :defs {"upgrade-tasks" ["defn"
-                                                   "upgrade-tasks"
-                                                   ["tasks"]
-                                                   ["->>"
-                                                    "tasks"
-                                                    ["map"
-                                                     ["fn"
-                                                      ["entry"]
-                                                      ["[]"
-                                                       ["key" "entry"]
-                                                       ["->"
-                                                        ["val" "entry"]
-                                                        ["assoc" ":created-time" ["get-time"]]
-                                                        ["assoc" ":touched-time" ["get-time"]]]]]]
-                                                    ["into" ["{}"]]]],
-                                  "get-time" ["defn" "get-time" [] [".valueOf" ["js/Date."]]],
-                                  "upgrade-groups" ["defn"
-                                                    "upgrade-groups"
-                                                    ["groups"]
-                                                    ["->>"
-                                                     "groups"
-                                                     ["map"
-                                                      ["fn"
-                                                       ["entry"]
-                                                       ["[]"
-                                                        ["key" "entry"]
-                                                        ["->"
-                                                         ["val" "entry"]
-                                                         ["assoc" ":created-time" ["get-time"]]
-                                                         ["assoc" ":touched-time" ["get-time"]]
-                                                         ["update" ":tasks" "upgrade-tasks"]]]]]
-                                                     ["into" ["{}"]]]],
-                                  "migrate-from-v1" ["defn"
-                                                     "migrate-from-v1"
-                                                     ["old-store"]
-                                                     [".log" "js/console" ["pr-str" "old-store"]]
-                                                     ["->"
-                                                      "old-store"
-                                                      ["update" ":groups" "upgrade-groups"]
-                                                      ["assoc" ":version" "2"]]],
-                                  "migrate-from-v0" ["defn"
-                                                     "migrate-from-v0"
-                                                     ["old-store"]
-                                                     ["merge"
-                                                      "schema/store"
-                                                      ["{}"
-                                                       [":router"
-                                                        ["{}" [":name" [":router" "old-store"]] [":data" "nil"]]]
-                                                       [":groups"
-                                                        ["->>"
-                                                         [":groups" "old-store"]
-                                                         ["map"
-                                                          ["fn"
-                                                           ["entry"]
-                                                           ["let"
-                                                            [["group-id" ["key" "entry"]] ["group" ["val" "entry"]]]
-                                                            ["[]"
-                                                             "group-id"
-                                                             ["assoc"
-                                                              "group"
-                                                              ":tasks"
-                                                              ["->>"
-                                                               [":tasks" "old-store"]
-                                                               ["filter"
-                                                                ["fn"
-                                                                 ["entry"]
-                                                                 ["=" "group-id" [":group-id" ["val" "entry"]]]]]
-                                                               ["into" ["{}"]]]]]]]]
-                                                         ["into" ["{}"]]]]
-                                                       [":version" "1"]]]]},
-                           :procs []},
          "render" {:ns ["ns"
                         "app.render"
-                        [":require"
+                        [":require-macros"
                          ["[]"
-                          "respo.alias"
+                          "respo.macros"
                           ":refer"
-                          ["[]" "html" "head" "title" "script" "style" "meta'" "div" "link" "body"]]
-                         ["[]" "respo.render.html" ":refer" ["[]" "make-html" "make-string"]]
+                          ["[]" "<>" "html" "head" "title" "script" "style" "meta'" "div" "link" "body"]]]
+                        [":require"
+                         ["[]" "respo.core" ":refer" ["[]" "create-element"]]
+                         ["[]" "respo.render.html" ":refer" ["[]" "make-string"]]
                          ["[]" "app.comp.container" ":refer" ["[]" "comp-container"]]
-                         ["[]" "|fs" ":refer" ["[]" "readFileSync" "writeFileSync"]]
-                         ["app.schema" ":as" "schema"]]],
+                         ["[]" "shell-page.core" ":refer" ["[]" "make-page" "slurp" "spit"]]
+                         ["[]" "app.schema" ":as" "schema"]]],
                    :defs {"main!" ["defn"
                                    "main!"
                                    []
                                    ["if"
                                     ["=" "js/process.env.env" "|dev"]
-                                    ["spit" "|target/index.html" ["generate-empty-html"]]
-                                    ["spit" "|dist/index.html" ["generate-html"]]]],
-                          "spit" ["defn"
-                                  "spit"
-                                  ["file-name" "content"]
-                                  ["writeFileSync" "file-name" "content"]
-                                  ["println" "|Wrote to:" "file-name"]],
-                          "generate-empty-html" ["defn"
-                                                 "generate-empty-html"
-                                                 []
-                                                 ["html-dsl"
-                                                  ["{}"
-                                                   [":build?" "false"]
-                                                   [":main" "|/main.js"]
-                                                   [":cljs-main" "|/browser/main.js"]]
-                                                  "|"]],
-                          "generate-html" ["defn"
-                                           "generate-html"
-                                           []
-                                           ["let"
-                                            [["tree" ["comp-container" "schema/store"]]
-                                             ["html-content" ["make-string" "tree"]]
-                                             ["resources"
-                                              ["let"
-                                               [["manifest" ["js/JSON.parse" ["slurp" "|dist/manifest.json"]]]]
-                                               ["{}"
-                                                [":build?" "true"]
-                                                [":css" ["aget" "manifest" "|main.css"]]
-                                                [":main" ["aget" "manifest" "|main.js"]]
-                                                [":vendor" ["aget" "manifest" "|vendor.js"]]]]]]
-                                            ["html-dsl" "resources" "html-content"]]],
-                          "slurp" ["defn" "slurp" ["x"] ["readFileSync" "x" "|utf8"]],
-                          "html-dsl" ["defn"
-                                      "html-dsl"
-                                      ["resources" "html-content"]
-                                      ["make-html"
-                                       ["html"
-                                        ["{}"]
-                                        ["head"
-                                         ["{}"]
-                                         ["title" ["{}" [":innerHTML" "|Wanderlist"]]]
-                                         ["link" ["{}" [":rel" "|icon"] [":type" "|image/png"] [":href" "icon-url"]]]
-                                         ["link" ["{}" [":rel" "|manifest"] [":href" "|manifest.json"]]]
-                                         ["meta'" ["{}" [":charset" "|utf8"]]]
-                                         ["meta'"
+                                    ["spit" "|target/index.html" ["dev-page"]]
+                                    ["spit" "|dist/index.html" ["prod-page"]]]],
+                          "base-info" ["def"
+                                       "base-info"
+                                       ["{}"
+                                        [":title" "|Wanderlist"]
+                                        [":icon" "|http://logo.mvc-works.org/mvc.png"]
+                                        [":inline-html" "|"]
+                                        [":ssr" "nil"]]],
+                          "prod-page" ["defn"
+                                       "prod-page"
+                                       []
+                                       ["let"
+                                        [["html-content" ["make-string" ["comp-container" "schema/store"]]]
+                                         ["manifest" ["js/JSON.parse" ["slurp" "|dist/manifest.json"]]]]
+                                        ["make-page"
+                                         "html-content"
+                                         ["merge"
+                                          "base-info"
                                           ["{}"
-                                           [":name" "|viewport"]
-                                           [":content" "|width=device-width, initial-scale=1"]]]
-                                         ["if"
-                                          [":build?" "resources"]
-                                          ["meta'" ["{}" [":id" "|server-rendered"] [":type" "|text/edn"]]]]
-                                         ["if"
-                                          ["contains?" "resources" ":css"]
-                                          ["link"
-                                           ["{}"
-                                            [":rel" "|stylesheet"]
-                                            [":type" "|text/css"]
-                                            [":href" [":css" "resources"]]]]]]
-                                        ["body"
-                                         ["{}"]
-                                         ["div" ["{}" [":class-name" "|app"] [":innerHTML" "html-content"]]]
-                                         ["if"
-                                          [":build?" "resources"]
-                                          ["script" ["{}" [":innerHTML" ["slurp" "|entry/ga.js"]]]]]
-                                         ["if"
-                                          [":build?" "resources"]
-                                          ["script" ["{}" [":src" [":vendor" "resources"]]]]
-                                          ["script" ["{}" [":src" [":cljs-main" "resources"]]]]]
-                                         ["script" ["{}" [":src" [":main" "resources"]]]]]]]],
-                          "icon-url" ["def" "icon-url" "|http://logo.mvc-works.org/mvc.png"]},
-                   :procs [["main!"]]},
+                                           [":styles" ["[]" ["aget" "manifest" "|main.css"]]]
+                                           [":scripts"
+                                            ["[]" ["aget" "manifest" "|vendor.js"] ["aget" "manifest" "|main.js"]]]
+                                           [":ssr" "|respo-ssr"]]]]]],
+                          "dev-page" ["defn"
+                                      "dev-page"
+                                      []
+                                      ["make-page"
+                                       "|"
+                                       ["merge"
+                                        "base-info"
+                                        ["{}" [":styles" ["[]"]] [":scripts" ["[]" "|/main.js" "|/browser/main.js"]]]]]]},
+                   :procs []},
          "comp.sidebar" {:ns ["ns"
                               "app.comp.sidebar"
-                              [":require-macros" ["respo.macros" ":refer" ["defcomp"]]]
+                              [":require-macros" ["respo.macros" ":refer" ["[]" "defcomp" "<>" "div" "span" "input"]]]
                               [":require"
                                ["[]" "clojure.string" ":as" "string"]
                                ["[]" "respo-ui.style" ":as" "ui"]
                                ["[]" "hsl.core" ":refer" ["[]" "hsl"]]
                                ["[]" "app.style.layout" ":as" "layout"]
                                ["[]" "app.style.widget" ":as" "widget"]
-                               ["respo.comp.space" ":refer" ["comp-space"]]
-                               ["[]" "respo.alias" ":refer" ["[]" "div" "span" "input"]]
+                               ["[]" "respo.comp.space" ":refer" ["[]" "=<"]]
+                               ["[]" "respo.core" ":refer" ["[]" "create-comp"]]
                                ["[]" "app.comp.group-line" ":refer" ["[]" "comp-group-line"]]]],
                          :defs {"on-query-change" ["defn"
                                                    "on-query-change"
@@ -959,13 +831,13 @@
                                                      [":placeholder" "|Group..."]
                                                      [":style" "style-query"]
                                                      [":event" ["{}" [":input" ["on-query-change" "cursor"]]]]]]
-                                                   ["comp-space" "8" "nil"]
+                                                   ["=<" "8" "nil"]
                                                    ["span"
                                                     ["{}"
                                                      [":inner-text" "|Add"]
                                                      [":style" "style-add"]
                                                      [":event" ["{}" [":click" ["on-group-add" "state"]]]]]]
-                                                   ["comp-space" "8" "nil"]
+                                                   ["=<" "8" "nil"]
                                                    ["span"
                                                     ["{}"
                                                      [":inner-text" "|Hide"]

@@ -1,12 +1,11 @@
 
 (ns app.comp.group-line
-  (:require-macros (respo.macros :refer (defcomp)))
-  (:require [respo.alias :refer [div span input]]
+  (:require-macros [respo.macros :refer [defcomp <> div span input]])
+  (:require [respo.core :refer [create-comp]]
             [hsl.core :refer [hsl]]
             [app.style.widget :as widget]
-            [respo.comp.space :refer [comp-space]]
-            [respo-ui.style :as ui]
-            (respo.comp.text :refer (comp-text))))
+            [respo.comp.space :refer [=<]]
+            [respo-ui.style :as ui]))
 
 (def style-small-hint {:font-size "12px", :color (hsl 0 0 70), :pointer-events "none"})
 
@@ -56,11 +55,11 @@
    (div
     {:style (style-group index selected? (> todo-size 0)),
      :event {:click (on-group-route (:id group))}}
-    (comp-text (str todo-size) style-small-hint)
-    (comp-space 8 0)
+    (<> span (str todo-size) style-small-hint)
+    (=< 8 0)
     (input
      {:value (:text group), :style style-input, :event {:input (on-edit (:id group))}})
-    (comp-space 20 nil)
+    (=< 20 nil)
     (div
      {:class-name "ion-md-arrow-up",
       :style (merge ui/center widget/icon style-promote),

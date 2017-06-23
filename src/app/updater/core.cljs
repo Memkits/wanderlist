@@ -3,9 +3,6 @@
 
 (defn updater [store op-type op-data op-id op-time]
   (case op-type
-    :states
-      (let [[cursor new-states] op-data]
-        (update store :states (fn [states] (assoc-in states (conj cursor :data) new-states))))
     :add-group
       (-> store
           (update

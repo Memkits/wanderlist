@@ -1,15 +1,15 @@
 
 (ns app.comp.todolist
-  (:require-macros (respo.macros :refer (defcomp)))
+  (:require-macros [respo.macros :refer [defcomp <> div section span header input]])
   (:require [hsl.core :refer [hsl]]
             [respo-ui.style :as ui]
             [clojure.string :as string]
             [app.comp.task :refer [comp-task]]
             [app.style.widget :as widget]
             [app.style.layout :as layout]
-            [respo.alias :refer [div section span header input]]
-            (respo.comp.space :refer (comp-space))
-            (respo.comp.debug :refer (comp-debug))))
+            [respo.core :refer [create-comp]]
+            [respo.comp.space :refer [=<]]
+            [respo.comp.inspect :refer [comp-inspect]]))
 
 (defn handle-task-add [router state]
   (fn [e dispatch!]
@@ -100,7 +100,7 @@
         :placeholder "Add a task...",
         :style style-input,
         :event {:input (handle-input cursor state), :keydown (handle-keydown router state)}})
-      (comp-space 8 nil)
+      (=< 8 nil)
       (span
        {:inner-text "Add",
         :style style-button,

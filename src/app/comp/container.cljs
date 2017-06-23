@@ -1,12 +1,11 @@
 
 (ns app.comp.container
-  (:require-macros (respo.macros :refer (defcomp)))
+  (:require-macros (respo.macros :refer (defcomp <> div textarea span)))
   (:require [clojure.string :as string]
             [hsl.core :refer [hsl]]
-            [respo.alias :refer [create-comp div textarea span]]
+            [respo.core :refer [create-comp]]
             [respo.cursor :refer [with-cursor]]
-            [respo.comp.text :refer [comp-text]]
-            [respo.comp.debug :refer [comp-debug]]
+            [respo.comp.inspect :refer [comp-inspect]]
             [app.comp.sidebar :refer [comp-sidebar]]
             [app.comp.todolist :refer [comp-todolist]]))
 
@@ -59,6 +58,6 @@
            (with-cursor
             :todolist
             (comp-todolist (:todolist states) router (get (:groups store) group-id)))
-           (div {:style style-placeholder} (comp-text "Select a group?" nil)))
-       (div {} (comp-text "router not matching a page" nil))))
-    (comment comp-debug states nil))))
+           (div {:style style-placeholder} (<> span "Select a group?" nil)))
+       (div {} (<> span "router not matching a page" nil))))
+    (comment comp-inspect "States" states nil))))

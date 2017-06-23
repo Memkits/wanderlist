@@ -1,13 +1,13 @@
 
 (ns app.comp.sidebar
-  (:require-macros (respo.macros :refer (defcomp)))
+  (:require-macros (respo.macros :refer [defcomp <> div span input]))
   (:require [clojure.string :as string]
             [respo-ui.style :as ui]
             [hsl.core :refer [hsl]]
             [app.style.layout :as layout]
             [app.style.widget :as widget]
-            (respo.comp.space :refer (comp-space))
-            [respo.alias :refer [div span input]]
+            [respo.comp.space :refer [=<]]
+            [respo.core :refer [create-comp]]
             [app.comp.group-line :refer [comp-group-line]]))
 
 (defn on-query-change [cursor]
@@ -76,9 +76,9 @@
        :placeholder "Group...",
        :style style-query,
        :event {:input (on-query-change cursor)}})
-     (comp-space 8 nil)
+     (=< 8 nil)
      (span {:inner-text "Add", :style style-add, :event {:click (on-group-add state)}})
-     (comp-space 8 nil)
+     (=< 8 nil)
      (span {:inner-text "Hide", :style style-add, :event {:click on-hide}}))
     (div
      {:style style-body, :event {:click on-empty-route}}

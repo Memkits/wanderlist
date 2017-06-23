@@ -1,11 +1,11 @@
 
 (ns app.comp.task
-  (:require-macros (respo.macros :refer (defcomp)))
+  (:require-macros [respo.macros :refer [defcomp <> input div section]])
   (:require [clojure.string :as string]
             [hsl.core :refer [hsl]]
             [respo-ui.style :as ui]
             [app.style.widget :as widget]
-            [respo.alias :refer [div input section]]))
+            [respo.core :refer [create-comp]]))
 
 (defn style-task [index]
   {:display "flex",
