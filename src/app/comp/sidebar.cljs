@@ -10,8 +10,7 @@
             [respo.core :refer [create-comp]]
             [app.comp.group-line :refer [comp-group-line]]))
 
-(defn on-query-change [cursor]
-  (fn [e dispatch!] (comment println e) (dispatch! :states [cursor (:value e)])))
+(defn on-query-change [e dispatch! mutate!] (comment println e) (mutate! (:value e)))
 
 (def style-header {:display "flex"})
 
@@ -75,7 +74,7 @@
       {:value state,
        :placeholder "Group...",
        :style style-query,
-       :event {:input (on-query-change cursor)}})
+       :event {:input on-query-change}})
      (=< 8 nil)
      (span {:inner-text "Add", :style style-add, :event {:click (on-group-add state)}})
      (=< 8 nil)

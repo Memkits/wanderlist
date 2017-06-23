@@ -18,8 +18,8 @@
 
 (def style-header {:display "flex", :flex-direction "column", :height "auto"})
 
-(defn handle-toggle [cursor state]
-  (fn [e dispatch!] (dispatch! :states [cursor (update state :fold-done? not)])))
+(defn handle-toggle [state]
+  (fn [e dispatch! mutate!] (mutate! (update state :fold-done? not))))
 
 (def style-space {:width "100%", :height "8px"})
 
@@ -43,8 +43,8 @@
 
 (def style-adder {:display "flex"})
 
-(defn handle-input [cursor state]
-  (fn [e dispatch!] (dispatch! :states [cursor (assoc state :draft (:value e))])))
+(defn handle-input [state]
+  (fn [e dispatch! mutate!] (mutate! (assoc state :draft (:value e)))))
 
 (def style-hint {:color (hsl 0 0 60)})
 
@@ -99,7 +99,7 @@
        {:value (:draft state),
         :placeholder "Add a task...",
         :style style-input,
-        :event {:input (handle-input cursor state), :keydown (handle-keydown router state)}})
+        :event {:input (handle-input state), :keydown (handle-keydown router state)}})
       (=< 8 nil)
       (span
        {:inner-text "Add",
@@ -115,9 +115,7 @@
       {:style style-section}
       (if (> (count done-tasks) 0)
         (span
-         {:inner-text "Toggle",
-          :style style-button,
-          :event {:click (handle-toggle cursor state)}})))
+         {:inner-text "Toggle", :style style-button, :event {:click (handle-toggle state)}})))
      (if (not (:fold-done? state))
        (section
         {:style (style-list (count done-tasks))}

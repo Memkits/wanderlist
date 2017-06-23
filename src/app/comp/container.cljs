@@ -1,10 +1,9 @@
 
 (ns app.comp.container
-  (:require-macros (respo.macros :refer (defcomp <> div textarea span)))
+  (:require-macros (respo.macros :refer (defcomp cursor-> <> div textarea span)))
   (:require [clojure.string :as string]
             [hsl.core :refer [hsl]]
             [respo.core :refer [create-comp]]
-            [respo.cursor :refer [with-cursor]]
             [respo.comp.inspect :refer [comp-inspect]]
             [app.comp.sidebar :refer [comp-sidebar]]
             [app.comp.todolist :refer [comp-todolist]]))
@@ -47,7 +46,7 @@
     (if (:show-sidebar? store)
       (div
        {:style style-left-column}
-       (with-cursor :group (comp-sidebar (:group states) (:groups store) router)))
+       (cursor-> :group comp-sidebar states (:groups store) router))
       (div {:event {:click on-show}, :style style-hidden}))
     (div {:style style-divider})
     (div
@@ -55,9 +54,7 @@
      (case (:name router)
        :table
          (if (some? group-id)
-           (with-cursor
-            :todolist
-            (comp-todolist (:todolist states) router (get (:groups store) group-id)))
+           (cursor-> :todolist comp-todolist states router (get (:groups store) group-id))
            (div {:style style-placeholder} (<> span "Select a group?" nil)))
        (div {} (<> span "router not matching a page" nil))))
     (comment comp-inspect "States" states nil))))

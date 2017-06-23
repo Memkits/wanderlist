@@ -236,12 +236,12 @@
                    :procs []},
          "comp.container" {:ns ["ns"
                                 "app.comp.container"
-                                [":require-macros" ["respo.macros" ":refer" ["defcomp" "<>" "div" "textarea" "span"]]]
+                                [":require-macros"
+                                 ["respo.macros" ":refer" ["defcomp" "cursor->" "<>" "div" "textarea" "span"]]]
                                 [":require"
                                  ["[]" "clojure.string" ":as" "string"]
                                  ["[]" "hsl.core" ":refer" ["[]" "hsl"]]
                                  ["[]" "respo.core" ":refer" ["[]" "create-comp"]]
-                                 ["[]" "respo.cursor" ":refer" ["[]" "with-cursor"]]
                                  ["[]" "respo.comp.inspect" ":refer" ["[]" "comp-inspect"]]
                                  ["[]" "app.comp.sidebar" ":refer" ["[]" "comp-sidebar"]]
                                  ["[]" "app.comp.todolist" ":refer" ["[]" "comp-todolist"]]]],
@@ -275,12 +275,12 @@
                                                        [":show-sidebar?" "store"]
                                                        ["div"
                                                         ["{}" [":style" "style-left-column"]]
-                                                        ["with-cursor"
+                                                        ["cursor->"
                                                          ":group"
-                                                         ["comp-sidebar"
-                                                          [":group" "states"]
-                                                          [":groups" "store"]
-                                                          "router"]]]
+                                                         "comp-sidebar"
+                                                         "states"
+                                                         [":groups" "store"]
+                                                         "router"]]
                                                        ["div"
                                                         ["{}"
                                                          [":event" ["{}" [":click" "on-show"]]]
@@ -293,12 +293,12 @@
                                                         [":table"
                                                          ["if"
                                                           ["some?" "group-id"]
-                                                          ["with-cursor"
+                                                          ["cursor->"
                                                            ":todolist"
-                                                           ["comp-todolist"
-                                                            [":todolist" "states"]
-                                                            "router"
-                                                            ["get" [":groups" "store"] "group-id"]]]
+                                                           "comp-todolist"
+                                                           "states"
+                                                           "router"
+                                                           ["get" [":groups" "store"] "group-id"]]
                                                           ["div"
                                                            ["{}" [":style" "style-placeholder"]]
                                                            ["<>" "span" "|Select a group?" "nil"]]]]
@@ -363,12 +363,10 @@
                                                   [":height" "|auto"]]],
                                  "handle-toggle" ["defn"
                                                   "handle-toggle"
-                                                  ["cursor" "state"]
+                                                  ["state"]
                                                   ["fn"
-                                                   ["e" "dispatch!"]
-                                                   ["dispatch!"
-                                                    ":states"
-                                                    ["[]" "cursor" ["update" "state" ":fold-done?" "not"]]]]],
+                                                   ["e" "dispatch!" "mutate!"]
+                                                   ["mutate!" ["update" "state" ":fold-done?" "not"]]]],
                                  "style-space" ["def" "style-space" ["{}" [":width" "|100%"] [":height" "|8px"]]],
                                  "style-button" ["def"
                                                  "style-button"
@@ -395,12 +393,10 @@
                                  "style-adder" ["def" "style-adder" ["{}" [":display" "|flex"]]],
                                  "handle-input" ["defn"
                                                  "handle-input"
-                                                 ["cursor" "state"]
+                                                 ["state"]
                                                  ["fn"
-                                                  ["e" "dispatch!"]
-                                                  ["dispatch!"
-                                                   ":states"
-                                                   ["[]" "cursor" ["assoc" "state" ":draft" [":value" "e"]]]]]],
+                                                  ["e" "dispatch!" "mutate!"]
+                                                  ["mutate!" ["assoc" "state" ":draft" [":value" "e"]]]]],
                                  "style-hint" ["def" "style-hint" ["{}" [":color" ["hsl" "0" "0" "60"]]]],
                                  "style-input" ["def"
                                                 "style-input"
@@ -459,7 +455,7 @@
                                                         [":style" "style-input"]
                                                         [":event"
                                                          ["{}"
-                                                          [":input" ["handle-input" "cursor" "state"]]
+                                                          [":input" ["handle-input" "state"]]
                                                           [":keydown" ["handle-keydown" "router" "state"]]]]]]
                                                       ["=<" "8" "nil"]
                                                       ["span"
@@ -486,7 +482,7 @@
                                                         ["{}"
                                                          [":inner-text" "|Toggle"]
                                                          [":style" "style-button"]
-                                                         [":event" ["{}" [":click" ["handle-toggle" "cursor" "state"]]]]]]]]
+                                                         [":event" ["{}" [":click" ["handle-toggle" "state"]]]]]]]]
                                                      ["if"
                                                       ["not" [":fold-done?" "state"]]
                                                       ["section"
@@ -733,11 +729,9 @@
                                ["[]" "app.comp.group-line" ":refer" ["[]" "comp-group-line"]]]],
                          :defs {"on-query-change" ["defn"
                                                    "on-query-change"
-                                                   ["cursor"]
-                                                   ["fn"
-                                                    ["e" "dispatch!"]
-                                                    ["--" "println" "e"]
-                                                    ["dispatch!" ":states" ["[]" "cursor" [":value" "e"]]]]],
+                                                   ["e" "dispatch!" "mutate!"]
+                                                   ["--" "println" "e"]
+                                                   ["mutate!" [":value" "e"]]],
                                 "style-header" ["def" "style-header" ["{}" [":display" "|flex"]]],
                                 "style-space" ["def"
                                                "style-space"
@@ -830,7 +824,7 @@
                                                      [":value" "state"]
                                                      [":placeholder" "|Group..."]
                                                      [":style" "style-query"]
-                                                     [":event" ["{}" [":input" ["on-query-change" "cursor"]]]]]]
+                                                     [":event" ["{}" [":input" "on-query-change"]]]]]
                                                    ["=<" "8" "nil"]
                                                    ["span"
                                                     ["{}"
