@@ -7,11 +7,6 @@ ExtractTextPlugin = require 'extract-text-webpack-plugin'
 module.exports =
   entry:
     main: './entry/release'
-    vendor: [
-      './target/release/cljs.core'
-      './target/release/respo.core'
-      './target/release/respo_ui.style'
-    ]
   output:
     path: path.join(__dirname, './dist/')
     filename: '[name].[chunkhash:8].js'
@@ -35,9 +30,7 @@ module.exports =
     ]
   plugins: [
     new ExtractTextPlugin('[name].[chunkhash:8].css')
-    new webpack.optimize.CommonsChunkPlugin
-      name: 'vendor'
-      filename: 'vendor.[chunkhash:8].js'
     new UglifyJSPlugin sourceMap: true
     new ManifestPlugin
+      fileName: 'assets-manifest.json'
   ]

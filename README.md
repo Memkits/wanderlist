@@ -15,7 +15,7 @@ This project is based on:
 
 ### Develop
 
-Workflow https://github.com/mvc-works/stack-workflow
+Workflow https://github.com/mvc-works/coworkflow
 
 ## License
 
