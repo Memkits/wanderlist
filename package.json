@@ -28,20 +28,20 @@
   },
   "homepage": "https://github.com/Memkits/wanderlist#readme",
   "devDependencies": {
-    "coffee-script": "^1.12.6",
+    "coffee-script": "^1.12.7",
     "css-loader": "^0.28.4",
-    "extract-text-webpack-plugin": "^2.1.2",
+    "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^0.11.2",
     "http-server": "^0.10.0",
     "ionicons": "^3.0.0",
-    "shadow-cljs": "^0.14.0",
+    "shadow-cljs": "^0.18.1",
     "source-map-loader": "^0.2.1",
     "style-loader": "^0.18.2",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "url-loader": "^0.5.9",
-    "webpack": "^3.0.0",
-    "webpack-dev-server": "^2.5.0",
-    "webpack-manifest-plugin": "^1.1.0"
+    "webpack": "^3.3.0",
+    "webpack-dev-server": "^2.5.1",
+    "webpack-manifest-plugin": "^1.1.2"
   },
   "dependencies": {}
 }
