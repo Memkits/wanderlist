@@ -8,7 +8,10 @@
             [app.schema :as schema]))
 
 (def base-info
-  {:title "Wanderlist", :icon "http://logo.mvc-works.org/mvc.png", :inline-html "", :ssr nil})
+  {:title "Wanderlist",
+   :icon "http://cdn.tiye.me/logo/memkits.png",
+   :inline-html "",
+   :ssr nil})
 
 (def preview? (= "preview" js/process.env.prod))
 
@@ -16,7 +19,7 @@
   (let [html-content (make-string (comp-container schema/store))
         webpack-info (js/JSON.parse (slurp "dist/webpack-manifest.json"))
         cljs-info (js/JSON.parse (slurp "dist/cljs-manifest.json"))
-        cdn (if preview? "" "http://cdn.tiye.me/coworkflow/")
+        cdn (if preview? "" "http://cdn.tiye.me/wanderlist/")
         prefix-cdn (fn [x] (str cdn x))]
     (make-page
      html-content
