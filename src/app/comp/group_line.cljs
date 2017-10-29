@@ -1,7 +1,6 @@
 
 (ns app.comp.group-line
-  (:require-macros [respo.macros :refer [defcomp <> div span input]])
-  (:require [respo.core :refer [create-comp]]
+  (:require [respo.macros :refer [defcomp <> div span input]]
             [hsl.core :refer [hsl]]
             [app.style.widget :as widget]
             [respo.comp.space :refer [=<]]

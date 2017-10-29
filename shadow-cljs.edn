@@ -1,9 +1,13 @@
 
 {:source-paths ["src"]
- :dependencies [[mvc-works/hsl "0.1.2"]
-                [respo/ui "0.1.9"]
-                [respo "0.5.14"]
-                [mvc-works/shell-page "0.1.2"]]
+ :dependencies [[mvc-works/hsl          "0.1.2"]
+                [respo/ui               "0.2.0"]
+                [respo                  "0.7.0-a1"]
+                [binaryage/devtools     "0.9.7"]
+                [respo/value            "0.2.2"]
+                [mvc-works/verbosely    "0.1.0-rc2"]
+                [mvc-works/shell-page   "0.1.5"]]
+ :open-file-command ["subl" ["%s:%s:%s" :file :line :column]]
  :builds {:browser {:target :browser
                     :output-dir "target/browser"
                     :asset-path "/browser"
@@ -12,9 +16,11 @@
                               :lib {:entries [respo.core respo.macros
                                               respo.comp.inspect]}}
                     :devtools {:after-load app.main/reload!
-                               :preloads [shadow.cljs.devtools.client.hud]}
+                               :preloads [shadow.cljs.devtools.client.hud
+                                          devtools.preload]}
                     :release {:output-dir "dist/"
-                              :module-hash-names true}}
+                              :module-hash-names 8
+                              :build-options {:manifest-name "cljs-manifest.json"}}}
           :ssr {:target :node-script
                 :output-to "target/ssr.js"
                 :main app.render/main!

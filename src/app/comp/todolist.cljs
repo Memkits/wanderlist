@@ -1,13 +1,12 @@
 
 (ns app.comp.todolist
-  (:require-macros [respo.macros :refer [defcomp <> div section span header input]])
   (:require [hsl.core :refer [hsl]]
             [respo-ui.style :as ui]
             [clojure.string :as string]
             [app.comp.task :refer [comp-task]]
             [app.style.widget :as widget]
             [app.style.layout :as layout]
-            [respo.core :refer [create-comp]]
+            [respo.macros :refer [defcomp <> div section span header input list->]]
             [respo.comp.space :refer [=<]]
             [respo.comp.inspect :refer [comp-inspect]]))
 
@@ -108,7 +107,8 @@
     (div {:style (layout/vspace 16)})
     (section
      {:style style-body}
-     (section
+     (list->
+      :section
       {:style (style-list (count todo-tasks))}
       (->> todo-tasks (sort by-touch-time) (map-indexed indexed-task) (sort-by first)))
      (div
@@ -117,6 +117,7 @@
         (span
          {:inner-text "Toggle", :style style-button, :event {:click (handle-toggle state)}})))
      (if (not (:fold-done? state))
-       (section
+       (list->
+        :section
         {:style (style-list (count done-tasks))}
         (->> done-tasks (sort by-touch-time) (map-indexed indexed-task) (sort-by first))))))))

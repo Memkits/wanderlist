@@ -1,13 +1,12 @@
 
 (ns app.comp.sidebar
-  (:require-macros (respo.macros :refer [defcomp <> div span input]))
   (:require [clojure.string :as string]
             [respo-ui.style :as ui]
             [hsl.core :refer [hsl]]
             [app.style.layout :as layout]
             [app.style.widget :as widget]
             [respo.comp.space :refer [=<]]
-            [respo.core :refer [create-comp]]
+            [respo.macros :refer [defcomp <> div span input list->]]
             [app.comp.group-line :refer [comp-group-line]]))
 
 (defn on-query-change [e dispatch! mutate!] (comment println e) (mutate! (:value e)))
@@ -81,7 +80,8 @@
      (span {:inner-text "Hide", :style style-add, :event {:click on-hide}}))
     (div
      {:style style-body, :event {:click on-empty-route}}
-     (div
+     (list->
+      :div
       {:style (style-box (count groups))}
       (->> groups
            (sort by-newest-group)

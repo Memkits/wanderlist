@@ -10,18 +10,24 @@
 (def base-info
   {:title "Wanderlist", :icon "http://logo.mvc-works.org/mvc.png", :inline-html "", :ssr nil})
 
+(def preview? (= "preview" js/process.env.prod))
+
 (defn prod-page []
   (let [html-content (make-string (comp-container schema/store))
-        manifest (js/JSON.parse (slurp "dist/assets-manifest.json"))
-        cljs-manifest (js/JSON.parse (slurp "dist/manifest.json"))]
+        webpack-info (js/JSON.parse (slurp "dist/webpack-manifest.json"))
+        cljs-info (js/JSON.parse (slurp "dist/cljs-manifest.json"))
+        cdn (if preview? "" "http://cdn.tiye.me/coworkflow/")
+        prefix-cdn (fn [x] (str cdn x))]
     (make-page
      html-content
      (merge
       base-info
-      {:styles [(aget manifest "main.css")],
-       :scripts [(aget manifest "main.js")
-                 (-> cljs-manifest (aget 0) (aget "js-name"))
-                 (-> cljs-manifest (aget 1) (aget "js-name"))],
+      {:styles ["http://cdn.tiye.me/favored-fonts/main.css"
+                (prefix-cdn (aget webpack-info "main.css"))],
+       :scripts (map
+                 prefix-cdn
+                 [(-> cljs-info (aget 0) (aget "js-name"))
+                  (-> cljs-info (aget 1) (aget "js-name"))]),
        :ssr "respo-ssr"}))))
 
 (defn dev-page []
@@ -29,7 +35,8 @@
    ""
    (merge
     base-info
-    {:styles [], :scripts ["/main.js" "/browser/lib.js" "/browser/main.js"]})))
+    {:styles ["http://localhost:8100/main.css"],
+     :scripts ["/main.js" "/browser/lib.js" "/browser/main.js"]})))
 
 (defn main! []
   (if (= js/process.env.env "dev")

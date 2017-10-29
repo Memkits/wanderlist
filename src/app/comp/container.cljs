@@ -1,9 +1,8 @@
 
 (ns app.comp.container
-  (:require-macros (respo.macros :refer (defcomp cursor-> <> div textarea span)))
   (:require [clojure.string :as string]
             [hsl.core :refer [hsl]]
-            [respo.core :refer [create-comp]]
+            [respo.macros :refer [defcomp cursor-> <> div textarea span]]
             [respo.comp.inspect :refer [comp-inspect]]
             [app.comp.sidebar :refer [comp-sidebar]]
             [app.comp.todolist :refer [comp-todolist]]))
