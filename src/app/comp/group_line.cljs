@@ -48,7 +48,7 @@
 
 (defcomp
  comp-group-line
- (group index selected? todo-size)
+ (group index selected?)
  (let [todo-size (count
                   (->> (:tasks group) (filter (fn [entry] (not (:done (val entry)))))))]
    (div

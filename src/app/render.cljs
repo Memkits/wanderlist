@@ -1,11 +1,10 @@
 
 (ns app.render
-  (:require-macros [respo.macros :refer [<> html head title script style meta' div link body]])
-  (:require [respo.core :refer [create-element]]
-            [respo.render.html :refer [make-string]]
+  (:require [respo.render.html :refer [make-string]]
             [app.comp.container :refer [comp-container]]
             [shell-page.core :refer [make-page slurp spit]]
-            [app.schema :as schema]))
+            [app.schema :as schema]
+            [cljs.reader :refer [read-string]]))
 
 (def base-info
   {:title "Wanderlist",
@@ -17,20 +16,15 @@
 
 (defn prod-page []
   (let [html-content (make-string (comp-container schema/store))
-        webpack-info (js/JSON.parse (slurp "dist/webpack-manifest.json"))
-        cljs-info (js/JSON.parse (slurp "dist/cljs-manifest.json"))
+        assets (read-string (slurp "dist/assets.edn"))
         cdn (if preview? "" "http://cdn.tiye.me/wanderlist/")
         prefix-cdn (fn [x] (str cdn x))]
     (make-page
      html-content
      (merge
       base-info
-      {:styles ["http://cdn.tiye.me/favored-fonts/main.css"
-                (prefix-cdn (aget webpack-info "main.css"))],
-       :scripts (map
-                 prefix-cdn
-                 [(-> cljs-info (aget 0) (aget "js-name"))
-                  (-> cljs-info (aget 1) (aget "js-name"))]),
+      {:styles ["http://cdn.tiye.me/favored-fonts/main.css"],
+       :scripts (map #(-> % :output-name prefix-cdn) assets),
        :ssr "respo-ssr"}))))
 
 (defn dev-page []
