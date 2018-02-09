@@ -1,7 +1,7 @@
 
 (ns app.comp.sidebar
   (:require [clojure.string :as string]
-            [respo-ui.style :as ui]
+            [respo-ui.core :as ui]
             [hsl.core :refer [hsl]]
             [app.style.layout :as layout]
             [app.style.widget :as widget]
@@ -9,14 +9,17 @@
             [respo.macros :refer [defcomp <> div span input list->]]
             [app.comp.group-line :refer [comp-group-line]]))
 
+(defn by-newest-group [group-a group-b]
+  (compare (:touched-time (val group-b)) (:touched-time (val group-a))))
+
+(defn on-empty-route [e dispatch!] (dispatch! :set-router {:name :table}))
+
+(defn on-group-add [state]
+  (fn [e dispatch!] (if (not (string/blank? state)) (do (dispatch! :add-group state)))))
+
+(defn on-hide [e dispatch!] (dispatch! :hide-sidebar nil))
+
 (defn on-query-change [e dispatch! mutate!] (comment println e) (mutate! (:value e)))
-
-(def style-header {:display "flex"})
-
-(def style-space
-  {:width "8px", :display "inline-block", :height "100%", :pointer-events "none"})
-
-(defn style-box [n] {:width "100%", :height (str (+ 80 (* n 40)) "px")})
 
 (def style-add
   (merge
@@ -26,8 +29,12 @@
     :font-family "Verdana",
     :width "auto"}))
 
-(def style-button
-  (merge widget/button {:background-color (hsl 120 40 84), :padding "0 16px", :width "auto"}))
+(def style-body
+  {:flex "1", :background-color (hsl 0 0 0 0), :position "relative", :overflow "auto"})
+
+(defn style-box [n] {:width "100%", :height (str (+ 80 (* n 40)) "px")})
+
+(def style-header {:display "flex"})
 
 (def style-query
   {:font-size "16px",
@@ -40,12 +47,6 @@
    :background-color (hsl 0 0 96),
    :border-radius 4})
 
-(def style-body
-  {:flex "1", :background-color (hsl 0 0 0 0), :position "relative", :overflow "auto"})
-
-(defn on-group-add [state]
-  (fn [e dispatch!] (if (not (string/blank? state)) (do (dispatch! :add-group state)))))
-
 (def style-sidebar
   {:background-color (hsl 0 0 100),
    :display "flex",
@@ -53,13 +54,6 @@
    :height "100%",
    :box-shadow (str "0px 0px 4px " (hsl 0 0 0 0.1)),
    :padding "16px"})
-
-(defn on-hide [e dispatch!] (dispatch! :hide-sidebar nil))
-
-(defn on-empty-route [e dispatch!] (dispatch! :set-router {:name :table}))
-
-(defn by-newest-group [group-a group-b]
-  (compare (:touched-time (val group-b)) (:touched-time (val group-a))))
 
 (defcomp
  comp-sidebar
@@ -70,16 +64,13 @@
     (div
      {:style (merge ui/row-center style-header)}
      (input
-      {:value state,
-       :placeholder "Group...",
-       :style style-query,
-       :event {:input on-query-change}})
+      {:value state, :placeholder "Group...", :style style-query, :on-input on-query-change})
      (=< 8 nil)
-     (span {:inner-text "Add", :style style-add, :event {:click (on-group-add state)}})
+     (span {:inner-text "Add", :style style-add, :on-click (on-group-add state)})
      (=< 8 nil)
-     (span {:inner-text "Hide", :style style-add, :event {:click on-hide}}))
+     (span {:inner-text "Hide", :style style-add, :on-click on-hide}))
     (div
-     {:style style-body, :event {:click on-empty-route}}
+     {:style style-body, :on-click on-empty-route}
      (list->
       :div
       {:style (style-box (count groups))}
@@ -93,3 +84,9 @@
                      selected? (= (:group-id router) (:id group))]
                  (comp-group-line group index selected?))]))
            (sort-by first)))))))
+
+(def style-button
+  (merge widget/button {:background-color (hsl 120 40 84), :padding "0 16px", :width "auto"}))
+
+(def style-space
+  {:width "8px", :display "inline-block", :height "100%", :pointer-events "none"})

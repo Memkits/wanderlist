@@ -7,15 +7,21 @@
             [app.comp.sidebar :refer [comp-sidebar]]
             [app.comp.todolist :refer [comp-todolist]]))
 
-(def style-hidden {:width 80, :cursor "pointer"})
-
 (defn on-show [e dispatch!] (dispatch! :show-sidebar nil))
 
-(def style-left-column {:width "34%", :display "flex", :flex-direction "column"})
+(def style-app
+  {:background-color (hsl 240 40 96),
+   :width "100%",
+   :height "100%",
+   :position "absolute",
+   :display "flex",
+   :font-family "Verdana"})
 
 (def style-divider {:width 1, :background-color (hsl 0 0 94)})
 
-(def style-right-column {:width "66%", :display "flex", :flex-direction "column"})
+(def style-hidden {:width 80, :cursor "pointer"})
+
+(def style-left-column {:width "34%", :display "flex", :flex-direction "column"})
 
 (def style-placeholder
   {:width "100%",
@@ -28,13 +34,7 @@
    :font-size "40px",
    :font-weight "light"})
 
-(def style-app
-  {:background-color (hsl 240 40 96),
-   :width "100%",
-   :height "100%",
-   :position "absolute",
-   :display "flex",
-   :font-family "Verdana"})
+(def style-right-column {:width "66%", :display "flex", :flex-direction "column"})
 
 (defcomp
  comp-container
@@ -46,7 +46,7 @@
       (div
        {:style style-left-column}
        (cursor-> :group comp-sidebar states (:groups store) router))
-      (div {:event {:click on-show}, :style style-hidden}))
+      (div {:on-click on-show, :style style-hidden}))
     (div {:style style-divider})
     (div
      {:style style-right-column}

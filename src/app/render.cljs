@@ -10,7 +10,15 @@
   {:title "Wanderlist",
    :icon "http://cdn.tiye.me/logo/memkits.png",
    :inline-html "",
-   :ssr nil})
+   :ssr nil,
+   :inline-styles [(slurp "./entry/main.css")]})
+
+(defn dev-page []
+  (make-page
+   ""
+   (merge
+    base-info
+    {:styles ["http://localhost:8100/main.css"], :scripts ["/lib.js" "/main.js"]})))
 
 (def preview? (= "preview" js/process.env.prod))
 
@@ -26,14 +34,6 @@
       {:styles ["http://cdn.tiye.me/favored-fonts/main.css"],
        :scripts (map #(-> % :output-name prefix-cdn) assets),
        :ssr "respo-ssr"}))))
-
-(defn dev-page []
-  (make-page
-   ""
-   (merge
-    base-info
-    {:styles ["http://localhost:8100/main.css"],
-     :scripts ["/main.js" "/browser/lib.js" "/browser/main.js"]})))
 
 (defn main! []
   (if (= js/process.env.env "dev")

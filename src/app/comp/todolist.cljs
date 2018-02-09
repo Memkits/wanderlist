@@ -1,7 +1,7 @@
 
 (ns app.comp.todolist
   (:require [hsl.core :refer [hsl]]
-            [respo-ui.style :as ui]
+            [respo-ui.core :as ui]
             [clojure.string :as string]
             [app.comp.task :refer [comp-task]]
             [app.style.widget :as widget]
@@ -10,17 +10,32 @@
             [respo.comp.space :refer [=<]]
             [respo.comp.inspect :refer [comp-inspect]]))
 
+(defn by-touch-time [entry-a entry-b]
+  (compare (:touched-time (val entry-b)) (:touched-time (val entry-a))))
+
+(defn handle-input [state]
+  (fn [e dispatch! mutate!] (mutate! (assoc state :draft (:value e)))))
+
+(defn handle-keydown [router state]
+  (fn [e dispatch!]
+    (if (and (= (:key-code e) 13) (> (count (:draft state)) 0))
+      (dispatch! :add-task {:text (:draft state), :group-id (:group-id router)}))))
+
 (defn handle-task-add [router state]
   (fn [e dispatch!]
     (if (not (string/blank? (:draft state)))
       (dispatch! :add-task {:text (:draft state), :group-id (:group-id router)}))))
 
-(def style-header {:display "flex", :flex-direction "column", :height "auto"})
-
 (defn handle-toggle [state]
   (fn [e dispatch! mutate!] (mutate! (update state :fold-done? not))))
 
-(def style-space {:width "100%", :height "8px"})
+(defn indexed-task [index entry] (let [[id task] entry] [id (comp-task task index)]))
+
+(def initial-state {:draft "", :fold-done? true})
+
+(def style-adder {:display "flex"})
+
+(def style-body {:flex "1", :overflow "auto", :padding-bottom "200px"})
 
 (def style-button
   (merge
@@ -31,21 +46,7 @@
     :display "inline-block",
     :width "auto"}))
 
-(def style-body {:flex "1", :overflow "auto", :padding-bottom "200px"})
-
-(defn style-list [size]
-  {:display "flex",
-   :flex-direction "column",
-   :position "relative",
-   :height (str (* 40 size) "px"),
-   :transition-duration "300ms"})
-
-(def style-adder {:display "flex"})
-
-(defn handle-input [state]
-  (fn [e dispatch! mutate!] (mutate! (assoc state :draft (:value e)))))
-
-(def style-hint {:color (hsl 0 0 60)})
+(def style-header {:display "flex", :flex-direction "column", :height "auto"})
 
 (def style-input
   {:outline "none",
@@ -57,9 +58,16 @@
    :background-color (hsl 0 0 96),
    :border-radius 4})
 
-(def initial-state {:draft "", :fold-done? true})
+(defn style-list [size]
+  {:display "flex",
+   :flex-direction "column",
+   :position "relative",
+   :height (str (* 40 size) "px"),
+   :transition-duration "300ms"})
 
 (def style-section {:margin-top "16px"})
+
+(def style-space {:width "100%", :height "8px"})
 
 (def style-todolist
   {:background-color (hsl 0 0 100),
@@ -69,16 +77,6 @@
    :flex-direction "column",
    :box-shadow (str "0 0 4px " (hsl 0 0 0 0.1)),
    :padding "16px"})
-
-(defn indexed-task [index entry] (let [[id task] entry] [id (comp-task task index)]))
-
-(defn by-touch-time [entry-a entry-b]
-  (compare (:touched-time (val entry-b)) (:touched-time (val entry-a))))
-
-(defn handle-keydown [router state]
-  (fn [e dispatch!]
-    (if (and (= (:key-code e) 13) (> (count (:draft state)) 0))
-      (dispatch! :add-task {:text (:draft state), :group-id (:group-id router)}))))
 
 (defcomp
  comp-todolist
@@ -98,12 +96,11 @@
        {:value (:draft state),
         :placeholder "Add a task...",
         :style style-input,
-        :event {:input (handle-input state), :keydown (handle-keydown router state)}})
+        :on-input (handle-input state),
+        :on-keydown (handle-keydown router state)})
       (=< 8 nil)
       (span
-       {:inner-text "Add",
-        :style style-button,
-        :event {:click (handle-task-add router state)}})))
+       {:inner-text "Add", :style style-button, :on-click (handle-task-add router state)})))
     (div {:style (layout/vspace 16)})
     (section
      {:style style-body}
@@ -114,10 +111,11 @@
      (div
       {:style style-section}
       (if (> (count done-tasks) 0)
-        (span
-         {:inner-text "Toggle", :style style-button, :event {:click (handle-toggle state)}})))
+        (span {:inner-text "Toggle", :style style-button, :on-click (handle-toggle state)})))
      (if (not (:fold-done? state))
        (list->
         :section
         {:style (style-list (count done-tasks))}
         (->> done-tasks (sort by-touch-time) (map-indexed indexed-task) (sort-by first))))))))
+
+(def style-hint {:color (hsl 0 0 60)})

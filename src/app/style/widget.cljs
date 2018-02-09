@@ -1,7 +1,5 @@
 
-(ns app.style.widget (:require [hsl.core :refer [hsl]] [respo-ui.style :as ui]))
-
-(def icon {:min-width 32, :text-align "center", :cursor "pointer"})
+(ns app.style.widget (:require [hsl.core :refer [hsl]] [respo-ui.core :as ui]))
 
 (def button
   (merge
@@ -13,3 +11,5 @@
     :color "white",
     :line-height "26px",
     :font-size "12px"}))
+
+(def icon {:min-width 32, :text-align "center", :cursor "pointer"})
