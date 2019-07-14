@@ -2,3 +2,6 @@
 /target
 /node_modules
 /dist
+
+.shadow-cljs/
+.nrepl-port

@@ -4,7 +4,7 @@
             [hsl.core :refer [hsl]]
             [respo-ui.core :as ui]
             [app.style.widget :as widget]
-            [respo.macros :refer [defcomp <> input div section]]))
+            [respo.core :refer [defcomp <> input div section]]))
 
 (defn handle-change [task]
   (fn [e dispatch!]
