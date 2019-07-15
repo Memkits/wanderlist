@@ -4,18 +4,13 @@
   "description": "Wanderlist ----",
   "main": "index.js",
   "scripts": {
-    "cdn": "rsync -avr --progress dist/* tiye.me:cdn/wanderlist",
-    "tiye": "rsync -avr --progress dist/{index.html,manifest.json} tiye.me:repo/Memkits/wanderlist/",
-    "upload": "yarn cdn && yarn tiye",
-    "release": "shadow-cljs release browser",
-    "watch": "shadow-cljs watch browser",
-    "compile-ssr": "shadow-cljs compile ssr",
-    "html-dev": "env=dev node target/ssr.js && cp entry/manifest.json target/",
-    "html": "node target/ssr.js && cp entry/manifest.json dist/",
-    "index.html": "yarn compile-ssr && yarn html-dev",
-    "del": "rm -rf dist/*",
-    "serve": "http-server dist",
-    "build": "yarn del && yarn release && yarn compile-ssr && yarn html"
+    "watch": "shadow-cljs watch client",
+    "serve": "http-server dist -s",
+    "build-cdn": "shadow-cljs clj-run build.main/build-cdn",
+    "build": "shadow-cljs clj-run build.main/build",
+    "up": "yarn build-cdn && tiye-up",
+    "page": "shadow-cljs clj-run build.main/page",
+    "ln": "cd target && rm -f entry && ln -s ../entry"
   },
   "repository": {
     "type": "git",
@@ -29,9 +24,10 @@
   "homepage": "https://github.com/Memkits/wanderlist#readme",
   "devDependencies": {
     "http-server": "^0.11.1",
-    "shadow-cljs": "^2.1.4"
+    "shadow-cljs": "^2.8.40"
   },
   "dependencies": {
-    "shortid": "^2.2.8"
+    "feather-icons": "^4.22.1",
+    "shortid": "^2.2.14"
   }
 }

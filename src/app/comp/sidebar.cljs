@@ -6,7 +6,7 @@
             [app.style.layout :as layout]
             [app.style.widget :as widget]
             [respo.comp.space :refer [=<]]
-            [respo.macros :refer [defcomp <> div span input list->]]
+            [respo.core :refer [defcomp <> div span input list->]]
             [app.comp.group-line :refer [comp-group-line]]))
 
 (defn by-newest-group [group-a group-b]

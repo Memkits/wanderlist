@@ -2,7 +2,7 @@
 (ns app.comp.container
   (:require [clojure.string :as string]
             [hsl.core :refer [hsl]]
-            [respo.macros :refer [defcomp cursor-> <> div textarea span]]
+            [respo.core :refer [defcomp cursor-> <> div textarea span]]
             [respo.comp.inspect :refer [comp-inspect]]
             [app.comp.sidebar :refer [comp-sidebar]]
             [app.comp.todolist :refer [comp-todolist]]))

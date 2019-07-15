@@ -1,0 +1,6 @@
+
+{:host "tiye.me"
+ :uploads [{:from "dist/*"
+            :to "cdn/wanderlist/"}
+           {:from "dist/{index.html,manifest.json}"
+            :to "repo/Memkits/wanderlist/"}]}

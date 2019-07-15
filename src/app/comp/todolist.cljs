@@ -6,7 +6,7 @@
             [app.comp.task :refer [comp-task]]
             [app.style.widget :as widget]
             [app.style.layout :as layout]
-            [respo.macros :refer [defcomp <> div section span header input list->]]
+            [respo.core :refer [defcomp <> div section span header input list->]]
             [respo.comp.space :refer [=<]]
             [respo.comp.inspect :refer [comp-inspect]]))
 
