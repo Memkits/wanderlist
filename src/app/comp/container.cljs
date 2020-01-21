@@ -56,4 +56,4 @@
            (cursor-> :todolist comp-todolist states router (get (:groups store) group-id))
            (div {:style style-placeholder} (<> span "Select a group?" nil)))
        (div {} (<> span "router not matching a page" nil))))
-    (comment comp-inspect "States" states nil))))
+    (comp-inspect "Store" store nil))))
