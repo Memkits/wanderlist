@@ -6,7 +6,7 @@
             [app.style.layout :as layout]
             [app.style.widget :as widget]
             [respo.comp.space :refer [=<]]
-            [respo.core :refer [defcomp <> div span input list->]]
+            [respo.core :refer [defcomp <> div span input list-> button]]
             [app.comp.group-line :refer [comp-group-line]]))
 
 (defn by-newest-group [group-a group-b]
@@ -20,14 +20,6 @@
 (defn on-hide [e dispatch!] (dispatch! :hide-sidebar nil))
 
 (defn on-query-change [e dispatch! mutate!] (comment println e) (mutate! (:value e)))
-
-(def style-add
-  (merge
-   widget/button
-   {:background-color (hsl 220 100 80),
-    :padding "0 16px",
-    :font-family "Verdana",
-    :width "auto"}))
 
 (def style-body
   {:flex "1", :background-color (hsl 0 0 0 0), :position "relative", :overflow "auto"})
@@ -66,9 +58,9 @@
      (input
       {:value state, :placeholder "Group...", :style style-query, :on-input on-query-change})
      (=< 8 nil)
-     (span {:inner-text "Add", :style style-add, :on-click (on-group-add state)})
+     (button {:inner-text "Add", :style ui/button, :on-click (on-group-add state)})
      (=< 8 nil)
-     (span {:inner-text "Hide", :style style-add, :on-click on-hide}))
+     (button {:inner-text "Hide", :style ui/button, :on-click on-hide}))
     (div
      {:style style-body, :on-click on-empty-route}
      (list->
@@ -84,9 +76,6 @@
                      selected? (= (:group-id router) (:id group))]
                  (comp-group-line group index selected?))]))
            (sort-by first)))))))
-
-(def style-button
-  (merge widget/button {:background-color (hsl 120 40 84), :padding "0 16px", :width "auto"}))
 
 (def style-space
   {:width "8px", :display "inline-block", :height "100%", :pointer-events "none"})

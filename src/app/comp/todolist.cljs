@@ -37,15 +37,6 @@
 
 (def style-body {:flex "1", :overflow "auto", :padding-bottom "200px"})
 
-(def style-button
-  (merge
-   widget/button
-   {:padding "0 16px",
-    :background-color (hsl 220 100 80),
-    :color "white",
-    :display "inline-block",
-    :width "auto"}))
-
 (def style-header {:display "flex", :flex-direction "column", :height "auto"})
 
 (def style-input
@@ -99,8 +90,7 @@
         :on-input (handle-input state),
         :on-keydown (handle-keydown router state)})
       (=< 8 nil)
-      (span
-       {:inner-text "Add", :style style-button, :on-click (handle-task-add router state)})))
+      (span {:inner-text "Add", :style ui/button, :on-click (handle-task-add router state)})))
     (div {:style (layout/vspace 16)})
     (section
      {:style style-body}
@@ -111,7 +101,7 @@
      (div
       {:style style-section}
       (if (> (count done-tasks) 0)
-        (span {:inner-text "Toggle", :style style-button, :on-click (handle-toggle state)})))
+        (span {:inner-text "Toggle", :style ui/button, :on-click (handle-toggle state)})))
      (if (not (:fold-done? state))
        (list->
         :section
