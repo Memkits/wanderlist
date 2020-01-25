@@ -61,7 +61,7 @@
                (let [group (last entry)
                      tasks (:tasks group)
                      selected? (= (:group-id router) (:id group))]
-                 (comp-group-line group index selected?))]))
+                 (cursor-> index comp-group-line states group index selected?))]))
            (sort-by first)))))))
 
 (def style-space

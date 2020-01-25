@@ -6,14 +6,12 @@
             [app.comp.task :refer [comp-task]]
             [app.style.widget :as widget]
             [app.style.layout :as layout]
-            [respo.core :refer [defcomp <> div section span header input list->]]
+            [respo.core :refer [defcomp cursor-> <> div section span header input list->]]
             [respo.comp.space :refer [=<]]
             [respo.comp.inspect :refer [comp-inspect]]))
 
 (defn by-touch-time [entry-a entry-b]
   (compare (:touched-time (val entry-b)) (:touched-time (val entry-a))))
-
-(defn indexed-task [index entry] (let [[id task] entry] [id (comp-task task index)]))
 
 (def style-adder {:display "flex"})
 
@@ -86,7 +84,12 @@
      (list->
       :section
       {:style (style-list (count todo-tasks))}
-      (->> todo-tasks (sort by-touch-time) (map-indexed indexed-task) (sort-by first)))
+      (->> todo-tasks
+           (sort by-touch-time)
+           (map-indexed
+            (fn [idx entry]
+              (let [[id task] entry] [id (cursor-> id comp-task states task idx)])))
+           (sort-by first)))
      (div
       {:style style-section}
       (if (> (count done-tasks) 0)
@@ -98,6 +101,11 @@
        (list->
         :section
         {:style (style-list (count done-tasks))}
-        (->> done-tasks (sort by-touch-time) (map-indexed indexed-task) (sort-by first))))))))
+        (->> done-tasks
+             (sort by-touch-time)
+             (map-indexed
+              (fn [idx entry]
+                (let [[id task] entry] [id (cursor-> id comp-task states task idx)])))
+             (sort-by first))))))))
 
 (def style-hint {:color (hsl 0 0 60)})
