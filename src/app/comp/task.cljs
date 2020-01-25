@@ -4,7 +4,8 @@
             [hsl.core :refer [hsl]]
             [respo-ui.core :as ui]
             [app.style.widget :as widget]
-            [respo.core :refer [defcomp <> input div section]]))
+            [respo.core :refer [defcomp <> input div section]]
+            [feather.core :refer [comp-i comp-icon]]))
 
 (defn style-done [done?] {:color (if done? (hsl 100 20 60) (hsl 20 90 80))})
 
@@ -28,10 +29,10 @@
  (let [done? (:done task)]
    (section
     {:style (style-task index)}
-    (div
-     {:class-name "ion-checkmark",
-      :style (merge ui/center widget/icon (style-done done?)),
-      :on-click (fn [e d!] (d! :toggle-task task))})
+    (comp-icon
+     :check
+     (merge ui/center widget/icon (style-done done?) {:font-size 24})
+     (fn [e d! m!] (d! :toggle-task task)))
     (input
      {:value (:text task),
       :style style-input,

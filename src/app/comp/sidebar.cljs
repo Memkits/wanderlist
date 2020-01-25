@@ -6,8 +6,9 @@
             [app.style.layout :as layout]
             [app.style.widget :as widget]
             [respo.comp.space :refer [=<]]
-            [respo.core :refer [defcomp <> div span input list-> button]]
-            [app.comp.group-line :refer [comp-group-line]]))
+            [respo.core :refer [defcomp cursor-> <> div span input list-> button]]
+            [app.comp.group-line :refer [comp-group-line]]
+            [respo-alerts.core :refer [comp-prompt]]))
 
 (defn by-newest-group [group-a group-b]
   (compare (:touched-time (val group-b)) (:touched-time (val group-a))))
@@ -18,17 +19,6 @@
 (defn style-box [n] {:width "100%", :height (str (+ 80 (* n 40)) "px")})
 
 (def style-header {:display "flex"})
-
-(def style-query
-  {:font-size "16px",
-   :padding "0 8px",
-   :line-height "32px",
-   :outline "none",
-   :border "none",
-   :width "100%",
-   :flex "1",
-   :background-color (hsl 0 0 96),
-   :border-radius 4})
 
 (def style-sidebar
   {:background-color (hsl 0 0 100),
@@ -45,20 +35,19 @@
    (div
     {:style style-sidebar}
     (div
-     {:style (merge ui/row-center style-header)}
-     (input
-      {:value state,
-       :placeholder "Group...",
-       :style style-query,
-       :on-input (fn [e d! m!] (comment println e) (m! (:value e)))})
-     (=< 8 nil)
-     (button
-      {:inner-text "Add",
-       :style ui/button,
-       :on-click (fn [e d!] (if (not (string/blank? state)) (do (d! :add-group state))))})
-     (=< 8 nil)
-     (button
-      {:inner-text "Hide", :style ui/button, :on-click (fn [e d!] (d! :hide-sidebar nil))}))
+     {:style (merge ui/row-parted style-header)}
+     (span nil)
+     (div
+      {}
+      (cursor->
+       :add
+       comp-prompt
+       states
+       {:trigger (button {:inner-text "Add", :style ui/button})}
+       (fn [result d! m!] (if (not (string/blank? result)) (do (d! :add-group result)))))
+      (=< 8 nil)
+      (button
+       {:inner-text "Hide", :style ui/button, :on-click (fn [e d!] (d! :hide-sidebar nil))})))
     (div
      {:style style-body, :on-click (fn [e d! m!] (d! :set-router {:name :table}))}
      (list->

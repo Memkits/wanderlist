@@ -4,7 +4,8 @@
             [hsl.core :refer [hsl]]
             [app.style.widget :as widget]
             [respo.comp.space :refer [=<]]
-            [respo-ui.core :as ui]))
+            [respo-ui.core :as ui]
+            [feather.core :refer [comp-i comp-icon]]))
 
 (defn style-group [index selected? todo?]
   {:padding "0px 8px",
@@ -42,19 +43,19 @@
                   (->> (:tasks group) (filter (fn [entry] (not (:done (val entry)))))))]
    (div
     {:style (style-group index selected? (> todo-size 0)),
-     :on-click (fn [e d!] (d! :set-router {:name :table, :group-id (:group group)}))}
+     :on-click (fn [e d! m!] (d! :set-router {:name :table, :group-id (:id group)}))}
     (<> span (str todo-size) style-small-hint)
     (=< 8 0)
-    (input
-     {:value (:text group),
+    (span
+     {:inner-text (:text group),
       :style style-input,
       :on-input (fn [e d!] (d! :update-group {:id (:id group), :text (:value e)}))})
     (=< 20 nil)
-    (div
-     {:class-name "ion-md-arrow-up",
-      :style (merge ui/center widget/icon style-promote),
-      :on-click (fn [e d!] (d! :touch-group (:id group)))})
-    (div
-     {:class-name "ion-md-close",
-      :style (merge ui/center widget/icon style-remove),
-      :on-click (fn [e d!] (d! :rm-group (:id group)) (d! :set-router {:name :table}))}))))
+    (comp-icon
+     :arrow-up
+     (merge ui/center widget/icon style-promote {:font-size 24})
+     (fn [e d!] (d! :touch-group (:id group))))
+    (comp-icon
+     :x
+     (merge ui/center widget/icon style-remove {:font-size 20, :color (hsl 0 0 80)})
+     (fn [e d! m!] (d! :rm-group (:id group)) (d! :set-router {:name :table}))))))
