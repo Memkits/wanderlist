@@ -12,15 +12,6 @@
 (defn by-newest-group [group-a group-b]
   (compare (:touched-time (val group-b)) (:touched-time (val group-a))))
 
-(defn on-empty-route [e dispatch!] (dispatch! :set-router {:name :table}))
-
-(defn on-group-add [state]
-  (fn [e dispatch!] (if (not (string/blank? state)) (do (dispatch! :add-group state)))))
-
-(defn on-hide [e dispatch!] (dispatch! :hide-sidebar nil))
-
-(defn on-query-change [e dispatch! mutate!] (comment println e) (mutate! (:value e)))
-
 (def style-body
   {:flex "1", :background-color (hsl 0 0 0 0), :position "relative", :overflow "auto"})
 
@@ -56,13 +47,20 @@
     (div
      {:style (merge ui/row-center style-header)}
      (input
-      {:value state, :placeholder "Group...", :style style-query, :on-input on-query-change})
+      {:value state,
+       :placeholder "Group...",
+       :style style-query,
+       :on-input (fn [e d! m!] (comment println e) (m! (:value e)))})
      (=< 8 nil)
-     (button {:inner-text "Add", :style ui/button, :on-click (on-group-add state)})
+     (button
+      {:inner-text "Add",
+       :style ui/button,
+       :on-click (fn [e d!] (if (not (string/blank? state)) (do (d! :add-group state))))})
      (=< 8 nil)
-     (button {:inner-text "Hide", :style ui/button, :on-click on-hide}))
+     (button
+      {:inner-text "Hide", :style ui/button, :on-click (fn [e d!] (d! :hide-sidebar nil))}))
     (div
-     {:style style-body, :on-click on-empty-route}
+     {:style style-body, :on-click (fn [e d! m!] (d! :set-router {:name :table}))}
      (list->
       :div
       {:style (style-box (count groups))}

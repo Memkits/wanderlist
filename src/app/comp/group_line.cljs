@@ -6,17 +6,6 @@
             [respo.comp.space :refer [=<]]
             [respo-ui.core :as ui]))
 
-(defn handle-click [group]
-  (fn [e dispatch!] (dispatch! :rm-group (:id group)) (dispatch! :set-router {:name :table})))
-
-(defn handle-promote [group] (fn [e dispatch!] (dispatch! :touch-group (:id group))))
-
-(defn on-edit [group-id]
-  (fn [e dispatch!] (dispatch! :update-group {:id group-id, :text (:value e)})))
-
-(defn on-group-route [group-id]
-  (fn [e dispatch!] (dispatch! :set-router {:name :table, :group-id group-id})))
-
 (defn style-group [index selected? todo?]
   {:padding "0px 8px",
    :color (if todo? (hsl 0 0 20) (hsl 0 0 70)),
@@ -53,16 +42,19 @@
                   (->> (:tasks group) (filter (fn [entry] (not (:done (val entry)))))))]
    (div
     {:style (style-group index selected? (> todo-size 0)),
-     :on-click (on-group-route (:id group))}
+     :on-click (fn [e d!] (d! :set-router {:name :table, :group-id (:group group)}))}
     (<> span (str todo-size) style-small-hint)
     (=< 8 0)
-    (input {:value (:text group), :style style-input, :on-input (on-edit (:id group))})
+    (input
+     {:value (:text group),
+      :style style-input,
+      :on-input (fn [e d!] (d! :update-group {:id (:id group), :text (:value e)}))})
     (=< 20 nil)
     (div
      {:class-name "ion-md-arrow-up",
       :style (merge ui/center widget/icon style-promote),
-      :on-click (handle-promote group)})
+      :on-click (fn [e d!] (d! :touch-group (:id group)))})
     (div
      {:class-name "ion-md-close",
       :style (merge ui/center widget/icon style-remove),
-      :on-click (handle-click group)}))))
+      :on-click (fn [e d!] (d! :rm-group (:id group)) (d! :set-router {:name :table}))}))))

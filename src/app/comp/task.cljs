@@ -6,16 +6,6 @@
             [app.style.widget :as widget]
             [respo.core :refer [defcomp <> input div section]]))
 
-(defn handle-change [task]
-  (fn [e dispatch!]
-    (dispatch! :update-task {:group-id (:group-id task), :id (:id task), :text (:value e)})))
-
-(defn handle-promote [task] (fn [e dispatch!] (dispatch! :touch-task task)))
-
-(defn handle-remove [task] (fn [e dispatch!] (dispatch! :rm-task task)))
-
-(defn handle-toggle [task] (fn [e dispatch!] (dispatch! :toggle-task task)))
-
 (defn style-done [done?] {:color (if done? (hsl 100 20 60) (hsl 20 90 80))})
 
 (def style-input
@@ -41,13 +31,17 @@
     (div
      {:class-name "ion-checkmark",
       :style (merge ui/center widget/icon (style-done done?)),
-      :on-click (handle-toggle task)})
-    (input {:value (:text task), :style style-input, :on-input (handle-change task)})
+      :on-click (fn [e d!] (d! :toggle-task task))})
+    (input
+     {:value (:text task),
+      :style style-input,
+      :on-input (fn [e d!]
+        (d! :update-task {:group-id (:group-id task), :id (:id task), :text (:value e)}))})
     (div
      {:class-name "ion-md-arrow-up",
       :style (merge widget/icon style-promote),
-      :on-click (handle-promote task)})
+      :on-click (fn [e d!] (d! :touch-task task))})
     (div
      {:class-name "ion-md-close",
       :style (merge widget/icon style-remove),
-      :on-click (handle-remove task)}))))
+      :on-click (fn [e d!] (d! :rm-task task))}))))

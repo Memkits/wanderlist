@@ -7,8 +7,6 @@
             [app.comp.sidebar :refer [comp-sidebar]]
             [app.comp.todolist :refer [comp-todolist]]))
 
-(defn on-show [e dispatch!] (dispatch! :show-sidebar nil))
-
 (def style-app
   {:background-color (hsl 240 40 96),
    :width "100%",
@@ -46,7 +44,7 @@
       (div
        {:style style-left-column}
        (cursor-> :group comp-sidebar states (:groups store) router))
-      (div {:on-click on-show, :style style-hidden}))
+      (div {:on-click (fn [e d! m!] (d! :show-sidebar nil)), :style style-hidden}))
     (div {:style style-divider})
     (div
      {:style style-right-column}
