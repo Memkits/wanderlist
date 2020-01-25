@@ -5,9 +5,8 @@
             [respo.core :refer [defcomp cursor-> <> div textarea span]]
             [respo.comp.inspect :refer [comp-inspect]]
             [app.comp.sidebar :refer [comp-sidebar]]
-            [app.comp.todolist :refer [comp-todolist]]))
-
-(defn on-show [e dispatch!] (dispatch! :show-sidebar nil))
+            [app.comp.todolist :refer [comp-todolist]]
+            [respo-ui.core :as ui]))
 
 (def style-app
   {:background-color (hsl 240 40 96),
@@ -30,9 +29,10 @@
    :display "flex",
    :justify-content "center",
    :align-items "center",
-   :color (hsl 0 0 80),
-   :font-size "40px",
-   :font-weight "light"})
+   :color (hsl 0 0 86),
+   :font-size 48,
+   :font-weight 300,
+   :font-family ui/font-fancy})
 
 (def style-right-column {:width "66%", :display "flex", :flex-direction "column"})
 
@@ -46,7 +46,7 @@
       (div
        {:style style-left-column}
        (cursor-> :group comp-sidebar states (:groups store) router))
-      (div {:on-click on-show, :style style-hidden}))
+      (div {:on-click (fn [e d! m!] (d! :show-sidebar nil)), :style style-hidden}))
     (div {:style style-divider})
     (div
      {:style style-right-column}
@@ -56,4 +56,4 @@
            (cursor-> :todolist comp-todolist states router (get (:groups store) group-id))
            (div {:style style-placeholder} (<> span "Select a group?" nil)))
        (div {} (<> span "router not matching a page" nil))))
-    (comp-inspect "Store" store nil))))
+    (comp-inspect "Store" store {:bottom 0}))))
