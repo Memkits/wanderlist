@@ -3,12 +3,11 @@
   (:require [clojure.string :as string]
             [respo-ui.core :as ui]
             [hsl.core :refer [hsl]]
-            [app.style.layout :as layout]
-            [app.style.widget :as widget]
             [respo.comp.space :refer [=<]]
             [respo.core :refer [defcomp cursor-> <> div span input list-> button]]
             [app.comp.group-line :refer [comp-group-line]]
-            [respo-alerts.core :refer [comp-prompt]]))
+            [respo-alerts.core :refer [comp-prompt]]
+            [feather.core :refer [comp-i comp-icon]]))
 
 (defn by-newest-group [group-a group-b]
   (compare (:touched-time (val group-b)) (:touched-time (val group-a))))
@@ -43,11 +42,13 @@
        :add
        comp-prompt
        states
-       {:trigger (button {:inner-text "Add", :style ui/button})}
+       {:trigger (comp-i :plus 20 (hsl 0 0 80))}
        (fn [result d! m!] (if (not (string/blank? result)) (do (d! :add-group result)))))
-      (=< 8 nil)
-      (button
-       {:inner-text "Hide", :style ui/button, :on-click (fn [e d!] (d! :hide-sidebar nil))})))
+      (=< 16 nil)
+      (comp-icon
+       :sidebar
+       {:font-size 16, :color (hsl 0 0 80), :cursor :pointer}
+       (fn [e d! m!] (d! :hide-sidebar nil)))))
     (div
      {:style style-body, :on-click (fn [e d! m!] (d! :set-router {:name :table}))}
      (list->
@@ -63,6 +64,3 @@
                      selected? (= (:group-id router) (:id group))]
                  (cursor-> index comp-group-line states group index selected?))]))
            (sort-by first)))))))
-
-(def style-space
-  {:width "8px", :display "inline-block", :height "100%", :pointer-events "none"})

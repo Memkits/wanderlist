@@ -4,11 +4,10 @@
             [respo-ui.core :as ui]
             [clojure.string :as string]
             [app.comp.task :refer [comp-task]]
-            [app.style.widget :as widget]
-            [app.style.layout :as layout]
             [respo.core :refer [defcomp cursor-> <> div section span header input list->]]
             [respo.comp.space :refer [=<]]
-            [respo.comp.inspect :refer [comp-inspect]]))
+            [respo.comp.inspect :refer [comp-inspect]]
+            [feather.core :refer [comp-icon comp-i]]))
 
 (defn by-touch-time [entry-a entry-b]
   (compare (:touched-time (val entry-b)) (:touched-time (val entry-a))))
@@ -38,8 +37,6 @@
 
 (def style-section {:margin-top "16px"})
 
-(def style-space {:width "100%", :height "8px"})
-
 (def style-todolist
   {:background-color (hsl 0 0 100),
    :width "100%",
@@ -60,7 +57,7 @@
     {:style style-todolist}
     (header
      {:style style-header}
-     (div {:style style-space})
+     (=< nil 8)
      (div
       {:style (merge ui/row-center style-adder)}
       (input
@@ -72,13 +69,13 @@
           (if (and (= (:key-code e) 13) (> (count (:draft state)) 0))
             (d! :add-task {:text (:draft state), :group-id (:group-id router)})))})
       (=< 8 nil)
-      (span
-       {:inner-text "Add",
-        :style ui/button,
-        :on-click (fn [e d!]
-          (if (not (string/blank? (:draft state)))
-            (d! :add-task {:text (:draft state), :group-id (:group-id router)})))})))
-    (div {:style (layout/vspace 16)})
+      (comp-icon
+       :corner-down-left
+       {:font-size 20, :color (hsl 200 80 80), :cursor :pointer}
+       (fn [e d!]
+         (if (not (string/blank? (:draft state)))
+           (d! :add-task {:text (:draft state), :group-id (:group-id router)}))))))
+    (=< nil 16)
     (section
      {:style style-body}
      (list->
@@ -90,13 +87,15 @@
             (fn [idx entry]
               (let [[id task] entry] [id (cursor-> id comp-task states task idx)])))
            (sort-by first)))
-     (div
-      {:style style-section}
-      (if (> (count done-tasks) 0)
-        (span
-         {:inner-text "Toggle",
-          :style ui/button,
-          :on-click (fn [e d! m!] (m! (update state :fold-done? not)))})))
+     (if (> (count done-tasks) 0)
+       (div
+        {:style (merge ui/row-middle style-section)}
+        (<> "Done tasks" {:color (hsl 0 0 80), :font-size 14})
+        (=< 8 nil)
+        (comp-icon
+         (if (:fold-done? state) :eye-off :eye)
+         {:font-size 16, :color (hsl 200 80 80), :cursor :pointer}
+         (fn [e d! m!] (m! (update state :fold-done? not))))))
      (if (not (:fold-done? state))
        (list->
         :section
@@ -107,5 +106,3 @@
               (fn [idx entry]
                 (let [[id task] entry] [id (cursor-> id comp-task states task idx)])))
              (sort-by first))))))))
-
-(def style-hint {:color (hsl 0 0 60)})

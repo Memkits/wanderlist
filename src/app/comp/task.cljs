@@ -3,7 +3,6 @@
   (:require [clojure.string :as string]
             [hsl.core :refer [hsl]]
             [respo-ui.core :as ui]
-            [app.style.widget :as widget]
             [respo.core :refer [defcomp cursor-> <> input div section]]
             [feather.core :refer [comp-i comp-icon]]
             [respo-alerts.core :refer [comp-confirm]]))
@@ -28,7 +27,7 @@
     {:style (style-task index)}
     (comp-icon
      :check
-     (merge ui/center widget/icon (style-done done?) {:font-size 24})
+     (merge (style-done done?) {:font-size 20, :cursor :pointer})
      (fn [e d! m!] (d! :toggle-task task)))
     (input
      {:value (:text task),
@@ -37,7 +36,7 @@
         (d! :update-task {:group-id (:group-id task), :id (:id task), :text (:value e)}))})
     (comp-icon
      :arrow-up
-     (merge widget/icon {:font-size 20, :color (hsl 120 50 80)})
+     {:font-size 20, :color (hsl 120 50 80), :cursor "pointer"}
      (fn [e d! m!] (d! :touch-task task)))
     (cursor->
      :remove
