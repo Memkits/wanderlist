@@ -3,12 +3,11 @@
   (:require [clojure.string :as string]
             [respo-ui.core :as ui]
             [hsl.core :refer [hsl]]
-            [app.style.layout :as layout]
-            [app.style.widget :as widget]
             [respo.comp.space :refer [=<]]
             [respo.core :refer [defcomp cursor-> <> div span input list-> button]]
             [app.comp.group-line :refer [comp-group-line]]
-            [respo-alerts.core :refer [comp-prompt]]))
+            [respo-alerts.core :refer [comp-prompt]]
+            [feather.core :refer [comp-i comp-icon]]))
 
 (defn by-newest-group [group-a group-b]
   (compare (:touched-time (val group-b)) (:touched-time (val group-a))))
@@ -18,15 +17,14 @@
 
 (defn style-box [n] {:width "100%", :height (str (+ 80 (* n 40)) "px")})
 
-(def style-header {:display "flex"})
-
 (def style-sidebar
   {:background-color (hsl 0 0 100),
    :display "flex",
    :flex-direction "column",
    :height "100%",
    :box-shadow (str "0px 0px 4px " (hsl 0 0 0 0.1)),
-   :padding "16px"})
+   :padding "16px",
+   :width "24%"})
 
 (defcomp
  comp-sidebar
@@ -35,19 +33,21 @@
    (div
     {:style style-sidebar}
     (div
-     {:style (merge ui/row-parted style-header)}
+     {:style (merge ui/row-parted)}
      (span nil)
      (div
-      {}
+      {:style ui/row-middle}
       (cursor->
        :add
        comp-prompt
        states
-       {:trigger (button {:inner-text "Add", :style ui/button})}
+       {:trigger (comp-i :plus 20 (hsl 0 0 80))}
        (fn [result d! m!] (if (not (string/blank? result)) (do (d! :add-group result)))))
-      (=< 8 nil)
-      (button
-       {:inner-text "Hide", :style ui/button, :on-click (fn [e d!] (d! :hide-sidebar nil))})))
+      (=< 16 nil)
+      (comp-icon
+       :sidebar
+       {:font-size 16, :color (hsl 0 0 80), :cursor :pointer}
+       (fn [e d! m!] (d! :hide-sidebar nil)))))
     (div
      {:style style-body, :on-click (fn [e d! m!] (d! :set-router {:name :table}))}
      (list->
@@ -63,6 +63,3 @@
                      selected? (= (:group-id router) (:id group))]
                  (cursor-> index comp-group-line states group index selected?))]))
            (sort-by first)))))))
-
-(def style-space
-  {:width "8px", :display "inline-block", :height "100%", :pointer-events "none"})
