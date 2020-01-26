@@ -4,7 +4,9 @@
             [respo-ui.core :as ui]
             [clojure.string :as string]
             [app.comp.task :refer [comp-task]]
-            [respo.core :refer [defcomp cursor-> <> div section span header input list->]]
+            [respo.core
+             :refer
+             [defcomp cursor-> <> div section span header input list-> button]]
             [respo.comp.space :refer [=<]]
             [respo.comp.inspect :refer [comp-inspect]]
             [feather.core :refer [comp-icon comp-i]]
@@ -27,7 +29,15 @@
     comp-prompt
     states
     {:trigger (comp-i :edit 14 (hsl 200 80 80)), :initial (:text group)}
-    (fn [result d! m!] (d! :update-group {:id (:id group), :text result}))))
+    (fn [result d! m!] (d! :update-group {:id (:id group), :text result})))
+   (=< 16 nil)
+   (cursor->
+    :add
+    comp-prompt
+    states
+    {:trigger (button {:style ui/button, :inner-text "Add task"})}
+    (fn [result d! m!]
+      (when-not (string/blank? result) (d! :add-task {:text result, :group-id (:id group)})))))
   (div
    {}
    (comp-icon
@@ -42,21 +52,7 @@
     {:trigger (comp-i :x 14 (hsl 0 100 70))}
     (fn [e d! m!] (d! :rm-group (:id group)) (d! :set-router {:name :table}))))))
 
-(def style-adder {:display "flex"})
-
-(def style-body {:flex "1", :overflow "auto", :padding-bottom "200px"})
-
-(def style-header {:display "flex", :flex-direction "column", :height "auto"})
-
-(def style-input
-  {:outline "none",
-   :border "none",
-   :padding "0px 8px",
-   :height "32px",
-   :font-size "16px",
-   :flex "1",
-   :background-color (hsl 0 0 96),
-   :border-radius 4})
+(def style-body {:padding-bottom "120px"})
 
 (defn style-list [size]
   {:display "flex",
@@ -69,12 +65,10 @@
 
 (def style-todolist
   {:background-color (hsl 0 0 100),
-   :width "100%",
    :height "100%",
-   :display "flex",
-   :flex-direction "column",
    :box-shadow (str "0 0 4px " (hsl 0 0 0 0.1)),
-   :padding "16px"})
+   :padding "16px",
+   :overflow :auto})
 
 (defcomp
  comp-todolist
@@ -86,27 +80,6 @@
    (div
     {:style style-todolist}
     (cursor-> :group comp-group-banner states group)
-    (=< nil 16)
-    (header
-     {:style style-header}
-     (=< nil 8)
-     (div
-      {:style (merge ui/row-center style-adder)}
-      (input
-       {:value (:draft state),
-        :placeholder "Add a task...",
-        :style style-input,
-        :on-input (fn [e d! m!] (m! (assoc state :draft (:value e)))),
-        :on-keydown (fn [e d!]
-          (if (and (= (:key-code e) 13) (> (count (:draft state)) 0))
-            (d! :add-task {:text (:draft state), :group-id (:group-id router)})))})
-      (=< 8 nil)
-      (comp-icon
-       :corner-down-left
-       {:font-size 20, :color (hsl 200 80 80), :cursor :pointer}
-       (fn [e d!]
-         (if (not (string/blank? (:draft state)))
-           (d! :add-task {:text (:draft state), :group-id (:group-id router)}))))))
     (=< nil 16)
     (section
      {:style style-body}

@@ -11,7 +11,13 @@
 (defn style-done [done?] {:color (if done? (hsl 100 20 60) (hsl 20 90 80))})
 
 (def style-input
-  {:outline "none", :border "none", :padding "0px 8px", :font-size "16px", :flex "1"})
+  {:outline "none",
+   :border "none",
+   :padding "0px 8px",
+   :line-height "32px",
+   :font-size "16px",
+   :flex "1",
+   :margin "0 8px"})
 
 (defn style-task [index]
   {:display "flex",
@@ -25,7 +31,7 @@
  (states task index)
  (let [done? (:done task)]
    (section
-    {:style (style-task index)}
+    {:style (merge ui/row-middle (style-task index))}
     (comp-icon
      :check
      (merge (style-done done?) {:font-size 20, :cursor :pointer})
@@ -33,6 +39,7 @@
     (input
      {:value (:text task),
       :style style-input,
+      :class-name "task-input",
       :on-input (fn [e d!]
         (d! :update-task {:group-id (:group-id task), :id (:id task), :text (:value e)}))})
     (comp-icon
@@ -44,5 +51,5 @@
      :remove
      comp-confirm
      states
-     {:trigger (comp-i :trash 14 (hsl 0 100 70))}
+     {:trigger (comp-i :x 14 (hsl 0 100 70))}
      (fn [e d! m!] (d! :rm-task task))))))

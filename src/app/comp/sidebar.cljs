@@ -23,7 +23,8 @@
    :flex-direction "column",
    :height "100%",
    :box-shadow (str "0px 0px 4px " (hsl 0 0 0 0.1)),
-   :padding "16px"})
+   :padding "16px",
+   :width "24%"})
 
 (defcomp
  comp-sidebar
@@ -35,7 +36,7 @@
      {:style (merge ui/row-parted)}
      (span nil)
      (div
-      {}
+      {:style ui/row-middle}
       (cursor->
        :add
        comp-prompt
