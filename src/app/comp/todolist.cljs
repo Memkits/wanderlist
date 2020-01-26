@@ -59,7 +59,7 @@
    :flex-direction "column",
    :position "relative",
    :height (str (* 40 size) "px"),
-   :transition-duration "300ms"})
+   :transition-duration "0ms"})
 
 (def style-section {:margin-top "16px"})
 
@@ -76,22 +76,25 @@
  (let [tasks (:tasks group)
        state (or (:data states) {:draft "", :fold-done? true})
        todo-tasks (->> tasks (filter (fn [entry] (not (:done (val entry))))))
-       done-tasks (->> tasks (filter (fn [entry] (:done (val entry)))))]
+       done-tasks (->> tasks (filter (fn [entry] (:done (val entry)))))
+       render-task-list (fn [tasks]
+                          (list->
+                           :section
+                           {:style (style-list (count tasks))}
+                           (->> tasks
+                                (sort by-touch-time)
+                                (map-indexed
+                                 (fn [idx entry]
+                                   (let [[id task] entry]
+                                     [id (cursor-> id comp-task states task idx)])))
+                                (sort-by first))))]
    (div
     {:style style-todolist}
     (cursor-> :group comp-group-banner states group)
     (=< nil 16)
     (section
      {:style style-body}
-     (list->
-      :section
-      {:style (style-list (count todo-tasks))}
-      (->> todo-tasks
-           (sort by-touch-time)
-           (map-indexed
-            (fn [idx entry]
-              (let [[id task] entry] [id (cursor-> id comp-task states task idx)])))
-           (sort-by first)))
+     (render-task-list todo-tasks)
      (if (> (count done-tasks) 0)
        (div
         {:style (merge ui/row-middle style-section)}
@@ -101,13 +104,4 @@
          (if (:fold-done? state) :eye-off :eye)
          {:font-size 16, :color (hsl 200 80 80), :cursor :pointer}
          (fn [e d! m!] (m! (update state :fold-done? not))))))
-     (if (not (:fold-done? state))
-       (list->
-        :section
-        {:style (style-list (count done-tasks))}
-        (->> done-tasks
-             (sort by-touch-time)
-             (map-indexed
-              (fn [idx entry]
-                (let [[id task] entry] [id (cursor-> id comp-task states task idx)])))
-             (sort-by first))))))))
+     (if (not (:fold-done? state)) (render-task-list done-tasks))))))
