@@ -7,10 +7,40 @@
             [respo.core :refer [defcomp cursor-> <> div section span header input list->]]
             [respo.comp.space :refer [=<]]
             [respo.comp.inspect :refer [comp-inspect]]
-            [feather.core :refer [comp-icon comp-i]]))
+            [feather.core :refer [comp-icon comp-i]]
+            [respo-alerts.core :refer [comp-prompt comp-confirm]]))
 
 (defn by-touch-time [entry-a entry-b]
   (compare (:touched-time (val entry-b)) (:touched-time (val entry-a))))
+
+(defcomp
+ comp-group-banner
+ (states group)
+ (div
+  {:style ui/row-parted}
+  (div
+   {:style ui/row-middle}
+   (<> (:text group) {:font-size 20, :font-family ui/font-fancy})
+   (=< 8 nil)
+   (cursor->
+    :edit
+    comp-prompt
+    states
+    {:trigger (comp-i :edit 14 (hsl 200 80 80)), :initial (:text group)}
+    (fn [result d! m!] (d! :update-group {:id (:id group), :text result}))))
+  (div
+   {}
+   (comp-icon
+    :arrow-up
+    {:font-size 14, :color (hsl 200 80 80), :cursor "pointer"}
+    (fn [e d!] (d! :touch-group (:id group))))
+   (=< 8 nil)
+   (cursor->
+    :remove
+    comp-confirm
+    states
+    {:trigger (comp-i :x 14 (hsl 0 100 70))}
+    (fn [e d! m!] (d! :rm-group (:id group)) (d! :set-router {:name :table}))))))
 
 (def style-adder {:display "flex"})
 
@@ -55,6 +85,8 @@
        done-tasks (->> tasks (filter (fn [entry] (:done (val entry)))))]
    (div
     {:style style-todolist}
+    (cursor-> :group comp-group-banner states group)
+    (=< nil 16)
     (header
      {:style style-header}
      (=< nil 8)

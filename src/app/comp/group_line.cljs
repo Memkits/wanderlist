@@ -43,21 +43,4 @@
     (span
      {:inner-text (:text group),
       :style style-input,
-      :on-input (fn [e d!] (d! :update-group {:id (:id group), :text (:value e)}))})
-    (=< 20 nil)
-    (cursor->
-     :edit
-     comp-prompt
-     states
-     {:trigger (comp-i :edit 20 (hsl 200 80 80)), :initial (:text group)}
-     (fn [result d! m!] (d! :update-group {:id (:id group), :text result})))
-    (comp-icon
-     :arrow-up
-     {:font-size 20, :color (hsl 200 80 80), :cursor "pointer"}
-     (fn [e d!] (d! :touch-group (:id group))))
-    (cursor->
-     :remove
-     comp-confirm
-     states
-     {:trigger (comp-i :x 20 (hsl 0 100 70))}
-     (fn [e d! m!] (d! :rm-group (:id group)) (d! :set-router {:name :table}))))))
+      :on-input (fn [e d!] (d! :update-group {:id (:id group), :text (:value e)}))}))))

@@ -5,7 +5,8 @@
             [respo-ui.core :as ui]
             [respo.core :refer [defcomp cursor-> <> input div section]]
             [feather.core :refer [comp-i comp-icon]]
-            [respo-alerts.core :refer [comp-confirm]]))
+            [respo-alerts.core :refer [comp-confirm]]
+            [respo.comp.space :refer [=<]]))
 
 (defn style-done [done?] {:color (if done? (hsl 100 20 60) (hsl 20 90 80))})
 
@@ -36,11 +37,12 @@
         (d! :update-task {:group-id (:group-id task), :id (:id task), :text (:value e)}))})
     (comp-icon
      :arrow-up
-     {:font-size 20, :color (hsl 120 50 80), :cursor "pointer"}
+     {:font-size 14, :color (hsl 150 50 80), :cursor :pointer}
      (fn [e d! m!] (d! :touch-task task)))
+    (=< 8 nil)
     (cursor->
      :remove
      comp-confirm
      states
-     {:trigger (comp-i :trash 20 (hsl 0 100 70))}
+     {:trigger (comp-i :trash 14 (hsl 0 100 70))}
      (fn [e d! m!] (d! :rm-task task))))))

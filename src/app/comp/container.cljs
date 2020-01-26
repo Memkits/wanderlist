@@ -8,19 +8,11 @@
             [app.comp.todolist :refer [comp-todolist]]
             [respo-ui.core :as ui]))
 
-(def style-app
-  {:background-color (hsl 240 40 96),
-   :width "100%",
-   :height "100%",
-   :position "absolute",
-   :display "flex",
-   :font-family "Verdana"})
-
 (def style-divider {:width 1, :background-color (hsl 0 0 94)})
 
 (def style-hidden {:width 80, :cursor "pointer"})
 
-(def style-left-column {:width "34%", :display "flex", :flex-direction "column"})
+(def style-left-column {:width "28%", :display "flex", :flex-direction "column"})
 
 (def style-placeholder
   {:width "100%",
@@ -34,14 +26,12 @@
    :font-weight 300,
    :font-family ui/font-fancy})
 
-(def style-right-column {:width "66%", :display "flex", :flex-direction "column"})
-
 (defcomp
  comp-container
  (store)
  (let [router (:router store), group-id (:group-id router), states (:states store)]
    (div
-    {:style style-app}
+    {:style (merge ui/fullscreen ui/global ui/row {:background-color (hsl 240 40 96)})}
     (if (:show-sidebar? store)
       (div
        {:style style-left-column}
@@ -49,7 +39,7 @@
       (div {:on-click (fn [e d! m!] (d! :show-sidebar nil)), :style style-hidden}))
     (div {:style style-divider})
     (div
-     {:style style-right-column}
+     {:style (merge ui/expand {:max-width 800})}
      (case (:name router)
        :table
          (if (some? group-id)

@@ -17,8 +17,6 @@
 
 (defn style-box [n] {:width "100%", :height (str (+ 80 (* n 40)) "px")})
 
-(def style-header {:display "flex"})
-
 (def style-sidebar
   {:background-color (hsl 0 0 100),
    :display "flex",
@@ -34,7 +32,7 @@
    (div
     {:style style-sidebar}
     (div
-     {:style (merge ui/row-parted style-header)}
+     {:style (merge ui/row-parted)}
      (span nil)
      (div
       {}
