@@ -1,7 +1,6 @@
 
 (ns app.main
   (:require [clojure.string :as string]
-            [respo.cursor :refer [mutate]]
             [respo.core :refer [render! clear-cache! realize-ssr! render-element]]
             [app.comp.container :refer [comp-container]]
             [app.updater :refer [updater]]
@@ -11,11 +10,7 @@
 (defonce *store (atom schema/store))
 
 (defn dispatch! [op op-data]
-  (let [now (.valueOf (js/Date.))
-        new-store (if (= :states op)
-                    (update @*store :states (mutate op-data))
-                    (updater @*store op op-data now now))]
-    (reset! *store new-store)))
+  (reset! *store (updater @*store op op-data (.now js/Date) (.now js/Date))))
 
 (def mount-target (.querySelector js/document ".app"))
 

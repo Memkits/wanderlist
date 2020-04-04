@@ -1,6 +1,6 @@
 
 (ns app.comp.group-line
-  (:require [respo.core :refer [defcomp cursor-> <> div span input]]
+  (:require [respo.core :refer [defcomp >> <> div span input]]
             [hsl.core :refer [hsl]]
             [respo.comp.space :refer [=<]]
             [respo-ui.core :as ui]
@@ -32,7 +32,7 @@
 
 (defcomp
  comp-group-line
- (states group index selected?)
+ (group index selected?)
  (let [todo-size (count
                   (->> (:tasks group) (filter (fn [entry] (not (:done (val entry)))))))]
    (div

@@ -2,7 +2,7 @@
 (ns app.comp.container
   (:require [clojure.string :as string]
             [hsl.core :refer [hsl]]
-            [respo.core :refer [defcomp cursor-> <> div textarea span]]
+            [respo.core :refer [defcomp >> <> div textarea span]]
             [respo.comp.inspect :refer [comp-inspect]]
             [app.comp.sidebar :refer [comp-sidebar]]
             [app.comp.todolist :refer [comp-todolist]]
@@ -33,7 +33,7 @@
     {:style (merge ui/fullscreen ui/global ui/row {:background-color (hsl 240 40 96)})}
     (comp-margin)
     (if (:show-sidebar? store)
-      (cursor-> :group comp-sidebar states (:groups store) router)
+      (comp-sidebar (>> states :group) (:groups store) router)
       (div
        {:style {:padding 16}}
        (comp-icon
@@ -46,7 +46,7 @@
      (case (:name router)
        :table
          (if (some? group-id)
-           (cursor-> :todolist comp-todolist states router (get (:groups store) group-id))
+           (comp-todolist (>> states :todolist) router (get (:groups store) group-id))
            (div {:style style-placeholder} (<> span "Select a group?" nil)))
        (div {} (<> span "router not matching a page" nil))))
     (comp-margin)

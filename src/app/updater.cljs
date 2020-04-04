@@ -1,8 +1,12 @@
 
-(ns app.updater (:require [hsl.core :refer [hsl]] [app.schema :as schema]))
+(ns app.updater
+  (:require [hsl.core :refer [hsl]]
+            [app.schema :as schema]
+            [respo.cursor :refer [update-states]]))
 
 (defn updater [store op-type op-data op-id op-time]
   (case op-type
+    :states (update-states store op-data)
     :add-group
       (-> store
           (update

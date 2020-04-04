@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "watch": "shadow-cljs watch client",
-    "serve": "http-server dist -s",
     "build-cdn": "shadow-cljs clj-run build.main/build-cdn",
     "build": "shadow-cljs clj-run build.main/build",
     "up": "yarn build-cdn && tiye-up",
@@ -23,11 +22,10 @@
   },
   "homepage": "https://github.com/Memkits/wanderlist#readme",
   "devDependencies": {
-    "http-server": "^0.12.1",
-    "shadow-cljs": "^2.8.83"
+    "shadow-cljs": "^2.8.94"
   },
   "dependencies": {
-    "feather-icons": "^4.25.0",
+    "feather-icons": "^4.26.0",
     "shortid": "^2.2.15"
   }
 }
