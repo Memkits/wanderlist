@@ -4,9 +4,7 @@
             [respo-ui.core :as ui]
             [clojure.string :as string]
             [app.comp.task :refer [comp-task]]
-            [respo.core
-             :refer
-             [defcomp cursor-> <> div section span header input list-> button]]
+            [respo.core :refer [defcomp >> <> div section span header input list-> button]]
             [respo.comp.space :refer [=<]]
             [respo.comp.inspect :refer [comp-inspect]]
             [feather.core :refer [comp-icon comp-i]]
@@ -24,17 +22,13 @@
    {:style ui/row-middle}
    (<> (:text group) {:font-size 20, :font-family ui/font-fancy})
    (=< 8 nil)
-   (cursor->
-    :edit
-    comp-prompt
-    states
+   (comp-prompt
+    (>> states :edit)
     {:trigger (comp-i :edit 14 (hsl 200 80 80)), :initial (:text group)}
     (fn [result d! m!] (d! :update-group {:id (:id group), :text result})))
    (=< 16 nil)
-   (cursor->
-    :add
-    comp-prompt
-    states
+   (comp-prompt
+    (>> states :add)
     {:trigger (button {:style ui/button, :inner-text "Add task"})}
     (fn [result d! m!]
       (when-not (string/blank? result) (d! :add-task {:text result, :group-id (:id group)})))))
@@ -45,10 +39,8 @@
     {:font-size 14, :color (hsl 200 80 80), :cursor "pointer"}
     (fn [e d!] (d! :touch-group (:id group))))
    (=< 8 nil)
-   (cursor->
-    :remove
-    comp-confirm
-    states
+   (comp-confirm
+    (>> states :remove)
     {:trigger (comp-i :x 14 (hsl 0 100 70))}
     (fn [e d! m!] (d! :rm-group (:id group)) (d! :set-router {:name :table}))))))
 
@@ -86,11 +78,11 @@
                                 (map-indexed
                                  (fn [idx entry]
                                    (let [[id task] entry]
-                                     [id (cursor-> id comp-task states task idx)])))
+                                     [id (comp-task (>> states id) task idx)])))
                                 (sort-by first))))]
    (div
     {:style style-todolist}
-    (cursor-> :group comp-group-banner states group)
+    (comp-group-banner (>> states :group) group)
     (=< nil 16)
     (section
      {:style style-body}

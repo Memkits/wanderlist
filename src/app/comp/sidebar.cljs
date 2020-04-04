@@ -4,7 +4,7 @@
             [respo-ui.core :as ui]
             [hsl.core :refer [hsl]]
             [respo.comp.space :refer [=<]]
-            [respo.core :refer [defcomp cursor-> <> div span input list-> button]]
+            [respo.core :refer [defcomp >> <> div span input list-> button]]
             [app.comp.group-line :refer [comp-group-line]]
             [respo-alerts.core :refer [comp-prompt]]
             [feather.core :refer [comp-i comp-icon]]))
@@ -29,7 +29,7 @@
 (defcomp
  comp-sidebar
  (states groups router)
- (let [state (or (:data states) "")]
+ (let [cursor (:cursor states), state (or (:data states) "")]
    (div
     {:style style-sidebar}
     (div
@@ -37,10 +37,8 @@
      (span nil)
      (div
       {:style ui/row-middle}
-      (cursor->
-       :add
-       comp-prompt
-       states
+      (comp-prompt
+       (>> states :add)
        {:trigger (comp-i :plus 20 (hsl 0 0 80))}
        (fn [result d! m!] (if (not (string/blank? result)) (do (d! :add-group result)))))
       (=< 16 nil)
@@ -61,5 +59,5 @@
                (let [group (last entry)
                      tasks (:tasks group)
                      selected? (= (:group-id router) (:id group))]
-                 (cursor-> index comp-group-line states group index selected?))]))
+                 (comp-group-line group index selected?))]))
            (sort-by first)))))))

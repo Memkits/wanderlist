@@ -3,7 +3,7 @@
   (:require [clojure.string :as string]
             [hsl.core :refer [hsl]]
             [respo-ui.core :as ui]
-            [respo.core :refer [defcomp cursor-> <> input div section]]
+            [respo.core :refer [defcomp >> <> input div section]]
             [feather.core :refer [comp-i comp-icon]]
             [respo-alerts.core :refer [comp-confirm]]
             [respo.comp.space :refer [=<]]))
@@ -47,9 +47,7 @@
      {:font-size 14, :color (hsl 150 50 80), :cursor :pointer}
      (fn [e d! m!] (d! :touch-task task)))
     (=< 8 nil)
-    (cursor->
-     :remove
-     comp-confirm
-     states
+    (comp-confirm
+     (>> states :remove)
      {:trigger (comp-i :x 14 (hsl 0 100 70))}
      (fn [e d! m!] (d! :rm-task task))))))
