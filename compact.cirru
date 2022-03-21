@@ -190,7 +190,7 @@
                   if (empty? groups)
                     div
                       {} $ :style ui/center
-                      <> "\"No tasks" $ {} (:font-family ui/font-fancy) (:font-style :italic)
+                      <> "\"Add a group to start" $ {} (:font-family ui/font-fancy) (:font-style :italic)
                         :color $ hsl 0 0 80
                     list->
                       {} $ :style
