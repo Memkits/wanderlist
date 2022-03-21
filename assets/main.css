@@ -34,3 +34,12 @@ body * {
 .task-input:focus {
   background-color: rgb(245, 245, 245);
 }
+
+
+i {
+  line-height: 1;
+}
+
+svg {
+  display: block;
+}
