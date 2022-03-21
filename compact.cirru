@@ -48,7 +48,8 @@
                   {} (:font-size 14)
                     :color $ hsl 0 100 70
                     :cursor :pointer
-                  fn (e d!) (d! :rm-task task)
+                  fn (e d!)
+                    .show remove-plugin d! $ fn () (d! :rm-task task)
                 .render remove-plugin
         |style-done $ quote
           defn style-done (done?)
@@ -112,7 +113,7 @@
                   case-default (:name router)
                     div ({}) (<> "|router not matching a page" nil)
                     :table $ if (some? group-id)
-                      comp-todolist (>> states :todolist) router $ get (:groups store) group-id
+                      comp-todolist (>> states group-id) router $ get (:groups store) group-id
                       div
                         {} $ :style style-placeholder
                         <> "|Select a group?" nil
@@ -186,18 +187,23 @@
                   {} (:style style-body)
                     :on-click $ fn (e d!)
                       d! :set-router $ {} (:name :table)
-                  list->
-                    {} $ :style
-                      style-box $ count groups
-                    -> groups (.to-list) (sort by-newest-group)
-                      map-indexed $ fn (index entry)
-                        [] (first entry)
-                          let
-                              group $ last entry
-                              tasks $ :tasks group
-                              selected? $ = (:group-id router) (:id group)
-                            comp-group-line group index selected?
-                      .sort-by first
+                  if (empty? groups)
+                    div
+                      {} $ :style ui/center
+                      <> "\"No tasks" $ {} (:font-family ui/font-fancy) (:font-style :italic)
+                        :color $ hsl 0 0 80
+                    list->
+                      {} $ :style
+                        style-box $ count groups
+                      -> groups (.to-list) (sort by-newest-group)
+                        map-indexed $ fn (index entry)
+                          [] (first entry)
+                            let
+                                group $ last entry
+                                tasks $ :tasks group
+                                selected? $ = (:group-id router) (:id group)
+                              comp-group-line group index selected?
+                        .sort-by first
                 .render add-plugin
         |by-newest-group $ quote
           defn by-newest-group (group-a group-b)
@@ -241,7 +247,6 @@
                 update :groups $ fn (task-groups)
                   assoc task-groups op-id $ merge schema/group
                     {} (:id op-id) (:text op-data) (:created-time op-time) (:touched-time op-time)
-                assoc-in ([] :states :group :data) |
               :rm-group $ dissoc-in store ([] :groups op-data)
               :update-group $ assoc-in store
                 [] :groups (:id op-data) :text
@@ -251,7 +256,6 @@
                 assoc-in
                   [] :groups (:group-id op-data) :tasks op-id
                   merge schema/task op-data $ {} (:id op-id) (:created-time op-time) (:touched-time op-time)
-                assoc-in ([] :states :todolist :data :draft) |
               :rm-task $ update-in store
                 [] :groups (:group-id op-data) :tasks
                 fn (tasks)
@@ -285,15 +289,14 @@
         |comp-todolist $ quote
           defcomp comp-todolist (states router group)
             let
+                cursor $ :cursor states
                 tasks $ :tasks group
                 state $ or (:data states)
                   {} (:draft |) (:fold-done? true)
-                todo-tasks $ -> tasks
-                  or $ {}
+                todo-tasks $ -> tasks .to-map
                   filter $ fn (entry)
                     not $ :done (last entry)
-                done-tasks $ -> tasks
-                  or $ {}
+                done-tasks $ -> tasks .to-map
                   filter $ fn (entry)
                     :done $ last entry
                 render-task-list $ fn (tasks)
@@ -313,7 +316,11 @@
                 =< nil 16
                 create-element :section
                   {} $ :style style-body
-                  render-task-list todo-tasks
+                  if (empty? todo-tasks)
+                    div ({})
+                      <> "\"No tasks" $ {} (:font-family ui/font-fancy) (:font-style :italic)
+                        :color $ hsl 0 0 80
+                    render-task-list todo-tasks
                   if
                     > (count done-tasks) 0
                     div
@@ -327,8 +334,8 @@
                         {} (:font-size 16)
                           :color $ hsl 200 80 80
                           :cursor :pointer
-                        fn (e d! m!)
-                          m! $ update state :fold-done? not
+                        fn (e d!)
+                          d! cursor $ update state :fold-done? not
                   if
                     not $ :fold-done? state
                     render-task-list done-tasks
@@ -489,7 +496,8 @@
         |*store $ quote (defatom *store schema/store)
         |dispatch! $ quote
           defn dispatch! (op op-data)
-            reset! *store $ updater @*store op op-data (js/Date.now) (js/Date.now)
+            when config/dev? $ js/console.log op op-data
+            reset! *store $ updater @*store op op-data (generate-id!) (js/Date.now)
         |save-local-storage! $ quote
           defn save-local-storage! (e)
             js/window.localStorage.setItem |wanderlist $ format-cirru-edn
@@ -505,13 +513,7 @@
     |app.config $ {}
       :ns $ quote (ns app.config)
       :defs $ {}
-        |cdn? $ quote
-          def cdn? $ cond
-              exists? js/window
-              , false
-            (exists? js/process) (= "\"true" js/process.env.cdn)
-            :else false
         |dev? $ quote
           def dev? $ = "\"dev" (get-env "\"mode")
         |site $ quote
-          def site $ {} (:dev-ui "\"http://localhost:8100/main-fonts.css") (:release-ui "\"http://cdn.tiye.me/favored-fonts/main-fonts.css") (:cdn-url "\"http://cdn.tiye.me/wanderlist/") (:title "\"Wanderlist") (:icon "\"http://cdn.tiye.me/logo/respo.png") (:storage-key "\"wanderlist")
+          def site $ {} (:title "\"Wanderlist") (:icon "\"http://cdn.tiye.me/logo/respo.png") (:storage-key "\"wanderlist")
