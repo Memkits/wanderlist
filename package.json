@@ -19,7 +19,7 @@
     "vite": "^4.3.9"
   },
   "dependencies": {
-    "@calcit/procs": "^0.7.0-a7",
+    "@calcit/procs": "^0.7.3",
     "feather-icons": "^4.29.0"
   }
 }

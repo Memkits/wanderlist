@@ -221,28 +221,32 @@
                 comp-icon :check
                   merge (style-done done?)
                     {} (:font-size 20) (:cursor :pointer)
-                  fn (e d!) (d! :toggle-task task)
+                  fn (e d!)
+                    d! $ : :toggle-task task
                 input $ {}
                   :value $ :text task
                   :style style-input
                   :class-name "\"task-input"
                   :on-input $ fn (e d!)
-                    d! :update-task $ {}
-                      :group-id $ :group-id task
-                      :id $ :id task
-                      :text $ :value e
+                    d! $ : :update-task
+                      {}
+                        :group-id $ :group-id task
+                        :id $ :id task
+                        :text $ :value e
                 comp-icon :arrow-up
                   {} (:font-size 14)
                     :color $ hsl 150 50 80
                     :cursor :pointer
-                  fn (e d!) (d! :touch-task task)
+                  fn (e d!)
+                    d! $ : :touch-task task
                 =< 8 nil
                 comp-icon :x
                   {} (:font-size 14)
                     :color $ hsl 0 100 70
                     :cursor :pointer
                   fn (e d!)
-                    .show remove-plugin d! $ fn () (d! :rm-task task)
+                    .show remove-plugin d! $ fn ()
+                      d! $ : :rm-task task
                 .render remove-plugin
         |style-done $ quote
           defn style-done (done?)
@@ -413,9 +417,11 @@
       :defs $ {}
         |*store $ quote (defatom *store schema/store)
         |dispatch! $ quote
-          defn dispatch! (op op-data)
+          defn dispatch! (op ? op-data)
             when config/dev? $ js/console.log op op-data
-            reset! *store $ updater @*store op op-data (generate-id!) (js/Date.now)
+            if (list? op)
+              recur $ : states op op-data
+              reset! *store $ updater @*store op (generate-id!) (js/Date.now)
         |main! $ quote
           defn main! ()
             if config/dev? $ load-console-formatter!
@@ -477,40 +483,49 @@
     |app.updater $ {}
       :defs $ {}
         |updater $ quote
-          defn updater (store op-type op-data op-id op-time)
-            case-default op-type
-              do (println "\"Unknown op:" op-type) store
-              :states $ update-states store op-data
-              :add-group $ -> store
-                update :groups $ fn (task-groups)
-                  assoc task-groups op-id $ merge schema/group
-                    {} (:id op-id) (:text op-data) (:created-time op-time) (:touched-time op-time)
-              :rm-group $ dissoc-in store ([] :groups op-data)
-              :update-group $ assoc-in store
-                [] :groups (:id op-data) :text
-                :text op-data
-              :touch-group $ assoc-in store ([] :groups op-data :touched-time) op-time
-              :add-task $ -> store
-                assoc-in
+          defn updater (store op op-id op-time)
+            tag-match op
+                :states cursor s
+                update-states store cursor s
+              (:add-group op-data)
+                -> store $ update :groups
+                  fn (task-groups)
+                    assoc task-groups op-id $ merge schema/group
+                      {} (:id op-id) (:text op-data) (:created-time op-time) (:touched-time op-time)
+              (:rm-group id)
+                dissoc-in store $ [] :groups id
+              (:update-group op-data)
+                assoc-in store
+                  [] :groups (:id op-data) :text
+                  :text op-data
+              (:touch-group gid)
+                assoc-in store ([] :groups gid :touched-time) op-time
+              (:add-task op-data)
+                -> store $ assoc-in
                   [] :groups (:group-id op-data) :tasks op-id
                   merge schema/task op-data $ {} (:id op-id) (:created-time op-time) (:touched-time op-time)
-              :rm-task $ update-in store
-                [] :groups (:group-id op-data) :tasks
-                fn (tasks)
-                  dissoc tasks $ :id op-data
-              :update-task $ assoc-in store
-                [] :groups (:group-id op-data) :tasks (:id op-data) :text
-                :text op-data
-              :toggle-task $ update-in store
-                [] :groups (:group-id op-data) :tasks $ :id op-data
-                fn (task)
-                  -> task (update :done not) (assoc :touched-time op-time) (assoc :done-time op-time)
-              :touch-task $ assoc-in store
-                [] :groups (:group-id op-data) :tasks (:id op-data) :touched-time
-                , op-time
-              :set-router $ assoc store :router op-data
-              :hide-sidebar $ assoc store :show-sidebar? false
-              :show-sidebar $ assoc store :show-sidebar? true
+              (:rm-task op-data)
+                update-in store
+                  [] :groups (:group-id op-data) :tasks
+                  fn (tasks)
+                    dissoc tasks $ :id op-data
+              (:update-task op-data)
+                assoc-in store
+                  [] :groups (:group-id op-data) :tasks (:id op-data) :text
+                  :text op-data
+              (:toggle-task op-data)
+                update-in store
+                  [] :groups (:group-id op-data) :tasks $ :id op-data
+                  fn (task)
+                    -> task (update :done not) (assoc :touched-time op-time) (assoc :done-time op-time)
+              (:touch-task op-data)
+                assoc-in store
+                  [] :groups (:group-id op-data) :tasks (:id op-data) :touched-time
+                  , op-time
+              (:set-router d) (assoc store :router d)
+              (:hide-sidebar) (assoc store :show-sidebar? false)
+              (:show-sidebar) (assoc store :show-sidebar? true)
+              _ $ do (println "\"Unknown op:" op) store
       :ns $ quote
         ns app.updater $ :require
           [] hsl.core :refer $ [] hsl
