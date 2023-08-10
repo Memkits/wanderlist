@@ -13,8 +13,9 @@
                 group-id $ :group-id router
                 states $ :states store
               div
-                {} $ :style
-                  merge ui/fullscreen ui/global ui/row $ {}
+                {}
+                  :class-name $ str-spaced css/fullscreen css/global css/row
+                  :style $ {}
                     :background-color $ hsl 240 40 96
                 comp-margin
                 if (:show-sidebar? store)
@@ -27,16 +28,16 @@
                         :color $ hsl 0 0 80
                         :cursor :pointer
                       fn (e d!) (d! :show-sidebar nil)
-                div $ {} (:style style-divider)
+                div $ {} (:class-name style-divider)
                 div
-                  {} $ :style
-                    merge ui/expand $ {} (:max-width 800) (:flex-basis "\"600px")
+                  {} (:class-name css/expand)
+                    :style $ {} (:max-width 800) (:flex-basis "\"600px")
                   case-default (:name router)
                     div ({}) (<> "|router not matching a page" nil)
                     :table $ if (some? group-id)
                       comp-todolist (>> states group-id) router $ get (:groups store) group-id
                       div
-                        {} $ :style style-placeholder
+                        {} $ :class-name style-placeholder
                         <> "|Select a group?" nil
                 comp-margin
                 if dev? $ comp-inspect |Store store
@@ -46,28 +47,32 @@
             {} $ :style
               {} (:flex 1) (:flex-basis "\"10px")
         |style-divider $ quote
-          def style-divider $ {} (:width 1)
-            :background-color $ hsl 0 0 94
+          defstyle style-divider $ {}
+            "\"&" $ {} (:width 1)
+              :background-color $ hsl 0 0 94
         |style-placeholder $ quote
-          def style-placeholder $ {} (:width |100%) (:height |100%)
-            :background-color $ hsl 180 40 98
-            :display |flex
-            :justify-content |center
-            :align-items |center
-            :color $ hsl 0 0 86
-            :font-size 48
-            :font-weight 300
-            :font-family ui/font-fancy
+          defstyle style-placeholder $ {}
+            "\"&" $ {} (:width |100%) (:height |100%)
+              :background-color $ hsl 180 40 98
+              :display |flex
+              :justify-content |center
+              :align-items |center
+              :color $ hsl 0 0 86
+              :font-size 48
+              :font-weight 300
+              :font-family ui/font-fancy
       :ns $ quote
         ns app.comp.container $ :require
-          [] respo-ui.core :refer $ [] hsl
-          [] respo.core :refer $ [] defcomp >> <> div textarea span
-          [] respo.comp.inspect :refer $ [] comp-inspect
-          [] app.comp.sidebar :refer $ [] comp-sidebar
-          [] app.comp.todolist :refer $ [] comp-todolist
-          [] respo-ui.core :as ui
-          [] feather.core :refer $ [] comp-icon
+          respo-ui.core :refer $ hsl
+          respo.core :refer $ defcomp >> <> div textarea span
+          respo.comp.inspect :refer $ comp-inspect
+          app.comp.sidebar :refer $ comp-sidebar
+          app.comp.todolist :refer $ comp-todolist
+          respo-ui.core :as ui
+          feather.core :refer $ comp-icon
           app.config :refer $ dev?
+          respo-ui.css :as css
+          respo.css :refer $ defstyle
     |app.comp.group-line $ {}
       :defs $ {}
         |comp-group-line $ quote
@@ -78,7 +83,7 @@
                     filter $ fn (entry)
                       not $ :done (last entry)
               div
-                {}
+                {} (:class-name style-group-base)
                   :style $ style-group index selected? (> todo-size 0)
                   :on-click $ fn (e d!)
                     d! :set-router $ {} (:name :table)
@@ -87,41 +92,39 @@
                 =< 8 0
                 span $ {}
                   :inner-text $ :text group
-                  :style style-input
+                  :class-name style-input
                   :on-input $ fn (e d!)
                     d! :update-group $ {}
                       :id $ :id group
                       :text $ :value e
         |style-group $ quote
           defn style-group (index selected? todo?)
-            {} (:padding "|0px 8px")
-              :color $ if todo? (hsl 0 0 20) (hsl 0 0 70)
-              :line-height |40px
-              :cursor |pointer
-              :position |absolute
+            {}
               :top $ str
                 + 8 $ * 40 index
                 , |px
-              :width |100%
-              :transition-duration |300ms
-              :cursor |pointer
               :background-color $ if selected? (hsl 200 20 94) |transparent
-              :display |flex
-              :align-items |center
+              :color $ if todo? (hsl 0 0 20) (hsl 0 0 70)
+        |style-group-base $ quote
+          defstyle style-group-base $ {}
+            "\"&" $ {} (:padding "|0px 8px") (:line-height |40px) (:cursor |pointer) (:position |absolute) (:width |100%) (:transition-duration |300ms) (:cursor |pointer) (:display |flex) (:align-items |center)
         |style-input $ quote
-          def style-input $ {} (:border |none) (:flex 1) (:outline |none) (:font-size 16) (:line-height 2) (:background-color |transparent)
+          defstyle style-input $ {}
+            "\"&" $ {} (:border |none) (:flex 1) (:outline |none) (:font-size 16) (:line-height 2) (:background-color |transparent)
         |style-small-hint $ quote
           def style-small-hint $ {} (:font-size |12px)
             :color $ hsl 0 0 70
             :pointer-events |none
       :ns $ quote
         ns app.comp.group-line $ :require
-          [] respo.core :refer $ [] defcomp >> <> div span input
-          [] respo-ui.core :refer $ [] hsl
-          [] respo.comp.space :refer $ [] =<
-          [] respo-ui.core :as ui
-          [] feather.core :refer $ [] comp-i comp-icon
-          [] respo-alerts.core :refer $ [] comp-prompt comp-confirm
+          respo.core :refer $ defcomp >> <> div span input
+          respo-ui.core :refer $ hsl
+          respo.comp.space :refer $ =<
+          respo-ui.core :as ui
+          feather.core :refer $ comp-i comp-icon
+          respo-alerts.core :refer $ comp-prompt comp-confirm
+          respo.css :refer $ defstyle
+          respo-ui.css :as css
     |app.comp.sidebar $ {}
       :defs $ {}
         |by-newest-group $ quote
@@ -136,12 +139,12 @@
                 state $ or (:data states) |
                 add-plugin $ use-prompt (>> states :add) ({})
               div
-                {} $ :style style-sidebar
+                {} $ :class-name style-sidebar
                 div
-                  {} $ :style ui/row-parted
+                  {} $ :class-name css/row-parted
                   span nil
                   div
-                    {} $ :style ui/row-middle
+                    {} $ :class-name css/row-middle
                     comp-icon :plus
                       {} (:font-size 20)
                         :color $ hsl 0 00 80
@@ -158,12 +161,12 @@
                         :cursor :pointer
                       fn (e d!) (d! :hide-sidebar nil)
                 div
-                  {} (:style style-body)
+                  {} (:class-name style-body)
                     :on-click $ fn (e d!)
                       d! :set-router $ {} (:name :table)
                   if (empty? groups)
                     div
-                      {} $ :style ui/center
+                      {} $ :class-name css/center
                       <> "\"Add a group to start" $ {} (:font-family ui/font-fancy) (:font-style :italic)
                         :color $ hsl 0 0 80
                     list->
@@ -180,10 +183,11 @@
                         .sort-by first
                 .render add-plugin
         |style-body $ quote
-          def style-body $ {} (:flex |1)
-            :background-color $ hsl 0 0 0 0
-            :position |relative
-            :overflow |auto
+          defstyle style-body $ {}
+            "\"&" $ {} (:flex |1)
+              :background-color $ hsl 0 0 0 0
+              :position |relative
+              :overflow |auto
         |style-box $ quote
           defn style-box (n)
             {} (:width |100%)
@@ -191,23 +195,26 @@
                 + 80 $ * n 40
                 , |px
         |style-sidebar $ quote
-          def style-sidebar $ {}
-            :background-color $ hsl 0 0 100
-            :display |flex
-            :flex-direction |column
-            :height |100%
-            :box-shadow $ str "|0px 0px 4px " (hsl 0 0 0 0.1)
-            :padding |16px
-            :width |24%
-            :transition-duration "\"200ms"
+          defstyle style-sidebar $ {}
+            "\"&" $ {}
+              :background-color $ hsl 0 0 100
+              :display |flex
+              :flex-direction |column
+              :height |100%
+              :box-shadow $ str "|0px 0px 4px " (hsl 0 0 0 0.1)
+              :padding |16px
+              :width |24%
+              :transition-duration "\"200ms"
       :ns $ quote
-        ns app.comp.sidebar $ :require ([] respo-ui.core :as ui)
-          [] respo-ui.core :refer $ [] hsl
-          [] respo.comp.space :refer $ [] =<
-          [] respo.core :refer $ [] defcomp >> <> div span input list-> button
-          [] app.comp.group-line :refer $ [] comp-group-line
-          [] respo-alerts.core :refer $ [] use-prompt
-          [] feather.core :refer $ [] comp-i comp-icon
+        ns app.comp.sidebar $ :require (respo-ui.core :as ui)
+          respo-ui.core :refer $ hsl
+          respo.comp.space :refer $ =<
+          respo.core :refer $ defcomp >> <> div span input list-> button
+          app.comp.group-line :refer $ comp-group-line
+          respo-alerts.core :refer $ use-prompt
+          feather.core :refer $ comp-i comp-icon
+          respo-ui.css :as css
+          respo.css :refer $ defstyle
     |app.comp.task $ {}
       :defs $ {}
         |comp-task $ quote
@@ -216,8 +223,8 @@
                 done? $ :done task
                 remove-plugin $ use-confirm (>> states :remove) ({})
               create-element :section
-                {} $ :style
-                  merge ui/row-middle $ style-task index
+                {} (:class-name css/row-middle)
+                  :style $ style-task index
                 comp-icon :check
                   merge (style-done done?)
                     {} (:font-size 20) (:cursor :pointer)
@@ -225,8 +232,7 @@
                     d! $ : :toggle-task task
                 input $ {}
                   :value $ :text task
-                  :style style-input
-                  :class-name "\"task-input"
+                  :class-name $ str-spaced "\"task-input" style-input
                   :on-input $ fn (e d!)
                     d! $ : :update-task
                       {}
@@ -253,7 +259,8 @@
             {} $ :color
               if done? (hsl 100 20 60) (hsl 20 90 80)
         |style-input $ quote
-          def style-input $ {} (:outline |none) (:border |none) (:padding "|0px 8px") (:line-height "\"32px") (:font-size |16px) (:flex |1) (:margin "\"0 8px")
+          defstyle style-input $ {}
+            "\"&" $ {} (:outline |none) (:border |none) (:padding "|0px 8px") (:line-height "\"32px") (:font-size |16px) (:flex |1) (:margin "\"0 8px")
         |style-task $ quote
           defn style-task (index)
             {} (:display |flex) (:position |absolute)
@@ -264,12 +271,14 @@
               :transition-duration |300ms
       :ns $ quote
         ns app.comp.task $ :require
-          [] respo-ui.core :refer $ [] hsl
-          [] respo-ui.core :as ui
-          [] respo.core :refer $ [] defcomp >> <> input div create-element
-          [] feather.core :refer $ [] comp-i comp-icon
-          [] respo-alerts.core :refer $ [] use-confirm
-          [] respo.comp.space :refer $ [] =<
+          respo-ui.core :refer $ hsl
+          respo-ui.core :as ui
+          respo.core :refer $ defcomp >> <> input div create-element
+          feather.core :refer $ comp-i comp-icon
+          respo-alerts.core :refer $ use-confirm
+          respo.comp.space :refer $ =<
+          respo.css :refer $ defstyle
+          respo-ui.css :as css
     |app.comp.todolist $ {}
       :defs $ {}
         |by-touch-time $ quote
@@ -285,9 +294,9 @@
                 add-plugin $ use-prompt (>> states :add) ({})
                 remove-plugin $ use-confirm (>> states :remove) ({})
               div
-                {} $ :style ui/row-parted
+                {} $ :class-name css/row-parted
                 div
-                  {} $ :style ui/row-middle
+                  {} $ :class-name css/row-middle
                   <> (:text group)
                     {} (:font-size 20) (:font-family ui/font-fancy)
                   =< 8 nil
@@ -307,7 +316,7 @@
                           when-not (.blank? result)
                             d! :add-task $ {} (:text result)
                               :group-id $ :id group
-                    button $ {} (:style ui/button) (:inner-text "\"Add task")
+                    button $ {} (:class-name css/button) (:inner-text "\"Add task")
                 div ({})
                   comp-icon :arrow-up
                     {} (:font-size 14)
@@ -351,7 +360,7 @@
                           [] id $ comp-task (>> states id) task idx
                       .sort-by first
               div
-                {} $ :style style-todolist
+                {} $ :class-name style-todolist
                 comp-group-banner (>> states :group) group
                 =< nil 16
                 create-element :section
@@ -364,7 +373,7 @@
                   if
                     > (count done-tasks) 0
                     div
-                      {} $ :style (merge ui/row-middle style-section)
+                      {} $ :class-name (str-spaced css/row-middle style-section)
                       <> "\"Done tasks" $ {}
                         :color $ hsl 0 0 80
                         :font-size 14
@@ -387,14 +396,16 @@
               :height $ str (* 40 size) "\"px"
               :transition-duration |0ms
         |style-section $ quote
-          def style-section $ {} (:margin-top |16px)
+          defstyle style-section $ {}
+            "\"&" $ {} (:margin-top |16px)
         |style-todolist $ quote
-          def style-todolist $ {}
-            :background-color $ hsl 0 0 100
-            :height "\"100%"
-            :box-shadow $ str "|0 0 4px " (hsl 0 0 0 0.1)
-            :padding |16px
-            :overflow :auto
+          defstyle style-todolist $ {}
+            "\"&" $ {}
+              :background-color $ hsl 0 0 100
+              :height "\"100%"
+              :box-shadow $ str "|0 0 4px " (hsl 0 0 0 0.1)
+              :padding |16px
+              :overflow :auto
       :ns $ quote
         ns app.comp.todolist $ :require
           [] respo-ui.core :refer $ [] hsl
@@ -406,6 +417,8 @@
           [] respo.comp.inspect :refer $ [] comp-inspect
           [] feather.core :refer $ [] comp-icon comp-i
           [] respo-alerts.core :refer $ [] use-prompt use-confirm
+          respo.css :refer $ defstyle
+          respo-ui.css :as css
     |app.config $ {}
       :defs $ {}
         |dev? $ quote
