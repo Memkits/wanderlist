@@ -2,9 +2,9 @@
   :dependencies $ {}
     |calcit-lang/lilac |main
     |calcit-lang/memof |main
-    |Respo/respo.calcit |0.15.1
+    |Respo/respo.calcit |main
     |Respo/reel.calcit |main
     |Respo/respo-markdown.calcit |main
-    |Respo/respo-ui.calcit |0.4.10
+    |Respo/respo-ui.calcit |main
     |Respo/alerts.calcit |main
     |Respo/respo-feather.calcit |main
