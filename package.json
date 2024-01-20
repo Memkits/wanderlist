@@ -16,7 +16,7 @@
   "homepage": "https://github.com/Memkits/wanderlist#readme",
   "devDependencies": {
     "bottom-tip": "^0.1.5",
-    "vite": "^4.4.12"
+    "vite": "^4.5.2"
   },
   "dependencies": {
     "@calcit/procs": "^0.8.0",
