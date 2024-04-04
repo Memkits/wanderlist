@@ -16,10 +16,10 @@
   "homepage": "https://github.com/Memkits/wanderlist#readme",
   "devDependencies": {
     "bottom-tip": "^0.1.5",
-    "vite": "^4.5.3"
+    "vite": "^5.2.8"
   },
   "dependencies": {
-    "@calcit/procs": "^0.8.0",
+    "@calcit/procs": "^0.8.46",
     "feather-icons": "^4.29.1"
   }
 }

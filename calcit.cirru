@@ -3043,8 +3043,7 @@
               |j $ %{} :Leaf (:at 1500458301231) (:by |root) (:text |mount-target)
               |r $ %{} :Expr (:at 1500458301231) (:by nil)
                 :data $ {}
-                  |T $ %{} :Leaf (:at 1500458301231) (:by |root) (:text |.querySelector)
-                  |j $ %{} :Leaf (:at 1500458301231) (:by |root) (:text |js/document)
+                  |j $ %{} :Leaf (:at 1712208145886) (:by |ivPoTMG-) (:text |js/document.querySelector)
                   |r $ %{} :Leaf (:at 1500458301231) (:by |root) (:text ||.app)
         |reload! $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1647859986617) (:by |ivPoTMG-)
