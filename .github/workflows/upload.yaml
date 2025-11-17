@@ -15,16 +15,14 @@ jobs:
 
     - uses: actions/setup-node@v4
       with:
-        node-version: 20
+        node-version: 24
         cache: 'yarn'
 
-    - uses: calcit-lang/setup-cr@0.0.3
-      with:
-        version: "0.8.46"
+    - uses: calcit-lang/setup-cr@0.0.8
 
     - name: "compiles to js"
       run: >
-        caps --ci && cr --emit-js --once
+        caps --ci && cr js --once
         && yarn && yarn vite build --base=./
 
     - name: Deploy to server

@@ -43,16 +43,19 @@
                   comp-margin
                   if dev? $ comp-inspect |Store store
                     {} $ :bottom 0
+          :examples $ []
         |comp-margin $ %{} :CodeEntry (:doc |)
           :code $ quote
             defcomp comp-margin () $ div
               {} $ :style
                 {} (:flex 1) (:flex-basis "\"10px")
+          :examples $ []
         |style-divider $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle style-divider $ {}
               "\"&" $ {} (:width 1)
                 :background-color $ hsl 0 0 94
+          :examples $ []
         |style-placeholder $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle style-placeholder $ {}
@@ -65,6 +68,7 @@
                 :font-size 48
                 :font-weight 300
                 :font-family ui/font-fancy
+          :examples $ []
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.comp.container $ :require
@@ -103,6 +107,7 @@
                       d! :update-group $ {}
                         :id $ :id group
                         :text $ :value e
+          :examples $ []
         |style-group $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn style-group (index selected? todo?)
@@ -112,19 +117,23 @@
                   , |px
                 :background-color $ if selected? (hsl 200 20 94) |transparent
                 :color $ if todo? (hsl 0 0 20) (hsl 0 0 70)
+          :examples $ []
         |style-group-base $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle style-group-base $ {}
               "\"&" $ {} (:padding "|0px 8px") (:line-height |40px) (:cursor |pointer) (:position |absolute) (:width |100%) (:transition-duration |300ms) (:cursor |pointer) (:display |flex) (:align-items |center)
+          :examples $ []
         |style-input $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle style-input $ {}
               "\"&" $ {} (:border |none) (:flex 1) (:outline |none) (:font-size 16) (:line-height 2) (:background-color |transparent)
+          :examples $ []
         |style-small-hint $ %{} :CodeEntry (:doc |)
           :code $ quote
             def style-small-hint $ {} (:font-size |12px)
               :color $ hsl 0 0 70
               :pointer-events |none
+          :examples $ []
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.comp.group-line $ :require
@@ -144,6 +153,7 @@
               &compare
                 :touched-time $ last group-b
                 :touched-time $ last group-a
+          :examples $ []
         |comp-sidebar $ %{} :CodeEntry (:doc |)
           :code $ quote
             defcomp comp-sidebar (states groups router)
@@ -195,6 +205,7 @@
                                 comp-group-line group index selected?
                           .sort-by first
                   .render add-plugin
+          :examples $ []
         |style-body $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle style-body $ {}
@@ -202,6 +213,7 @@
                 :background-color $ hsl 0 0 0 0
                 :position |relative
                 :overflow |auto
+          :examples $ []
         |style-box $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn style-box (n)
@@ -209,6 +221,7 @@
                 :height $ str
                   + 80 $ * n 40
                   , |px
+          :examples $ []
         |style-sidebar $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle style-sidebar $ {}
@@ -221,6 +234,7 @@
                 :padding |16px
                 :width |24%
                 :transition-duration "\"200ms"
+          :examples $ []
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.comp.sidebar $ :require (respo-ui.core :as ui)
@@ -272,15 +286,18 @@
                       .show remove-plugin d! $ fn ()
                         d! $ : :rm-task task
                   .render remove-plugin
+          :examples $ []
         |style-done $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn style-done (done?)
               {} $ :color
                 if done? (hsl 100 20 60) (hsl 20 90 80)
+          :examples $ []
         |style-input $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle style-input $ {}
               "\"&" $ {} (:outline |none) (:border |none) (:padding "|0px 8px") (:line-height "\"32px") (:font-size |16px) (:flex |1) (:margin "\"0 8px")
+          :examples $ []
         |style-task $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn style-task (index)
@@ -290,6 +307,7 @@
                   , |px
                 :width |100%
                 :transition-duration |300ms
+          :examples $ []
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.comp.task $ :require
@@ -309,6 +327,7 @@
               &compare
                 :touched-time $ last entry-b
                 :touched-time $ last entry-a
+          :examples $ []
         |comp-group-banner $ %{} :CodeEntry (:doc |)
           :code $ quote
             defcomp comp-group-banner (states group)
@@ -359,6 +378,7 @@
                   .render edit-plugin
                   .render add-plugin
                   .render remove-plugin
+          :examples $ []
         |comp-todolist $ %{} :CodeEntry (:doc |)
           :code $ quote
             defcomp comp-todolist (states router group)
@@ -413,19 +433,23 @@
                     if
                       not $ :fold-done? state
                       render-task-list done-tasks
+          :examples $ []
         |style-body $ %{} :CodeEntry (:doc |)
           :code $ quote
             def style-body $ {} (:padding-bottom "\"120px")
+          :examples $ []
         |style-list $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn style-list (size)
               {} (:display |flex) (:flex-direction |column) (:position |relative)
                 :height $ str (* 40 size) "\"px"
                 :transition-duration |0ms
+          :examples $ []
         |style-section $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle style-section $ {}
               "\"&" $ {} (:margin-top |16px)
+          :examples $ []
         |style-todolist $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle style-todolist $ {}
@@ -435,6 +459,7 @@
                 :box-shadow $ str "|0 0 4px " (hsl 0 0 0 0.1)
                 :padding |16px
                 :overflow :auto
+          :examples $ []
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.comp.todolist $ :require
@@ -454,15 +479,18 @@
         |dev? $ %{} :CodeEntry (:doc |)
           :code $ quote
             def dev? $ = "\"dev" (get-env "\"mode" "\"release")
+          :examples $ []
         |site $ %{} :CodeEntry (:doc |)
           :code $ quote
             def site $ {} (:title "\"Wanderlist") (:icon "\"http://cdn.tiye.me/logo/respo.png") (:storage-key "\"wanderlist")
+          :examples $ []
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote (ns app.config)
     |app.main $ %{} :FileEntry
       :defs $ {}
         |*store $ %{} :CodeEntry (:doc |)
           :code $ quote (defatom *store schema/store)
+          :examples $ []
         |dispatch! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn dispatch! (op ? op-data)
@@ -470,6 +498,7 @@
               if (list? op)
                 recur $ : states op op-data
                 reset! *store $ updater @*store op (generate-id!) (js/Date.now)
+          :examples $ []
         |main! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn main! ()
@@ -486,9 +515,11 @@
               add-watch *store :rerender $ fn (s p) (render-app!)
               set! js/window.onbeforeunload save-local-storage!
               println "|App started."
+          :examples $ []
         |mount-target $ %{} :CodeEntry (:doc |)
           :code $ quote
             def mount-target $ js/document.querySelector |.app
+          :examples $ []
         |reload! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn reload! () $ if (nil? build-errors)
@@ -497,15 +528,18 @@
                 render-app!
                 hud! "\"ok~" "\"Ok"
               hud! "\"error" build-errors
+          :examples $ []
         |render-app! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn render-app! () $ render! mount-target (comp-container @*store) dispatch!
+          :examples $ []
         |save-local-storage! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn save-local-storage! (e)
               js/window.localStorage.setItem |wanderlist $ format-cirru-edn
                 assoc @*store :states $ {}
               ; js/console.log $ pr-str @*store
+          :examples $ []
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.main $ :require
@@ -524,6 +558,7 @@
               :tasks $ noted task ({})
               :created-time nil
               :touched-time nil
+          :examples $ []
         |store $ %{} :CodeEntry (:doc |)
           :code $ quote
             def store $ {} (:version 2)
@@ -531,9 +566,11 @@
               :router $ {} (:name :table)
               :show-sidebar? true
               :states $ {}
+          :examples $ []
         |task $ %{} :CodeEntry (:doc |)
           :code $ quote
             def task $ {} (:id nil) (:text nil) (:done false) (:created-time nil) (:touched-time nil) (:done-time nil)
+          :examples $ []
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.schema $ :require
@@ -585,6 +622,7 @@
                 (:hide-sidebar) (assoc store :show-sidebar? false)
                 (:show-sidebar) (assoc store :show-sidebar? true)
                 _ $ do (println "\"Unknown op:" op) store
+          :examples $ []
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.updater $ :require
