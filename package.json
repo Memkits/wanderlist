@@ -1,9 +1,15 @@
 {
   "name": "wanderlist",
   "version": "0.1.0",
+  "packageManager": "yarn@4.12.0",
   "description": "Wanderlist ----",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "compile-page": "cr js",
+    "release-page": "vite build --base=./",
+    "watch-page": "cr js -w",
+    "build": "yarn compile-page && yarn release-page"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Memkits/wanderlist.git"
@@ -16,10 +22,11 @@
   "homepage": "https://github.com/Memkits/wanderlist#readme",
   "devDependencies": {
     "bottom-tip": "^0.1.5",
-    "vite": "^7.2.2"
+    "vite": "^8.0.2"
   },
   "dependencies": {
-    "@calcit/procs": "^0.9.20",
+    "@calcit/procs": "0.12.13",
+    "dayjs": "^1.11.20",
     "feather-icons": "^4.29.2"
   }
 }
