@@ -47,28 +47,28 @@
         |style-collapsed-sidebar $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defstyle style-collapsed-sidebar $ {}
-              "\"&" $ {} (:padding "\"24px 8px") (:width "\"56px") (:display "\"flex") (:justify-content "\"center") (:transition-duration "\"200ms")
+              |& $ {} (:padding "|24px 8px") (:width |56px) (:display |flex) (:justify-content |center) (:transition-duration |200ms)
           :examples $ []
         |style-divider $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defstyle style-divider $ {}
-              "\"&" $ {} (:width 1)
+              |& $ {} (:width 1)
                 :background-color $ hsl 220 16 90
           :examples $ []
         |style-main-panel $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defstyle style-main-panel $ {}
-              "\"&" $ {} (:max-width "\"860px") (:flex-basis "\"640px") (:background-color "\"#ffffff") (:border-radius "\"12px") (:box-shadow "\"0 2px 12px rgba(5, 5, 5, 0.06)") (:margin "\"16px 0") (:overflow "\"hidden")
+              |& $ {} (:max-width |860px) (:flex-basis |640px) (:background-color |#ffffff) (:border-radius |12px) (:box-shadow "|0 2px 12px rgba(5, 5, 5, 0.06)") (:margin "|16px 0") (:overflow |hidden)
           :examples $ []
         |style-margin $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defstyle style-margin $ {}
-              "\"&" $ {} (:flex 1) (:flex-basis "\"12px")
+              |& $ {} (:flex 1) (:flex-basis |12px)
           :examples $ []
         |style-placeholder $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defstyle style-placeholder $ {}
-              "\"&" $ {} (:width |100%) (:height |100%)
+              |& $ {} (:width |100%) (:height |100%)
                 :background-color $ hsl 220 30 98
                 :display |flex
                 :justify-content |center
@@ -81,7 +81,7 @@
         |style-root $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defstyle style-root $ {}
-              "\"&" $ {} (:background-color "\"#f5f7fa") (:min-height "\"100vh")
+              |& $ {} (:background-color |#f5f7fa) (:min-height |100vh)
           :examples $ []
       :ns $ %{} :NsEntry (:doc |)
         :code $ quote
@@ -136,17 +136,17 @@
         |style-group-base $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defstyle style-group-base $ {}
-              "\"&" $ {} (:padding "|0px 12px") (:line-height |40px) (:cursor |pointer) (:position |absolute) (:width |100%) (:transition-duration |220ms) (:display |flex) (:align-items |center) (:border-radius |8px)
+              |& $ {} (:padding "|0px 12px") (:line-height |40px) (:cursor |pointer) (:position |absolute) (:width |100%) (:transition-duration |220ms) (:display |flex) (:align-items |center) (:border-radius |8px)
           :examples $ []
         |style-input $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defstyle style-input $ {}
-              "\"&" $ {} (:border |none) (:flex 1) (:outline |none) (:font-size 15) (:line-height 2) (:background-color |transparent)
+              |& $ {} (:border |none) (:flex 1) (:outline |none) (:font-size 15) (:line-height 2) (:background-color |transparent)
           :examples $ []
         |style-small-hint $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defstyle style-small-hint $ {}
-              "\"&" $ {} (:font-size |12px) (:color |#8c8c8c) (:pointer-events |none) (:min-width |20px)
+              |& $ {} (:font-size |12px) (:color |#8c8c8c) (:pointer-events |none) (:min-width |20px)
           :examples $ []
       :ns $ %{} :NsEntry (:doc |)
         :code $ quote
@@ -203,7 +203,7 @@
                     if (empty? groups)
                       div
                         {} $ :class-name css/center
-                        <> "\"Add a group to start" $ {} (:class-name style-empty-hint)
+                        <> "|Add a group to start" $ {} (:class-name style-empty-hint)
                       list->
                         {} (:class-name style-box-base)
                           :style $ style-box (count groups)
@@ -221,7 +221,7 @@
         |style-body $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defstyle style-body $ {}
-              "\"&" $ {} (:flex |1)
+              |& $ {} (:flex |1)
                 :background-color $ hsl 0 0 0 0
                 :position |relative
                 :overflow |auto
@@ -238,17 +238,17 @@
         |style-box-base $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defstyle style-box-base $ {}
-              "\"&" $ {} (:width |100%) (:position |relative)
+              |& $ {} (:width |100%) (:position |relative)
           :examples $ []
         |style-empty-hint $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defstyle style-empty-hint $ {}
-              "\"&" $ {} (:font-family ui/font-fancy) (:font-style :italic) (:color |#8c8c8c)
+              |& $ {} (:font-family ui/font-fancy) (:font-style :italic) (:color |#8c8c8c)
           :examples $ []
         |style-sidebar $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defstyle style-sidebar $ {}
-              "\"&" $ {}
+              |& $ {}
                 :background-color $ hsl 0 0 100
                 :display |flex
                 :flex-direction |column
@@ -256,7 +256,7 @@
                 :box-shadow "|1px 0 6px rgba(5, 5, 5, 0.06)"
                 :padding "|20px 16px"
                 :width |280px
-                :transition-duration "\"200ms"
+                :transition-duration |200ms
           :examples $ []
       :ns $ %{} :NsEntry (:doc |)
         :code $ quote
@@ -288,7 +288,7 @@
                       d! $ : :toggle-task task
                   input $ {}
                     :value $ :text task
-                    :class-name $ str-spaced "\"task-input" style-input
+                    :class-name $ str-spaced |task-input style-input
                     :on-input $ fn (e d!)
                       d! $ : :update-task
                         {}
@@ -320,12 +320,12 @@
         |style-input $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defstyle style-input $ {}
-              "\"&" $ {} (:outline |none) (:border "|1px solid #d9d9d9") (:padding "|0px 10px") (:line-height "\"32px") (:font-size |15px) (:flex |1) (:margin "\"0 8px") (:border-radius |8px) (:background-color |#ffffff)
+              |& $ {} (:outline |none) (:border "|1px solid #d9d9d9") (:padding "|0px 10px") (:line-height |32px) (:font-size |15px) (:flex |1) (:margin "|0 8px") (:border-radius |8px) (:background-color |#ffffff)
           :examples $ []
         |style-task-base $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defstyle style-task-base $ {}
-              "\"&" $ {} (:display |flex) (:position |absolute) (:width |100%) (:transition-duration |200ms) (:padding "|2px 4px")
+              |& $ {} (:display |flex) (:position |absolute) (:width |100%) (:transition-duration |200ms) (:padding "|2px 4px")
           :examples $ []
         |style-task-offset $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
@@ -386,7 +386,7 @@
                             when-not (.blank? result)
                               d! :add-task $ {} (:text result)
                                 :group-id $ :id group
-                      button $ {} (:class-name css/button) (:inner-text "\"Add task")
+                      button $ {} (:class-name css/button) (:inner-text "|Add task")
                   div ({})
                     comp-icon :arrow-up
                       {} (:font-size 14)
@@ -439,14 +439,14 @@
                     {} $ :class-name style-body
                     if (empty? todo-tasks)
                       div ({})
-                        <> "\"No tasks" $ {} (:font-family ui/font-fancy) (:font-style :italic)
+                        <> "|No tasks" $ {} (:font-family ui/font-fancy) (:font-style :italic)
                           :color $ hsl 0 0 80
                       render-task-list todo-tasks
                     if
                       > (count done-tasks) 0
                       div
                         {} $ :class-name (str-spaced css/row-middle style-section)
-                        <> "\"Done tasks" $ {}
+                        <> "|Done tasks" $ {}
                           :color $ hsl 0 0 80
                           :font-size 14
                         =< 8 nil
@@ -464,31 +464,31 @@
         |style-body $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defstyle style-body $ {}
-              "\"&" $ {} (:padding-bottom "\"120px")
+              |& $ {} (:padding-bottom |120px)
           :examples $ []
         |style-list-base $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defstyle style-list-base $ {}
-              "\"&" $ {} (:display |flex) (:flex-direction |column) (:position |relative)
+              |& $ {} (:display |flex) (:flex-direction |column) (:position |relative)
           :examples $ []
         |style-list-height $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defn style-list-height (size)
               {}
-                :height $ str (* 40 size) "\"px"
+                :height $ str (* 40 size) |px
                 :transition-duration |0ms
           :examples $ []
         |style-section $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defstyle style-section $ {}
-              "\"&" $ {} (:margin-top |16px)
+              |& $ {} (:margin-top |16px)
           :examples $ []
         |style-todolist $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
             defstyle style-todolist $ {}
-              "\"&" $ {}
+              |& $ {}
                 :background-color $ hsl 0 0 100
-                :height "\"100%"
+                :height |100%
                 :box-shadow "|0 2px 8px rgba(5, 5, 5, 0.06)"
                 :padding "|20px 24px"
                 :overflow :auto
@@ -511,11 +511,11 @@
       :defs $ {}
         |dev? $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
-            def dev? $ = "\"dev" (get-env "\"mode" "\"release")
+            def dev? $ = |dev (get-env |mode |release)
           :examples $ []
         |site $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
-            def site $ {} (:title "\"Wanderlist") (:icon "\"http://cdn.tiye.me/logo/respo.png") (:storage-key "\"wanderlist")
+            def site $ {} (:title |Wanderlist) (:icon |http://cdn.tiye.me/logo/respo.png) (:storage-key |wanderlist)
           :examples $ []
       :ns $ %{} :NsEntry (:doc |)
         :code $ quote (ns app.config)
@@ -536,7 +536,7 @@
           :code $ quote
             defn main! ()
               if config/dev? $ load-console-formatter!
-              println "\"Running mode:" $ if config/dev? "\"dev" "\"release"
+              println "|Running mode:" $ if config/dev? |dev |release
               if-let
                 stored-data $ js/window.localStorage.getItem |wanderlist
                 try
@@ -559,8 +559,8 @@
               do (clear-cache!) (remove-watch *store :changes)
                 add-watch *store :changes $ fn (s prev) (render-app!)
                 render-app!
-                hud! "\"ok~" "\"Ok"
-              hud! "\"error" build-errors
+                hud! |ok~ |Ok
+              hud! |error build-errors
           :examples $ []
         |render-app! $ %{} :CodeEntry (:doc |) (:schema nil)
           :code $ quote
@@ -581,8 +581,8 @@
             [] app.updater :refer $ [] updater
             [] app.schema :as schema
             app.config :as config
-            "\"./calcit.build-errors" :default build-errors
-            "\"bottom-tip" :default hud!
+            |./calcit.build-errors :default build-errors
+            |bottom-tip :default hud!
     |app.schema $ %{} :FileEntry
       :defs $ {}
         |group $ %{} :CodeEntry (:doc |) (:schema nil)
@@ -654,7 +654,7 @@
                 (:set-router d) (assoc store :router d)
                 (:hide-sidebar) (assoc store :show-sidebar? false)
                 (:show-sidebar) (assoc store :show-sidebar? true)
-                _ $ do (println "\"Unknown op:" op) store
+                _ $ do (println "|Unknown op:" op) store
           :examples $ []
       :ns $ %{} :NsEntry (:doc |)
         :code $ quote
