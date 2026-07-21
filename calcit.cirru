@@ -532,7 +532,7 @@
                 recur $ : states op op-data
                 reset! *store $ updater @*store op (generate-id!) (js/Date.now)
           :examples $ []
-        |main! $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+        |main! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn main! ()
               if config/dev? $ load-console-formatter!
@@ -549,6 +549,10 @@
               set! js/window.onbeforeunload save-local-storage!
               println "|App started."
           :examples $ []
+          :schema $ :: :fn
+            {} (:return :unit)
+              :args $ []
+              :features $ #{} :js-ffi
         |mount-target $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             def mount-target $ js/document.querySelector |.app
