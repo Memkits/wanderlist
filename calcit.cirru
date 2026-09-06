@@ -1,12 +1,14 @@
 
-{} (:about "|Machine-generated snapshot. Do not edit directly — changes will be overwritten. Use `cr query` to inspect and `cr edit`/`cr tree` to modify. Run `cr docs agents --full` first. Manual edits must follow format and schema conventions, then run `cr edit format`.") (:package |app)
-  :configs $ {} (:init-fn |app.main/main!) (:reload-fn |app.main/reload!) (:version |0.0.1)
-    :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |alerts.calcit/ |respo-feather.calcit/
+{} (:about "|Machine-generated snapshot. Do not edit directly — changes will be overwritten. Use `calcit query` to inspect and `calcit edit`/`calcit tree` to modify. Run `calcit docs agents --full` first. Manual edits must follow format and schema conventions, then run `calcit edit format`.") (:package |app)
   :entries $ {}
+    :default $ {} (:description |) (:init-fn 'app.main/main!) (:mode :native) (:reload-fn 'app.main/reload!)
+      :feature-policy $ {}
+      :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |alerts.calcit/ |respo-feather.calcit/
+      :type-slots $ {}
   :files $ {}
-    |app.comp.container $ %{} :FileEntry
+    'app.comp.container $ %{} 'FileEntry
       :defs $ {}
-        |comp-container $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+        'comp-container $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-container (store)
               let
@@ -39,33 +41,39 @@
                   if dev? $ comp-inspect |Store store
                     {} $ :bottom 0
           :examples $ []
-        |comp-margin $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'comp-margin $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-margin () $ div
               {} $ :class-name style-margin
           :examples $ []
-        |style-collapsed-sidebar $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-collapsed-sidebar $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-collapsed-sidebar $ {}
               |& $ {} (:padding "|24px 8px") (:width |56px) (:display |flex) (:justify-content |center) (:transition-duration |200ms)
           :examples $ []
-        |style-divider $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-divider $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-divider $ {}
               |& $ {} (:width 1)
                 :background-color $ hsl 220 16 90
           :examples $ []
-        |style-main-panel $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-main-panel $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-main-panel $ {}
               |& $ {} (:max-width |860px) (:flex-basis |640px) (:background-color |#ffffff) (:border-radius |12px) (:box-shadow "|0 2px 12px rgba(5, 5, 5, 0.06)") (:margin "|16px 0") (:overflow |hidden)
           :examples $ []
-        |style-margin $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-margin $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-margin $ {}
               |& $ {} (:flex 1) (:flex-basis |12px)
           :examples $ []
-        |style-placeholder $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-placeholder $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-placeholder $ {}
               |& $ {} (:width |100%) (:height |100%)
@@ -78,12 +86,14 @@
                 :font-weight 400
                 :font-family ui/font-fancy
           :examples $ []
-        |style-root $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-root $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-root $ {}
               |& $ {} (:background-color |#f5f7fa) (:min-height |100vh)
           :examples $ []
-      :ns $ %{} :NsEntry (:doc |)
+          :schema $ :: 'Dynamic
+      :ns $ %{} 'NsEntry (:doc |)
         :code $ quote
           ns app.comp.container $ :require
             respo-ui.core :refer $ hsl
@@ -96,9 +106,9 @@
             app.config :refer $ dev?
             respo-ui.css :as css
             respo.css :refer $ defstyle
-    |app.comp.group-line $ %{} :FileEntry
+    'app.comp.group-line $ %{} 'FileEntry
       :defs $ {}
-        |comp-group-line $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+        'comp-group-line $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-group-line (group index selected?)
               let
@@ -123,7 +133,8 @@
                         :id $ :id group
                         :text $ :value e
           :examples $ []
-        |style-group $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-group $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn style-group (index selected? todo?)
               {}
@@ -133,22 +144,26 @@
                 :background-color $ if selected? (hsl 200 20 94) |transparent
                 :color $ if todo? (hsl 0 0 20) (hsl 0 0 70)
           :examples $ []
-        |style-group-base $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-group-base $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-group-base $ {}
               |& $ {} (:padding "|0px 12px") (:line-height |40px) (:cursor |pointer) (:position |absolute) (:width |100%) (:transition-duration |220ms) (:display |flex) (:align-items |center) (:border-radius |8px)
           :examples $ []
-        |style-input $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-input $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-input $ {}
               |& $ {} (:border |none) (:flex 1) (:outline |none) (:font-size 15) (:line-height 2) (:background-color |transparent)
           :examples $ []
-        |style-small-hint $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-small-hint $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-small-hint $ {}
               |& $ {} (:font-size |12px) (:color |#8c8c8c) (:pointer-events |none) (:min-width |20px)
           :examples $ []
-      :ns $ %{} :NsEntry (:doc |)
+          :schema $ :: 'Dynamic
+      :ns $ %{} 'NsEntry (:doc |)
         :code $ quote
           ns app.comp.group-line $ :require
             respo.core :refer $ defcomp >> <> div span input
@@ -159,16 +174,17 @@
             respo-alerts.core :refer $ comp-prompt comp-confirm
             respo.css :refer $ defstyle
             respo-ui.css :as css
-    |app.comp.sidebar $ %{} :FileEntry
+    'app.comp.sidebar $ %{} 'FileEntry
       :defs $ {}
-        |by-newest-group $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+        'by-newest-group $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn by-newest-group (group-a group-b)
               &compare
                 :touched-time $ last group-b
                 :touched-time $ last group-a
           :examples $ []
-        |comp-sidebar $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'comp-sidebar $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-sidebar (states groups router)
               let
@@ -218,7 +234,8 @@
                           .sort-by first
                   .render add-plugin
           :examples $ []
-        |style-body $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-body $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-body $ {}
               |& $ {} (:flex |1)
@@ -227,7 +244,8 @@
                 :overflow |auto
                 :padding-top |8px
           :examples $ []
-        |style-box $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-box $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn style-box (n)
               {} $ :height
@@ -235,17 +253,20 @@
                   + 80 $ * n 40
                   , |px
           :examples $ []
-        |style-box-base $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-box-base $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-box-base $ {}
               |& $ {} (:width |100%) (:position |relative)
           :examples $ []
-        |style-empty-hint $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-empty-hint $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-empty-hint $ {}
               |& $ {} (:font-family ui/font-fancy) (:font-style :italic) (:color |#8c8c8c)
           :examples $ []
-        |style-sidebar $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-sidebar $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-sidebar $ {}
               |& $ {}
@@ -258,7 +279,8 @@
                 :width |280px
                 :transition-duration |200ms
           :examples $ []
-      :ns $ %{} :NsEntry (:doc |)
+          :schema $ :: 'Dynamic
+      :ns $ %{} 'NsEntry (:doc |)
         :code $ quote
           ns app.comp.sidebar $ :require (respo-ui.core :as ui)
             respo-ui.core :refer $ hsl
@@ -269,9 +291,9 @@
             feather.core :refer $ comp-i comp-icon
             respo-ui.css :as css
             respo.css :refer $ defstyle
-    |app.comp.task $ %{} :FileEntry
+    'app.comp.task $ %{} 'FileEntry
       :defs $ {}
-        |comp-task $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+        'comp-task $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-task (states task index)
               let
@@ -311,23 +333,27 @@
                         d! $ : :rm-task task
                   .render remove-plugin
           :examples $ []
-        |style-done $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-done $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn style-done (done?)
               {} $ :color
                 if done? (hsl 100 20 60) (hsl 20 90 80)
           :examples $ []
-        |style-input $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-input $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-input $ {}
               |& $ {} (:outline |none) (:border "|1px solid #d9d9d9") (:padding "|0px 10px") (:line-height |32px) (:font-size |15px) (:flex |1) (:margin "|0 8px") (:border-radius |8px) (:background-color |#ffffff)
           :examples $ []
-        |style-task-base $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-task-base $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-task-base $ {}
               |& $ {} (:display |flex) (:position |absolute) (:width |100%) (:transition-duration |200ms) (:padding "|2px 4px")
           :examples $ []
-        |style-task-offset $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-task-offset $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn style-task-offset (index)
               {} $ :top
@@ -335,7 +361,8 @@
                   + 8 $ * index 40
                   , |px
           :examples $ []
-      :ns $ %{} :NsEntry (:doc |)
+          :schema $ :: 'Dynamic
+      :ns $ %{} 'NsEntry (:doc |)
         :code $ quote
           ns app.comp.task $ :require
             respo-ui.core :refer $ hsl
@@ -346,16 +373,17 @@
             respo.comp.space :refer $ =<
             respo.css :refer $ defstyle
             respo-ui.css :as css
-    |app.comp.todolist $ %{} :FileEntry
+    'app.comp.todolist $ %{} 'FileEntry
       :defs $ {}
-        |by-touch-time $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+        'by-touch-time $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn by-touch-time (entry-a entry-b)
               &compare
                 :touched-time $ last entry-b
                 :touched-time $ last entry-a
           :examples $ []
-        |comp-group-banner $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'comp-group-banner $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-group-banner (states group)
               let
@@ -406,12 +434,13 @@
                   .render add-plugin
                   .render remove-plugin
           :examples $ []
-        |comp-todolist $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'comp-todolist $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-todolist (states router group)
               let
                   cursor $ :cursor states
-                  tasks $ :tasks group
+                  tasks $ option:unwrap-or (:tasks group) ({})
                   state $ or (:data states)
                     {} (:draft |) (:fold-done? true)
                   todo-tasks $ -> tasks .to-map
@@ -461,29 +490,34 @@
                       not $ :fold-done? state
                       render-task-list done-tasks
           :examples $ []
-        |style-body $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-body $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-body $ {}
               |& $ {} (:padding-bottom |120px)
           :examples $ []
-        |style-list-base $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-list-base $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-list-base $ {}
               |& $ {} (:display |flex) (:flex-direction |column) (:position |relative)
           :examples $ []
-        |style-list-height $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-list-height $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn style-list-height (size)
               {}
                 :height $ str (* 40 size) |px
                 :transition-duration |0ms
           :examples $ []
-        |style-section $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-section $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-section $ {}
               |& $ {} (:margin-top |16px)
           :examples $ []
-        |style-todolist $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'style-todolist $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-todolist $ {}
               |& $ {}
@@ -493,7 +527,8 @@
                 :padding "|20px 24px"
                 :overflow :auto
           :examples $ []
-      :ns $ %{} :NsEntry (:doc |)
+          :schema $ :: 'Dynamic
+      :ns $ %{} 'NsEntry (:doc |)
         :code $ quote
           ns app.comp.todolist $ :require
             [] respo-ui.core :refer $ [] hsl
@@ -507,24 +542,28 @@
             [] respo-alerts.core :refer $ [] use-prompt use-confirm
             respo.css :refer $ defstyle
             respo-ui.css :as css
-    |app.config $ %{} :FileEntry
+    'app.config $ %{} 'FileEntry
       :defs $ {}
-        |dev? $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+        'dev? $ %{} 'CodeEntry (:doc |)
           :code $ quote
-            def dev? $ = |dev (get-env |mode |release)
+            def dev? $ = |dev
+              option:unwrap-or (get-env |mode) |release
           :examples $ []
-        |site $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'site $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def site $ {} (:title |Wanderlist) (:icon |http://cdn.tiye.me/logo/respo.png) (:storage-key |wanderlist)
           :examples $ []
-      :ns $ %{} :NsEntry (:doc |)
+          :schema $ :: 'Dynamic
+      :ns $ %{} 'NsEntry (:doc |)
         :code $ quote (ns app.config)
-    |app.main $ %{} :FileEntry
+    'app.main $ %{} 'FileEntry
       :defs $ {}
-        |*store $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+        '*store $ %{} 'CodeEntry (:doc |)
           :code $ quote (defatom *store schema/store)
           :examples $ []
-        |dispatch! $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn dispatch! (op ? op-data)
               when config/dev? $ js/console.log op op-data
@@ -532,32 +571,37 @@
                 recur $ : states op op-data
                 reset! *store $ updater @*store op (generate-id!) (js/Date.now)
           :examples $ []
-        |main! $ %{} :CodeEntry (:doc |)
+          :schema $ :: 'Dynamic
+        'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn main! ()
               if config/dev? $ load-console-formatter!
               println "|Running mode:" $ if config/dev? |dev |release
-              if-let
-                stored-data $ js/window.localStorage.getItem |wanderlist
-                try
-                  let
-                      old-store $ parse-cirru-edn stored-data
-                    reset! *store $ merge schema/store old-store
-                  fn $ e
+              let
+                  raw $ js/window.localStorage.getItem |wanderlist
+                if (js-present? raw)
+                  try
+                    let
+                        old-store $ parse-cirru-edn
+                          unsafe-coerce raw $ quote String
+                      reset! *store $ merge schema/store old-store
+                    fn (e) &unit
+                  , &unit
               render-app!
               add-watch *store :rerender $ fn (s p) (render-app!)
               set! js/window.onbeforeunload save-local-storage!
               println "|App started."
           :examples $ []
-          :schema $ :: :fn
-            {} (:return :unit)
+          :schema $ :: 'Fn
+            {} (:return 'Unit)
               :args $ []
               :features $ #{} :js-ffi
-        |mount-target $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+        'mount-target $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def mount-target $ js/document.querySelector |.app
           :examples $ []
-        |reload! $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn reload! () $ if (nil? build-errors)
               do (clear-cache!) (remove-watch *store :changes)
@@ -566,18 +610,21 @@
                 hud! |ok~ |Ok
               hud! |error build-errors
           :examples $ []
-        |render-app! $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn render-app! () $ render! mount-target (comp-container @*store) dispatch!
           :examples $ []
-        |save-local-storage! $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'save-local-storage! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn save-local-storage! (e)
               js/window.localStorage.setItem |wanderlist $ format-cirru-edn
                 assoc @*store :states $ {}
               ; js/console.log $ pr-str @*store
           :examples $ []
-      :ns $ %{} :NsEntry (:doc |)
+          :schema $ :: 'Dynamic
+      :ns $ %{} 'NsEntry (:doc |)
         :code $ quote
           ns app.main $ :require
             [] respo.core :refer $ [] render! clear-cache! realize-ssr! render-element
@@ -587,16 +634,17 @@
             app.config :as config
             |./calcit.build-errors :default build-errors
             |bottom-tip :default hud!
-    |app.schema $ %{} :FileEntry
+    'app.schema $ %{} 'FileEntry
       :defs $ {}
-        |group $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+        'group $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def group $ {} (:text nil) (:id nil)
               :tasks $ noted task ({})
               :created-time nil
               :touched-time nil
           :examples $ []
-        |store $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'store $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def store $ {} (:version 2)
               :groups $ noted group ({})
@@ -604,17 +652,19 @@
               :show-sidebar? true
               :states $ {}
           :examples $ []
-        |task $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :schema $ :: 'Dynamic
+        'task $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def task $ {} (:id nil) (:text nil) (:done false) (:created-time nil) (:touched-time nil) (:done-time nil)
           :examples $ []
-      :ns $ %{} :NsEntry (:doc |)
+          :schema $ :: 'Dynamic
+      :ns $ %{} 'NsEntry (:doc |)
         :code $ quote
           ns app.schema $ :require
             [] hsl.core :refer $ [] hsl
-    |app.updater $ %{} :FileEntry
+    'app.updater $ %{} 'FileEntry
       :defs $ {}
-        |updater $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+        'updater $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn updater (store op op-id op-time)
               tag-match op
@@ -659,7 +709,8 @@
                 (:show-sidebar) (assoc store :show-sidebar? true)
                 _ $ do (println "|Unknown op:" op) store
           :examples $ []
-      :ns $ %{} :NsEntry (:doc |)
+          :schema $ :: 'Dynamic
+      :ns $ %{} 'NsEntry (:doc |)
         :code $ quote
           ns app.updater $ :require
             [] hsl.core :refer $ [] hsl

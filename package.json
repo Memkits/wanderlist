@@ -5,9 +5,9 @@
   "description": "Wanderlist ----",
   "main": "index.js",
   "scripts": {
-    "compile-page": "cr js",
+    "compile-page": "calcit calcit.cirru js",
     "release-page": "vite build --base=./",
-    "watch-page": "cr js -w",
+    "watch-page": "calcit calcit.cirru js -w",
     "build": "yarn compile-page && yarn release-page"
   },
   "repository": {
@@ -22,10 +22,10 @@
   "homepage": "https://github.com/Memkits/wanderlist#readme",
   "devDependencies": {
     "bottom-tip": "^0.1.5",
-    "vite": "^8.0.16"
+    "vite": "8.2.2"
   },
   "dependencies": {
-    "@calcit/procs": "^0.12.50",
+    "@calcit/procs": "0.13.77",
     "dayjs": "^1.11.20",
     "feather-icons": "^4.29.2"
   }
