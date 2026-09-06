@@ -12,14 +12,20 @@
           :code $ quote
             defcomp comp-container (store)
               let
-                  router $ :router store
-                  group-id $ :group-id router
-                  states $ :states store
+                  safe-store $ if (map? store) store ({})
+                  router $ option:unwrap-or (get safe-store :router) ({})
+                  safe-router $ if (map? router) router ({})
+                  group-id-option $ get safe-router :group-id
+                  states $ option:unwrap-or (get safe-store :states) ({})
+                  safe-states $ if (map? states) states ({})
+                  groups $ option:unwrap-or (get safe-store :groups) ({})
+                  safe-groups $ if (map? groups) groups ({})
                 div
                   {} $ :class-name (str-spaced css/fullscreen css/global css/row style-root)
                   comp-margin
-                  if (:show-sidebar? store)
-                    comp-sidebar (>> states :group) (:groups store) router
+                  if
+                    option:unwrap-or (get safe-store :show-sidebar?) false
+                    comp-sidebar (>> safe-states :group) safe-groups safe-router
                     div
                       {} $ :class-name style-collapsed-sidebar
                       comp-icon :sidebar
@@ -30,15 +36,16 @@
                   div $ {} (:class-name style-divider)
                   div
                     {} $ :class-name (str-spaced css/expand style-main-panel)
-                    case-default (:name router)
-                      div ({}) (<> "|router not matching a page" nil)
-                      :table $ if (some? group-id)
-                        comp-todolist (>> states group-id) router $ get (:groups store) group-id
+                    case-default
+                      option:unwrap-or (get safe-router :name) :table
+                      div ({}) (<> |router-not-matching-a-page nil)
+                      :table $ if-let (group-id group-id-option)
+                        comp-todolist (>> safe-states group-id) safe-router $ option:unwrap-or (get safe-groups group-id) ({})
                         div
                           {} $ :class-name style-placeholder
-                          <> "|Select a group?" nil
+                          <> |Select-a-group? nil
                   comp-margin
-                  if dev? $ comp-inspect |Store store
+                  if dev? $ comp-inspect |Store safe-store
                     {} $ :bottom 0
           :examples $ []
           :schema $ :: 'Dynamic
@@ -113,25 +120,30 @@
             defcomp comp-group-line (group index selected?)
               let
                   todo-size $ count
-                    -> (:tasks group)
+                    ->
+                      option:unwrap-or (get group :tasks) ({})
                       filter $ fn (entry)
-                        not $ :done (last entry)
+                        not $ option:unwrap-or
+                          get
+                            option:unwrap-or (last entry) ({})
+                            , :done
+                          , false
                 div
                   {} (:class-name style-group-base)
                     :style $ style-group index selected? (> todo-size 0)
                     :on-click $ fn (e d!)
                       d! :set-router $ {} (:name :table)
-                        :group-id $ :id group
+                        :group-id $ option:unwrap-or (get group :id) nil
                   <> (str todo-size)
                     {} $ :class-name style-small-hint
                   =< 8 0
                   span $ {}
-                    :inner-text $ :text group
+                    :inner-text $ option:unwrap-or (get group :text) |
                     :class-name style-input
                     :on-input $ fn (e d!)
                       d! :update-group $ {}
-                        :id $ :id group
-                        :text $ :value e
+                        :id $ option:unwrap-or (get group :id) nil
+                        :text $ option:unwrap-or (get e :value) |
           :examples $ []
           :schema $ :: 'Dynamic
         'style-group $ %{} 'CodeEntry (:doc |)
@@ -180,16 +192,24 @@
           :code $ quote
             defn by-newest-group (group-a group-b)
               &compare
-                :touched-time $ last group-b
-                :touched-time $ last group-a
+                option:unwrap-or
+                  get
+                    option:unwrap-or (last group-b) ({})
+                    , :touched-time
+                  , 0
+                option:unwrap-or
+                  get
+                    option:unwrap-or (last group-a) ({})
+                    , :touched-time
+                  , 0
           :examples $ []
           :schema $ :: 'Dynamic
         'comp-sidebar $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-sidebar (states groups router)
               let
-                  cursor $ :cursor states
-                  state $ or (:data states) |
+                  cursor $ option:unwrap-or (get states :cursor) ([])
+                  state $ option:unwrap-or (get states :data) |
                   add-plugin $ use-prompt (>> states :add) ({})
                 div
                   {} $ :class-name style-sidebar
@@ -227,9 +247,11 @@
                           map-indexed $ fn (index entry)
                             [] (first entry)
                               let
-                                  group $ last entry
-                                  tasks $ :tasks group
-                                  selected? $ = (:group-id router) (:id group)
+                                  group $ option:unwrap-or (last entry) ({})
+                                  tasks $ option:unwrap-or (get group :tasks) ({})
+                                  selected? $ =
+                                    option:unwrap-or (get router :group-id) nil
+                                    option:unwrap-or (get group :id) nil
                                 comp-group-line group index selected?
                           .sort-by first
                   .render add-plugin
@@ -297,7 +319,7 @@
           :code $ quote
             defcomp comp-task (states task index)
               let
-                  done? $ :done task
+                  done? $ option:unwrap-or (get task :done) false
                   remove-plugin $ use-confirm (>> states :remove) ({})
                 create-element :section
                   {}
@@ -309,14 +331,14 @@
                     fn (e d!)
                       d! $ : :toggle-task task
                   input $ {}
-                    :value $ :text task
+                    :value $ option:unwrap-or (get task :text) |
                     :class-name $ str-spaced |task-input style-input
                     :on-input $ fn (e d!)
                       d! $ : :update-task
                         {}
-                          :group-id $ :group-id task
-                          :id $ :id task
-                          :text $ :value e
+                          :group-id $ option:unwrap-or (get task :group-id) nil
+                          :id $ option:unwrap-or (get task :id) nil
+                          :text $ option:unwrap-or (get e :value) |
                   comp-icon :arrow-up
                     {} (:font-size 14)
                       :color $ hsl 150 50 80
@@ -379,8 +401,16 @@
           :code $ quote
             defn by-touch-time (entry-a entry-b)
               &compare
-                :touched-time $ last entry-b
-                :touched-time $ last entry-a
+                option:unwrap-or
+                  get
+                    option:unwrap-or (last entry-b) ({})
+                    , :touched-time
+                  , 0
+                option:unwrap-or
+                  get
+                    option:unwrap-or (last entry-a) ({})
+                    , :touched-time
+                  , 0
           :examples $ []
           :schema $ :: 'Dynamic
         'comp-group-banner $ %{} 'CodeEntry (:doc |)
@@ -388,14 +418,16 @@
             defcomp comp-group-banner (states group)
               let
                   edit-plugin $ use-prompt (>> states :edit)
-                    {} $ :initial (:text group)
+                    {} $ :initial
+                      option:unwrap-or (get group :text) |
                   add-plugin $ use-prompt (>> states :add) ({})
                   remove-plugin $ use-confirm (>> states :remove) ({})
                 div
                   {} $ :class-name css/row-parted
                   div
                     {} $ :class-name css/row-middle
-                    <> (:text group)
+                    <>
+                      option:unwrap-or (get group :text) |
                       {} (:font-size 20) (:font-family ui/font-fancy)
                     =< 8 nil
                     span
@@ -403,7 +435,7 @@
                         fn (e d!)
                           .show edit-plugin d! $ fn (result)
                             d! :update-group $ {}
-                              :id $ :id group
+                              :id $ option:unwrap-or (get group :id) nil
                               :text result
                       comp-i :edit 14 $ hsl 200 80 80
                     =< 16 nil
@@ -413,7 +445,7 @@
                           .show add-plugin d! $ fn (result)
                             when-not (.blank? result)
                               d! :add-task $ {} (:text result)
-                                :group-id $ :id group
+                                :group-id $ option:unwrap-or (get group :id) nil
                       button $ {} (:class-name css/button) (:inner-text "|Add task")
                   div ({})
                     comp-icon :arrow-up
@@ -421,13 +453,13 @@
                         :color $ hsl 200 80 80
                         :cursor |pointer
                       fn (e d!)
-                        d! :touch-group $ :id group
+                        d! :touch-group $ option:unwrap-or (get group :id) nil
                     =< 8 nil
                     span
                       {} $ :on-click
                         fn (e d!)
                           .show remove-plugin d! $ fn ()
-                            d! :rm-group $ :id group
+                            d! :rm-group $ option:unwrap-or (get group :id) nil
                             d! :set-router $ {} (:name :table)
                       comp-i :x 14 $ hsl 0 100 70
                   .render edit-plugin
@@ -439,16 +471,24 @@
           :code $ quote
             defcomp comp-todolist (states router group)
               let
-                  cursor $ :cursor states
-                  tasks $ option:unwrap-or (:tasks group) ({})
-                  state $ or (:data states)
+                  cursor $ option:unwrap-or (get states :cursor) ([])
+                  tasks $ option:unwrap-or (get group :tasks) ({})
+                  state $ option:unwrap-or (get states :data)
                     {} (:draft |) (:fold-done? true)
                   todo-tasks $ -> tasks .to-map
                     filter $ fn (entry)
-                      not $ :done (last entry)
+                      not $ option:unwrap-or
+                        get
+                          option:unwrap-or (last entry) ({})
+                          , :done
+                        , false
                   done-tasks $ -> tasks .to-map
                     filter $ fn (entry)
-                      :done $ last entry
+                      option:unwrap-or
+                        get
+                          option:unwrap-or (last entry) ({})
+                          , :done
+                        , false
                   render-task-list $ fn (tasks)
                     list->
                       {} (:class-name style-list-base)
@@ -480,14 +520,16 @@
                           :font-size 14
                         =< 8 nil
                         comp-icon
-                          if (:fold-done? state) :eye-off :eye
+                          if
+                            option:unwrap-or (get state :fold-done?) true
+                            , :eye-off :eye
                           {} (:font-size 16)
                             :color $ hsl 200 80 80
                             :cursor :pointer
                           fn (e d!)
                             d! cursor $ update state :fold-done? not
                     if
-                      not $ :fold-done? state
+                      not $ option:unwrap-or (get state :fold-done?) true
                       render-task-list done-tasks
           :examples $ []
           :schema $ :: 'Dynamic
@@ -677,37 +719,54 @@
                 (:rm-group id)
                   dissoc-in store $ [] :groups id
                 (:update-group op-data)
-                  assoc-in store
-                    [] :groups (:id op-data) :text
-                    :text op-data
+                  let
+                      data $ if (map? op-data) op-data ({})
+                      id $ option:unwrap-or (get data :id) nil
+                      text $ option:unwrap-or (get data :text) |
+                    assoc-in store ([] :groups id :text) text
                 (:touch-group gid)
                   assoc-in store ([] :groups gid :touched-time) op-time
                 (:add-task op-data)
-                  -> store $ assoc-in
-                    [] :groups (:group-id op-data) :tasks op-id
-                    merge schema/task op-data $ {} (:id op-id) (:created-time op-time) (:touched-time op-time)
+                  let
+                      data $ if (map? op-data) op-data ({})
+                      group-id $ option:unwrap-or (get data :group-id) nil
+                    -> store $ assoc-in ([] :groups group-id :tasks op-id)
+                      merge schema/task data $ {} (:id op-id) (:created-time op-time) (:touched-time op-time)
                 (:rm-task op-data)
-                  update-in store
-                    [] :groups (:group-id op-data) :tasks
-                    fn (tasks)
-                      dissoc tasks $ :id op-data
+                  let
+                      data $ if (map? op-data) op-data ({})
+                      group-id $ option:unwrap-or (get data :group-id) nil
+                      id $ option:unwrap-or (get data :id) nil
+                    update-in store ([] :groups group-id :tasks)
+                      fn (tasks)
+                        dissoc
+                          option:unwrap-or tasks $ {}
+                          , id
                 (:update-task op-data)
-                  assoc-in store
-                    [] :groups (:group-id op-data) :tasks (:id op-data) :text
-                    :text op-data
+                  let
+                      data $ if (map? op-data) op-data ({})
+                      group-id $ option:unwrap-or (get data :group-id) nil
+                      id $ option:unwrap-or (get data :id) nil
+                      text $ option:unwrap-or (get data :text) |
+                    assoc-in store ([] :groups group-id :tasks id :text) text
                 (:toggle-task op-data)
-                  update-in store
-                    [] :groups (:group-id op-data) :tasks $ :id op-data
-                    fn (task)
-                      -> task (update :done not) (assoc :touched-time op-time) (assoc :done-time op-time)
+                  let
+                      data $ if (map? op-data) op-data ({})
+                      group-id $ option:unwrap-or (get data :group-id) nil
+                      id $ option:unwrap-or (get data :id) nil
+                    update-in store ([] :groups group-id :tasks id)
+                      fn (task)
+                        -> (option:unwrap-or task schema/task) (update :done not) (assoc :touched-time op-time) (assoc :done-time op-time)
                 (:touch-task op-data)
-                  assoc-in store
-                    [] :groups (:group-id op-data) :tasks (:id op-data) :touched-time
-                    , op-time
+                  let
+                      data $ if (map? op-data) op-data ({})
+                      group-id $ option:unwrap-or (get data :group-id) nil
+                      id $ option:unwrap-or (get data :id) nil
+                    assoc-in store ([] :groups group-id :tasks id :touched-time) op-time
                 (:set-router d) (assoc store :router d)
                 (:hide-sidebar) (assoc store :show-sidebar? false)
                 (:show-sidebar) (assoc store :show-sidebar? true)
-                _ $ do (println "|Unknown op:" op) store
+                _ $ do (println |Unknown-op: op) store
           :examples $ []
           :schema $ :: 'Dynamic
       :ns $ %{} 'NsEntry (:doc |)

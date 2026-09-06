@@ -7,13 +7,18 @@ on:
       - main
   pull_request: {}
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
 
-    - uses: actions/setup-node@v6
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
       with:
         node-version: 24
 
@@ -23,27 +28,56 @@ jobs:
         corepack prepare yarn@4.12.0 --activate
         yarn --version
 
-    - uses: calcit-lang/setup-cr@0.0.9
+    - uses: calcit-lang/setup-calcit@704b3f5cd6f9ce3bd1e0c926dbdd1d181adb8180 # v1.4.0
+      with:
+        tools: calcit,caps
+        caps-version: "0.1.0"
 
-    - name: Install deps
-      run: caps --ci && yarn install --immutable
+    - name: Install and validate
+      run: |
+        caps --strict --ci
+        yarn install --immutable
+        caps verify --toolchain
+        calcit calcit.cirru edit format
+        git diff --exit-code -- calcit.cirru
+        calcit calcit.cirru --check-only
+        calcit calcit.cirru analyze quality --baseline config/calcit-quality.cirru
 
     - name: "compiles to js"
       run: |
         yarn compile-page
         yarn release-page
 
-    - name: Deploy to server
-      id: deploy
-      uses: Pendect/action-rsyncer@v2.0.0
-      env:
-        DEPLOY_KEY: ${{secrets.rsync_private_key}}
-      with:
-        flags: '-avzr --progress'
-        options: ''
-        ssh_options: ''
-        src: 'dist/*'
-        dest: 'rsync-user@tiye.me:/web-assets/repo/${{ github.repository }}'
+    - name: Install verified rsync
+      run: |
+        set -euo pipefail
+        curl --fail --location --silent --show-error \
+          --output "$RUNNER_TEMP/rsync.tar.gz" \
+          https://download.samba.org/pub/rsync/src/rsync-3.5.0.tar.gz
+        echo "c7ffd1ef653e99540f661e47cb00b7f9cad1ee6b972399b16f93d672656e0d33  $RUNNER_TEMP/rsync.tar.gz" | sha256sum --check --strict
+        tar -xzf "$RUNNER_TEMP/rsync.tar.gz" -C "$RUNNER_TEMP"
+        cd "$RUNNER_TEMP/rsync-3.5.0"
+        ./configure --prefix="$RUNNER_TEMP/rsync-install" --disable-acl-support --disable-lz4 --disable-openssl --disable-xattr-support --disable-xxhash --disable-zstd
+        make -j2
+        make install
+        echo "$RUNNER_TEMP/rsync-install/bin" >> "$GITHUB_PATH"
 
-    - name: Display status from deploy
-      run: echo "${{ steps.deploy.outputs.status }}"
+    - name: Configure verified SSH host
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      env:
+        DEPLOY_KEY: ${{ secrets.rsync_private_key }}
+      run: |
+        set -euo pipefail
+        install -m 700 -d "$HOME/.ssh"
+        printf '%s\n' "$DEPLOY_KEY" > "$HOME/.ssh/deploy_key"
+        chmod 600 "$HOME/.ssh/deploy_key"
+        printf '%s\n' 'tiye.me ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINfDrFyoH0+6TL2+xhosnON6f0+/m9Iz8ydJLWMQQzsm' > "$HOME/.ssh/known_hosts"
+        chmod 600 "$HOME/.ssh/known_hosts"
+
+    - name: Deploy web assets
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: |
+        set -euo pipefail
+        rsync -avzr --progress \
+          -e "ssh -i $HOME/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts" \
+          dist/* "rsync-user@tiye.me:/web-assets/repo/${{ github.repository }}"
