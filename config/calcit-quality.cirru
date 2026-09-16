@@ -342,25 +342,7 @@
       :typeNotFull 0
       :unresolved 0
       :unsafeCoerce 1
-    |app.main/mount-target $ {} (:codeDynamic 0)
-      :codeNil 0
-      :declaredOptional 0
-      :deprecatedCalls 0
-      :schemaDynamic 1
-      :typeNone 1
-      :typeNotFull 1
-      :unresolved 1
-      :unsafeCoerce 0
     |app.main/reload! $ {} (:codeDynamic 0)
-      :codeNil 0
-      :declaredOptional 0
-      :deprecatedCalls 0
-      :schemaDynamic 1
-      :typeNone 1
-      :typeNotFull 1
-      :unresolved 1
-      :unsafeCoerce 0
-    |app.main/render-app! $ {} (:codeDynamic 0)
       :codeNil 0
       :declaredOptional 0
       :deprecatedCalls 0
@@ -408,7 +390,7 @@
     |app.updater/updater $ {} (:codeDynamic 0)
       :codeNil 10
       :declaredOptional 0
-      :deprecatedCalls 1
+      :deprecatedCalls 0
       :schemaDynamic 1
       :typeNone 1
       :typeNotFull 1
@@ -417,11 +399,11 @@
   :metrics $ {} (:codeDynamic 0)
     :codeNil 40
     :declaredOptional 0
-    :deprecatedCalls 1
-    :schemaDynamic 45
-    :typeNone 40
-    :typeNotFull 41
-    :unresolved 85
+    :deprecatedCalls 0
+    :schemaDynamic 43
+    :typeNone 38
+    :typeNotFull 39
+    :unresolved 83
     :unsafeCoerce 1
   :scope $ {} (:includeDependencies false)
     :namespace nil
