@@ -3,8 +3,7 @@
   :about "|Machine-generated snapshot. Do not edit directly — changes will be overwritten. Use `calcit query` to inspect and `calcit edit`/`calcit tree` to modify. Run `calcit docs agents --contract` before mutations; use `--full` for first orientation or changed contract digest. Manual edits must follow format and schema conventions, then run `calcit edit format`."
   :package |app
   :entries $ {} $ :default
-    {} (:description |) (:init-fn 'app.main/main!) (:mode :native)
-      :reload-fn 'app.main/reload!
+    {} (:description |) (:init-fn 'app.main/main!) (:mode :native) (:reload-fn 'app.main/reload!)
       :feature-policy $ {}
       :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |alerts.calcit/ |respo-feather.calcit/
       :type-slots $ {}
@@ -40,8 +39,7 @@
                   {} $ :class-name $ str-spaced css/expand style-main-panel
                   case-default
                     option:unwrap-or (get safe-router :name) :table
-                    div ({})
-                      <> |router-not-matching-a-page nil
+                    div ({}) (<> |router-not-matching-a-page nil)
                     :table $ if-let (group-id group-id-option)
                       comp-todolist (>> safe-states group-id) safe-router $ option:unwrap-or (get safe-groups group-id) ({})
                       div
@@ -58,8 +56,7 @@
           :schema $ :: 'Dynamic
         'style-collapsed-sidebar $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-collapsed-sidebar
-            {} $ |& $ {} (:padding "|24px 8px") (:width |56px) (:display |flex) (:justify-content |center)
-              :transition-duration |200ms
+            {} $ |& $ {} (:padding "|24px 8px") (:width |56px) (:display |flex) (:justify-content |center) (:transition-duration |200ms)
           :examples $ []
           :schema $ :: 'Dynamic
         'style-divider $ %{} 'CodeEntry (:doc |)
@@ -70,12 +67,7 @@
           :schema $ :: 'Dynamic
         'style-main-panel $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-main-panel
-            {} $ |& $ {} (:max-width |860px) (:flex-basis |640px)
-              :background-color |#ffffff
-              :border-radius |12px
-              :box-shadow "|0 2px 12px rgba(5, 5, 5, 0.06)"
-              :margin "|16px 0"
-              :overflow |hidden
+            {} $ |& $ {} (:max-width |860px) (:flex-basis |640px) (:background-color |#ffffff) (:border-radius |12px) (:box-shadow "|0 2px 12px rgba(5, 5, 5, 0.06)") (:margin "|16px 0") (:overflow |hidden)
           :examples $ []
           :schema $ :: 'Dynamic
         'style-margin $ %{} 'CodeEntry (:doc |)
@@ -98,9 +90,7 @@
           :schema $ :: 'Dynamic
         'style-root $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-root
-            {} $ |& $ {}
-              :background-color |#f5f7fa
-              :min-height |100vh
+            {} $ |& $ {} (:background-color |#f5f7fa) (:min-height |100vh)
           :examples $ []
           :schema $ :: 'Dynamic
       :ns $ %{} 'NsEntry (:doc |)
@@ -159,17 +149,12 @@
           :schema $ :: 'Dynamic
         'style-group-base $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-group-base
-            {} $ |& $ {} (:padding "|0px 12px") (:line-height |40px) (:cursor |pointer) (:position |absolute) (:width |100%)
-              :transition-duration |220ms
-              :display |flex
-              :align-items |center
-              :border-radius |8px
+            {} $ |& $ {} (:padding "|0px 12px") (:line-height |40px) (:cursor |pointer) (:position |absolute) (:width |100%) (:transition-duration |220ms) (:display |flex) (:align-items |center) (:border-radius |8px)
           :examples $ []
           :schema $ :: 'Dynamic
         'style-input $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-input
-            {} $ |& $ {} (:border |none) (:flex 1) (:outline |none) (:font-size 15) (:line-height 2)
-              :background-color |transparent
+            {} $ |& $ {} (:border |none) (:flex 1) (:outline |none) (:font-size 15) (:line-height 2) (:background-color |transparent)
           :examples $ []
           :schema $ :: 'Dynamic
         'style-small-hint $ %{} 'CodeEntry (:doc |)
@@ -260,7 +245,7 @@
         'style-body $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-body
             {} $ |& $ {} (:flex |1)
-              :background-color $ hsl 0 0 0 0
+              :background-color $ hsl 0 0 0
               :position |relative
               :overflow |auto
               :padding-top |8px
@@ -354,22 +339,12 @@
           :schema $ :: 'Dynamic
         'style-input $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-input
-            {} $ |& $ {} (:outline |none)
-              :border "|1px solid #d9d9d9"
-              :padding "|0px 10px"
-              :line-height |32px
-              :font-size |15px
-              :flex |1
-              :margin "|0 8px"
-              :border-radius |8px
-              :background-color |#ffffff
+            {} $ |& $ {} (:outline |none) (:border "|1px solid #d9d9d9") (:padding "|0px 10px") (:line-height |32px) (:font-size |15px) (:flex |1) (:margin "|0 8px") (:border-radius |8px) (:background-color |#ffffff)
           :examples $ []
           :schema $ :: 'Dynamic
         'style-task-base $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-task-base
-            {} $ |& $ {} (:display |flex) (:position |absolute) (:width |100%)
-              :transition-duration |200ms
-              :padding "|2px 4px"
+            {} $ |& $ {} (:display |flex) (:position |absolute) (:width |100%) (:transition-duration |200ms) (:padding "|2px 4px")
           :examples $ []
           :schema $ :: 'Dynamic
         'style-task-offset $ %{} 'CodeEntry (:doc |)
@@ -576,9 +551,7 @@
           :schema $ :: 'Dynamic
         'site $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def site
-            {} (:title |Wanderlist)
-              :icon |http://cdn.tiye.me/logo/respo.png
-              :storage-key |wanderlist
+            {} (:title |Wanderlist) (:icon |http://cdn.tiye.me/logo/respo.png) (:storage-key |wanderlist)
           :examples $ []
           :schema $ :: 'Dynamic
       :ns $ %{} 'NsEntry (:doc |)
@@ -597,6 +570,13 @@
               reset! *store $ updater @*store op (generate-id!) (js/Date.now)
           :examples $ []
           :schema $ :: 'Dynamic
+        'get-mount-target $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defn get-mount-target () (js/document.querySelector |.app)
+          :examples $ []
+          :schema $ :: 'Fn $ {}
+            :args $ []
+            :features $ #{} :js-ffi
+            :return $ :: 'JsNullish 'JsObject
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! ()
             if config/dev? $ load-console-formatter!
@@ -607,7 +587,7 @@
                 try
                   let
                       old-store $ parse-cirru-edn $ unsafe-coerce raw (quote String)
-                    reset! *store $ merge schema/store old-store
+                    reset! *store $ assert-type old-store $ :: 'Map 'Tag 'Dynamic
                   fn (e) &unit
                 , &unit
             render-app!
@@ -619,10 +599,10 @@
             :args $ []
             :features $ #{} :js-ffi
         'mount-target $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ def mount-target
-            js/document.querySelector |.app
+          :code $ quote $ def mount-target ([] get-mount-target)
           :examples $ []
-          :schema $ :: 'Dynamic
+          :ffi $ {} $ :backend :js
+          :schema $ :: 'JsNullish 'JsObject
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! ()
             if (nil? build-errors)
@@ -637,7 +617,8 @@
           :code $ quote $ defn render-app! ()
             render! mount-target (comp-container @*store) dispatch!
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Fn $ {} (:return 'Unit)
+            :args $ []
         'save-local-storage! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn save-local-storage! (e)
             js/window.localStorage.setItem |wanderlist $ format-cirru-edn $ assoc @*store :states ({})
@@ -656,6 +637,10 @@
             |bottom-tip :default hud!
     'app.schema $ %{} 'FileEntry
       :defs $ {}
+        'Store $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defstruct Store (:version 'Number) (:groups 'Map) (:router 'Map) (:show-sidebar? 'Bool) (:states 'Map)
+          :examples $ []
+          :schema $ :: 'StructDef
         'group $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def group
             {} (:text nil) (:id nil)
@@ -685,7 +670,7 @@
       :defs $ {} $ 'updater
         %{} 'CodeEntry (:doc |)
           :code $ quote $ defn updater (store op op-id op-time)
-            tag-match op
+            match op
               (:states cursor s) (update-states store cursor s)
               (:add-group op-data)
                 -> store $ update :groups $ fn (task-groups)
