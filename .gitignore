@@ -9,3 +9,5 @@ dist/
 .yarn/*.gz
 
 .DS_Store
+.pnp.cjs
+.pnp.loader.mjs
