@@ -10,6 +10,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: cos-upload-${{ github.repository }}-${{ github.event_name == 'pull_request' && 'pr' || 'production' }}
+  cancel-in-progress: false
+
 jobs:
   test:
     runs-on: ubuntu-24.04
@@ -38,7 +42,7 @@ jobs:
     - name: Resolve immutable dependencies
       run: |
         set -euo pipefail
-        caps --ci
+        caps --ci --strict
         yarn install --immutable
         caps verify --toolchain
 
@@ -46,6 +50,10 @@ jobs:
       run: |
         set -euo pipefail
         test "$(calcit --version)" = "0.27.0"
+        test -f calcit.cirru
+        test -f deps.cirru
+        test ! -e compact.cirru
+        test ! -e package.cirru
         calcit calcit.cirru edit format
         git diff --exit-code -- calcit.cirru
         calcit calcit.cirru fix --workflow strict --verify --format edn
@@ -68,6 +76,7 @@ jobs:
       env:
         CDN_ORIGIN: https://cos-sh.tiye.me
       run: |
+        set -euo pipefail
         if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
           asset_prefix="${GITHUB_REPOSITORY}/pr/"
         elif [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
@@ -85,6 +94,8 @@ jobs:
         set -euo pipefail
         yarn compile-page
         yarn release-page
+        node --test scripts/*.test.mjs
+        node scripts/check-cdn-path.mjs
 
     - name: Check COS credentials
       id: cos-credentials
