@@ -5,7 +5,7 @@
   :entries $ {} $ :default
     {} (:description |) (:init-fn 'app.main/main!) (:mode :js) (:reload-fn 'app.main/reload!) (:target :browser)
       :feature-policy $ {}
-      :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |alerts.calcit/ |respo-feather.calcit/
+      :modules $ [] |respo.calcit/ |respo-ui.calcit/ |reel.calcit/ |alerts.calcit/ |respo-feather.calcit/
       :type-slots $ {}
   :files $ {}
     'app.comp.container $ %{} 'FileEntry
@@ -33,7 +33,8 @@
                       {} (:font-size 16)
                         :color $ hsl 0 0 80
                         :cursor :pointer
-                      fn (e d!) (d! :show-sidebar nil)
+                      fn (e d!)
+                        d! $ :: :show-sidebar
                 div $ {} $ :class-name style-divider
                 div
                   {} $ :class-name $ str-spaced css/expand style-main-panel
@@ -131,7 +132,7 @@
                 {} (:class-name style-group-base)
                   :style $ style-group index selected? $ > todo-size 0
                   :on-click $ fn (e d!)
-                    d! :set-router $ {} (:name :table)
+                    d! $ :: :set-router $ {} (:name :table)
                       :group-id $ option:unwrap-or (get group :id) nil
                 <> (str todo-size)
                   {} $ :class-name style-small-hint
@@ -140,7 +141,7 @@
                   :inner-text $ option:unwrap-or (get group :text) |
                   :class-name style-input
                   :on-input $ fn (e d!)
-                    d! :update-group $ {}
+                    d! $ :: :update-group $ {}
                       :id $ option:unwrap-or (get group :id) nil
                       :text $ option:unwrap-or (get e :value) |
           :examples $ []
@@ -222,17 +223,18 @@
                         .show add-plugin d! $ fn (result)
                           if
                             not $ .blank? $ prompt-text result
-                            d! :add-group result
+                            d! $ :: :add-group result
                     =< 16 nil
                     comp-icon :sidebar
                       {} (:font-size 16)
                         :color $ hsl 0 0 80
                         :cursor :pointer
-                      fn (e d!) (d! :hide-sidebar nil)
+                      fn (e d!)
+                        d! $ :: :hide-sidebar
                 div
                   {} (:class-name style-body)
                     :on-click $ fn (e d!)
-                      d! :set-router $ {} $ :name :table
+                      d! $ :: :set-router $ {} (:name :table)
                   if (empty? groups)
                     div
                       {} $ :class-name css/center
@@ -437,7 +439,7 @@
                   span
                     {} $ :on-click $ fn (e d!)
                       .show edit-plugin d! $ fn (result)
-                        d! :update-group $ {}
+                        d! $ :: :update-group $ {}
                           :id $ option:unwrap-or (get group :id) nil
                           :text result
                     comp-i :edit 14 $ hsl 200 80 80
@@ -447,7 +449,7 @@
                       .show add-plugin d! $ fn (result)
                         when-not
                           .blank? $ prompt-text result
-                          d! :add-task $ {} (:text result)
+                          d! $ :: :add-task $ {} (:text result)
                             :group-id $ option:unwrap-or (get group :id) nil
                     button $ {} (:class-name css/button) (:inner-text "|Add task")
                 div ({})
@@ -456,13 +458,13 @@
                       :color $ hsl 200 80 80
                       :cursor |pointer
                     fn (e d!)
-                      d! :touch-group $ option:unwrap-or (get group :id) nil
+                      d! $ :: :touch-group $ option:unwrap-or (get group :id) nil
                   =< 8 nil
                   span
                     {} $ :on-click $ fn (e d!)
                       .show remove-plugin d! $ fn ()
-                        d! :rm-group $ option:unwrap-or (get group :id) nil
-                        d! :set-router $ {} $ :name :table
+                        d! $ :: :rm-group $ option:unwrap-or (get group :id) nil
+                        d! $ :: :set-router $ {} (:name :table)
                     comp-i :x 14 $ hsl 0 100 70
                 .render edit-plugin
                 .render add-plugin
@@ -529,7 +531,7 @@
                           :color $ hsl 200 80 80
                           :cursor :pointer
                         fn (e d!)
-                          d! cursor $ update state :fold-done? not
+                          d! $ :: :states cursor $ update state :fold-done? not
                   if
                     not $ option:unwrap-or (get state :fold-done?) true
                     render-task-list done-tasks
@@ -647,7 +649,7 @@
             :args $ []
             :features $ #{} :js-ffi
         'mount-target $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ def mount-target ([] get-mount-target)
+          :code $ quote $ def mount-target (get-mount-target)
           :examples $ []
           :ffi $ {} $ :backend :js
           :schema $ :: 'JsNullish 'JsObject
@@ -680,12 +682,12 @@
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
           :require
-            [] respo.core :refer $ [] render! clear-cache! realize-ssr! render-element
-            [] app.comp.container :refer $ [] comp-container
-            [] app.updater :refer $ [] updater
-            [] app.schema :as schema
+            respo.core :refer $ render! clear-cache! realize-ssr! render-element
+            app.comp.container :refer $ comp-container
+            app.updater :refer $ updater
+            app.schema :as schema
             app.config :as config
-            |./calcit.build-errors :default build-errors
+            |./calcit.build-errors.mjs :default build-errors
             |bottom-tip :default hud!
     'app.schema $ %{} 'FileEntry
       :defs $ {}
