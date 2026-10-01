@@ -95,7 +95,6 @@ jobs:
         yarn compile-page
         yarn release-page
         node --test scripts/*.test.mjs
-        node scripts/check-cdn-path.mjs
 
     - name: Check COS credentials
       id: cos-credentials

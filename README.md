@@ -12,8 +12,8 @@ The canonical sources are `calcit.cirru` and `deps.cirru`; CI rejects retired
 single Enum operations; Alerts cursor state calls use Respo's published adapter.
 
 Run `yarn compile-page`, then `node --test scripts/*.test.mjs` for task/group,
-prompt, fold-state, mount-target and CDN regressions. CI validates generated
-frontend CDN paths; public upload verification stays inside cos-upload-action.
+prompt, fold-state and mount-target regressions. Public upload verification uses
+cos-upload-action's built-in verify settings, with no extra CDN checker.
 Original server deployment paths are unchanged.
 
 This project is based on:
