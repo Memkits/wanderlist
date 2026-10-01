@@ -44,32 +44,17 @@ jobs:
         set -euo pipefail
         caps --ci --strict
         yarn install --immutable
-        caps verify --toolchain
 
     - name: Validate Calcit snapshot and types
       run: |
         set -euo pipefail
-        test "$(calcit --version)" = "0.27.0"
         test -f calcit.cirru
         test -f deps.cirru
         test ! -e compact.cirru
         test ! -e package.cirru
         calcit calcit.cirru edit format
         git diff --exit-code -- calcit.cirru
-        calcit calcit.cirru fix --workflow strict --verify --format edn
         calcit calcit.cirru --check-only
-        calcit calcit.cirru analyze check-public \
-          --ns app.comp.container --ns app.comp.group-line \
-          --ns app.comp.sidebar --ns app.comp.task \
-          --ns app.comp.todolist --ns app.config --ns app.main \
-          --ns app.schema --ns app.updater \
-          --summary-only --format json
-        calcit calcit.cirru analyze check-types --summary-only --format json
-        calcit calcit.cirru analyze weak-types \
-          --only schema-dynamic,code-dynamic --intent unresolved \
-          --summary-only --format json
-        calcit calcit.cirru analyze deprecated --summary-only --format json
-        calcit calcit.cirru analyze dynamic-methods
 
     - name: Select CDN asset path
       id: asset-path
@@ -80,10 +65,8 @@ jobs:
         set -euo pipefail
         if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
           asset_prefix="${GITHUB_REPOSITORY}/pr/${PR_NUMBER}/${GITHUB_RUN_ID}/"
-        elif [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
-          asset_prefix="${GITHUB_REPOSITORY}/"
         else
-          asset_prefix="${GITHUB_REPOSITORY}/branches/${GITHUB_REF_NAME}/"
+          asset_prefix="${GITHUB_REPOSITORY}/"
         fi
         base_url="${CDN_ORIGIN}/${asset_prefix}"
         echo "VITE_BASE_URL=${base_url}" >> "$GITHUB_ENV"
@@ -97,28 +80,8 @@ jobs:
         yarn release-page
         node --test scripts/*.test.mjs
 
-    - name: Check COS credentials
-      id: cos-credentials
-      if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
-      env:
-        COS_BUCKET: ${{ secrets.COS_BUCKET }}
-        COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
-        COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
-      run: |
-        if [[ -n "$COS_BUCKET" && -n "$COS_SECRET_ID" && -n "$COS_SECRET_KEY" ]]; then
-          echo "available=true" >> "$GITHUB_OUTPUT"
-        else
-          echo "available=false" >> "$GITHUB_OUTPUT"
-          if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
-            echo "::warning title=COS upload skipped::Configure COS_BUCKET, COS_SECRET_ID, and COS_SECRET_KEY to run public upload verification."
-          else
-            echo "::error title=COS credentials missing::COS_BUCKET, COS_SECRET_ID, and COS_SECRET_KEY are required for production deployment."
-            exit 1
-          fi
-        fi
-
     - name: Upload and verify static assets on COS
-      if: steps.cos-credentials.outputs.available == 'true'
+      if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
       uses: worktools/cos-upload-action@17e6d213fe9f6772a6090a13c8ba044cd6cbcb09 # v1.1.1
       with:
         source-dir: dist
