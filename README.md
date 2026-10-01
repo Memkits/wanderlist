@@ -15,6 +15,8 @@ Run `yarn compile-page`, then `node --test scripts/*.test.mjs` for task/group,
 prompt, fold-state and mount-target regressions. Public upload verification uses
 cos-upload-action's built-in verify settings, with no extra CDN checker.
 Original server deployment paths are unchanged.
+Each PR run uses an isolated preview prefix (`pr/<number>/<run-id>/`) and
+concurrency group, so unrelated PRs do not cancel queued build checks.
 
 This project is based on:
 
