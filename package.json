@@ -22,7 +22,7 @@
   "homepage": "https://github.com/Memkits/wanderlist#readme",
   "devDependencies": {
     "bottom-tip": "^0.1.5",
-    "vite": "8.3.1"
+    "vite": "8.3.3"
   },
   "dependencies": {
     "@calcit/procs": "0.30.1-alpha.5",
