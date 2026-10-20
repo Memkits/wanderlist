@@ -7,15 +7,14 @@ import { updater } from "../js-out/app.updater.mjs";
 import { comp_group_line } from "../js-out/app.comp.group-line.mjs";
 import { comp_sidebar } from "../js-out/app.comp.sidebar.mjs";
 import { comp_todolist } from "../js-out/app.comp.todolist.mjs";
-import { component_$q_, component_tree } from "../js-out/respo.util.detect.mjs";
+import { component_$q_, component_tree, child_pair_value } from "../js-out/respo.util.detect.mjs";
 import { make_string } from "../js-out/respo.render.html.mjs";
 import { wrap_dispatch } from "../js-out/respo.controller.client.mjs";
 import { take_prompt_task_$x_ } from "../js-out/respo-alerts.core.mjs";
 
-const t = c.init_tags(["id", "text", "groups", "tasks", "group-id", "router", "states", "cursor", "data", "root", "add", "show?", "fold-done?", "value", "done", "event", "children", "click", "input"]);
+const t = c.init_tags(["id", "text", "groups", "tasks", "group-id", "router", "states", "cursor", "data", "root", "add", "show?", "fold-done?", "value", "done", "event", "children", "node", "click", "input"]);
 const map = c._$n__$M_;
 const field = (v, key) => c.option_$o_unwrap(c.get(v, key));
-const nth = (v, i) => c.option_$o_unwrap(c.nth(v, i));
 const apply = (db, name, payload, id = "op") => updater(db, payload === undefined ? c._$o__$o_(c.init_tags([name])[name]) : c._$o__$o_(c.init_tags([name])[name], payload), id, 100);
 const initial = () => apply(store, "add-group", "group", "g");
 const group = (db) => field(field(db, t.groups), "g");
@@ -29,7 +28,8 @@ function handler(node, kind, label = "") {
   }
   const children = c.get(node, t.children);
   if (c.option_$o_some_$q_(children)) for (const pair of c.option_$o_unwrap(children).toArray()) {
-    const found = handler(nth(pair, 1), kind, label);
+    if (c.option_$o_none_$q_(field(pair, t.node))) continue;
+    const found = handler(child_pair_value(pair), kind, label);
     if (found) return found;
   }
 }

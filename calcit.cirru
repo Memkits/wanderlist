@@ -5,7 +5,7 @@
   :entries $ {} $ :default
     {} (:description |) (:init-fn 'app.main/main!) (:mode :js) (:reload-fn 'app.main/reload!) (:target :browser)
       :feature-policy $ {}
-      :modules $ [] |respo.calcit/ |respo-ui.calcit/ |reel.calcit/ |alerts.calcit/ |respo-feather.calcit/
+      :modules $ [] |respo.calcit/ |respo-ui.calcit/ |alerts.calcit/ |respo-feather.calcit/
       :type-slots $ {}
   :files $ {}
     'app.comp.container $ %{} 'FileEntry
@@ -15,17 +15,26 @@
             let
                 safe-store $ if (map? store) store $ {}
                 router $ option:unwrap-or (get safe-store :router) ({})
-                safe-router $ if (map? router) router $ {}
-                group-id-option $ get safe-router :group-id
+                safe-router $ if (map? router)
+                  decode-map-as router $ :: 'Map 'Tag 'Dynamic
+                  {}
+                group-id-option $ .map (get safe-router :group-id)
+                  fn (id) (decode-map-as id 'String)
                 states $ option:unwrap-or (get safe-store :states) ({})
-                safe-states $ if (map? states) states $ {}
+                safe-states $ if (map? states)
+                  decode-map-as states $ :: 'Map 'Dynamic 'Dynamic
+                  {}
                 groups $ option:unwrap-or (get safe-store :groups) ({})
-                safe-groups $ if (map? groups) groups $ {}
+                safe-groups $ if (map? groups)
+                  decode-map-as groups $ :: 'Map 'String 'Dynamic
+                  {}
               div
                 {} $ :class-name $ str-spaced css/fullscreen css/global css/row style-root
                 comp-margin
                 if
-                  option:unwrap-or (get safe-store :show-sidebar?) false
+                  decode-map-as
+                    option:unwrap-or (get safe-store :show-sidebar?) false
+                    , 'Bool
                   comp-sidebar (>> safe-states :group) safe-groups safe-router
                   div
                     {} $ :class-name style-collapsed-sidebar
@@ -38,12 +47,14 @@
                 div $ {} $ :class-name style-divider
                 div
                   {} $ :class-name $ str-spaced css/expand style-main-panel
-                  case-default
+                  match
                     option:unwrap-or (get safe-router :name) :table
-                    div ({}) (<> |router-not-matching-a-page nil)
                     :table $ if-let (group-id group-id-option)
-                      comp-todolist (>> safe-states group-id) safe-router $ option:unwrap-or (get safe-groups group-id) ({})
+                      comp-todolist (>> safe-states group-id) safe-router $ decode-map-as
+                        option:unwrap-or (get safe-groups group-id) ({})
+                        :: 'Map 'Tag 'Dynamic
                       comp-placeholder
+                    _ $ div ({}) (<> |router-not-matching-a-page nil)
                 comp-margin
                 if dev? $ comp-inspect |Store safe-store $ {} (:bottom 0)
           :examples $ []
@@ -120,14 +131,14 @@
         'comp-group-line $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-group-line (group index selected?)
             let
-                todo-size $ count $ ->
-                  option:unwrap-or (get group :tasks) ({})
-                  filter $ fn (entry)
-                    not $ option:unwrap-or
-                      get
-                        option:unwrap-or (last entry) ({})
-                        , :done
-                      , false
+                todo-size $ count $ .filter-kv
+                  decode-map-as
+                    option:unwrap-or (get group :tasks) ({})
+                    :: 'Map 'String $ :: 'Map 'Tag 'Dynamic
+                  fn (id task)
+                    not $ decode-map-as
+                      option:unwrap-or (get task :done) false
+                      , 'Bool
               div
                 {} (:class-name style-group-base)
                   :style $ style-group index selected? $ > todo-size 0
@@ -138,12 +149,16 @@
                   {} $ :class-name style-small-hint
                 =< 8 0
                 span $ {}
-                  :inner-text $ option:unwrap-or (get group :text) |
+                  :inner-text $ decode-map-as
+                    option:unwrap-or (get group :text) |
+                    , 'String
                   :class-name style-input
                   :on-input $ fn (e d!)
                     d! $ :: :update-group $ {}
                       :id $ option:unwrap-or (get group :id) nil
-                      :text $ option:unwrap-or (get e :value) |
+                      :text $ decode-map-as
+                        option:unwrap-or (get e :value) |
+                        , 'String
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
             :args $ [] 'Dynamic 'Number 'Bool
@@ -190,16 +205,20 @@
         'by-newest-group $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn by-newest-group (group-a group-b)
             &compare
-              option:unwrap-or
-                get
-                  option:unwrap-or (last group-b) ({})
-                  , :touched-time
-                , 0
-              option:unwrap-or
-                get
-                  option:unwrap-or (last group-a) ({})
-                  , :touched-time
-                , 0
+              decode-map-as
+                option:unwrap-or
+                  get
+                    option:unwrap-or (last group-b) ({})
+                    , :touched-time
+                  , 0
+                , 'Number
+              decode-map-as
+                option:unwrap-or
+                  get
+                    option:unwrap-or (last group-a) ({})
+                    , :touched-time
+                  , 0
+                , 'Number
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Number)
             :args $ [] 'Dynamic 'Dynamic
@@ -256,13 +275,12 @@
                 .render add-plugin
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] (:: 'Map 'Tag 'Dynamic) (:: 'Map 'String 'Dynamic) (:: 'Map 'Tag 'Dynamic)
+            :args $ [] (:: 'Map 'Dynamic 'Dynamic) (:: 'Map 'String 'Dynamic) (:: 'Map 'Tag 'Dynamic)
         'prompt-text $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn prompt-text (x) (unsafe-coerce x 'String)
+          :code $ quote $ defn prompt-text (x) (decode-map-as x 'String)
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'String)
             :args $ [] 'Dynamic
-            :features $ #{} :js-ffi
         'style-body $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-body
             {} $ |& $ {} (:flex |1)
@@ -320,7 +338,9 @@
         'comp-task $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-task (states task index)
             let
-                done? $ option:unwrap-or (get task :done) false
+                done? $ decode-map-as
+                  option:unwrap-or (get task :done) false
+                  , 'Bool
                 remove-plugin $ use-confirm (>> states :remove) ({})
               create-element :section
                 {}
@@ -332,13 +352,17 @@
                   fn (e d!)
                     d! $ : :toggle-task task
                 input $ {}
-                  :value $ option:unwrap-or (get task :text) |
+                  :value $ decode-map-as
+                    option:unwrap-or (get task :text) |
+                    , 'String
                   :class-name $ str-spaced |task-input style-input
                   :on-input $ fn (e d!)
                     d! $ : :update-task $ {}
                       :group-id $ option:unwrap-or (get task :group-id) nil
                       :id $ option:unwrap-or (get task :id) nil
-                      :text $ option:unwrap-or (get e :value) |
+                      :text $ decode-map-as
+                        option:unwrap-or (get e :value) |
+                        , 'String
                 comp-icon :arrow-up
                   {} (:font-size 14)
                     :color $ hsl 150 50 80
@@ -398,26 +422,29 @@
         'as-map $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn as-map (x)
             if (map? x)
-              unsafe-coerce x $ :: 'Map 'String 'Dynamic
+              decode-map-as x $ :: 'Map 'String $ :: 'Map 'Tag 'Dynamic
               {}
           :examples $ []
           :schema $ :: 'Fn $ {}
             :args $ [] 'Dynamic
-            :features $ #{} :js-ffi
-            :return $ :: 'Map 'String 'Dynamic
+            :return $ :: 'Map 'String $ :: 'Map 'Tag 'Dynamic
         'by-touch-time $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn by-touch-time (entry-a entry-b)
             &compare
-              option:unwrap-or
-                get
-                  option:unwrap-or (last entry-b) ({})
-                  , :touched-time
-                , 0
-              option:unwrap-or
-                get
-                  option:unwrap-or (last entry-a) ({})
-                  , :touched-time
-                , 0
+              decode-map-as
+                option:unwrap-or
+                  get
+                    option:unwrap-or (last entry-b) ({})
+                    , :touched-time
+                  , 0
+                , 'Number
+              decode-map-as
+                option:unwrap-or
+                  get
+                    option:unwrap-or (last entry-a) ({})
+                    , :touched-time
+                  , 0
+                , 'Number
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Number)
             :args $ [] 'Dynamic 'Dynamic
@@ -425,7 +452,9 @@
           :code $ quote $ defcomp comp-group-banner (states group)
             let
                 edit-plugin $ use-prompt (>> states :edit)
-                  {} $ :initial $ option:unwrap-or (get group :text) |
+                  {} $ :initial $ decode-map-as
+                    option:unwrap-or (get group :text) |
+                    , 'String
                 add-plugin $ use-prompt (>> states :add) ({})
                 remove-plugin $ use-confirm (>> states :remove) ({})
               div
@@ -433,7 +462,9 @@
                 div
                   {} $ :class-name css/row-middle
                   <>
-                    option:unwrap-or (get group :text) |
+                    decode-map-as
+                      option:unwrap-or (get group :text) |
+                      , 'String
                     {} (:font-size 20) (:font-family ui/font-fancy)
                   =< 8 nil
                   span
@@ -475,34 +506,32 @@
         'comp-todolist $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-todolist (states router group)
             let
-                cursor $ option:unwrap-or (get states :cursor) ([])
+                cursor $ decode-map-as
+                  option:unwrap-or (get states :cursor) ([])
+                  :: 'List 'Dynamic
                 tasks $ as-map $ option:unwrap-or (get group :tasks) ({})
-                state $ option:unwrap-or (get states :data)
-                  {} (:draft |) (:fold-done? true)
-                todo-tasks $ -> tasks .to-map $ filter
-                  fn (entry)
-                    not $ option:unwrap-or
-                      get
-                        option:unwrap-or (last entry) ({})
-                        , :done
-                      , false
-                done-tasks $ -> tasks .to-map $ filter
-                  fn (entry)
-                    option:unwrap-or
-                      get
-                        option:unwrap-or (last entry) ({})
-                        , :done
-                      , false
+                state $ decode-map-as
+                  option:unwrap-or (get states :data)
+                    {} (:draft |) (:fold-done? true)
+                  :: 'Map 'Tag 'Dynamic
+                todo-tasks $ .filter-kv tasks $ fn (id task)
+                  not $ decode-map-as
+                    option:unwrap-or (get task :done) false
+                    , 'Bool
+                done-tasks $ .filter-kv tasks $ fn (id task)
+                  decode-map-as
+                    option:unwrap-or (get task :done) false
+                    , 'Bool
                 render-task-list $ fn (tasks)
+                  hint-fn $ {}
+                    :args $ [] $ :: 'Map 'String (:: 'Map 'Tag 'Dynamic)
+                    :return 'respo.schema/Element
                   list->
                     {} (:class-name style-list-base)
                       :style $ style-list-height $ count tasks
-                    -> (as-map tasks) (.to-list) (sort by-touch-time)
+                    -> tasks (.to-list) (sort by-touch-time)
                       map-indexed $ fn (idx entry)
-                        let-sugar
-                              [] id task
-                              , entry
-                          [] id $ comp-task (>> states id) task idx
+                        let[] (id task) entry $ [] id $ comp-task (>> states id) task idx
                       .sort-by first
               div
                 {} $ :class-name style-todolist
@@ -525,7 +554,9 @@
                       =< 8 nil
                       comp-icon
                         if
-                          option:unwrap-or (get state :fold-done?) true
+                          decode-map-as
+                            option:unwrap-or (get state :fold-done?) true
+                            , 'Bool
                           , :eye-off :eye
                         {} (:font-size 16)
                           :color $ hsl 200 80 80
@@ -533,17 +564,18 @@
                         fn (e d!)
                           d! $ :: :states cursor $ update state :fold-done? not
                   if
-                    not $ option:unwrap-or (get state :fold-done?) true
+                    not $ decode-map-as
+                      option:unwrap-or (get state :fold-done?) true
+                      , 'Bool
                     render-task-list done-tasks
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] (:: 'Map 'Tag 'Dynamic) (:: 'Map 'Tag 'Dynamic) (:: 'Map 'Tag 'Dynamic)
+            :args $ [] (:: 'Map 'Dynamic 'Dynamic) (:: 'Map 'Tag 'Dynamic) (:: 'Map 'Tag 'Dynamic)
         'prompt-text $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn prompt-text (x) (unsafe-coerce x 'String)
+          :code $ quote $ defn prompt-text (x) (decode-map-as x 'String)
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'String)
             :args $ [] 'Dynamic
-            :features $ #{} :js-ffi
         'style-body $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-body
             {} $ |& $ {} (:padding-bottom |120px)
@@ -581,15 +613,15 @@
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.comp.todolist
           :require
-            [] respo-ui.core :refer $ [] hsl
-            [] respo-ui.core :as ui
-            [] clojure.string :as string
-            [] app.comp.task :refer $ [] comp-task
-            [] respo.core :refer $ [] defcomp >> <> div section span header input list-> button create-element
-            [] respo.comp.space :refer $ [] =<
-            [] respo.comp.inspect :refer $ [] comp-inspect
-            [] feather.core :refer $ [] comp-icon comp-i
-            [] respo-alerts.core :refer $ [] use-prompt use-confirm
+            respo-ui.core :refer $ hsl
+            respo-ui.core :as ui
+            clojure.string :as string
+            app.comp.task :refer $ comp-task
+            respo.core :refer $ defcomp >> <> div section span header input list-> button create-element
+            respo.comp.space :refer $ =<
+            respo.comp.inspect :refer $ comp-inspect
+            feather.core :refer $ comp-icon comp-i
+            respo-alerts.core :refer $ use-prompt use-confirm
             respo.css :refer $ defstyle
             respo-ui.css :as css
     'app.config $ %{} 'FileEntry
@@ -609,24 +641,29 @@
     'app.main $ %{} 'FileEntry
       :defs $ {}
         '*store $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defatom *store schema/store
+          :code $ quote $ defref *store schema/store
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Ref $ :: 'Map 'Tag 'Dynamic
         'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch! (op)
-            when config/dev? $ js/console.log op
-            reset! *store $ updater @*store op (generate-id!) (js/Date.now)
+            if (enum? op)
+              do
+                when config/dev? $ js/console.log op
+                reset! *store $ updater @*store op (generate-id!)
+                  decode-map-as (js/Date.now) 'Number
+                , &unit
+              raise "|Expected Wanderlist operation Enum"
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ [] 'Dynamic
             :features $ #{} :js-ffi
         'get-mount-target $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn get-mount-target () (js/document.querySelector |.app)
+          :code $ quote $ defn get-mount-target ()
+            option:unwrap $ respo-browser/query-selector |.app
           :examples $ []
-          :schema $ :: 'Fn $ {}
+          :schema $ :: 'Fn $ {} (:return 'respo.dom/DomElement)
             :args $ []
             :features $ #{} :js-ffi
-            :return $ :: 'JsNullish 'JsObject
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! ()
             if config/dev? $ load-console-formatter!
@@ -636,12 +673,12 @@
               if (js-present? raw)
                 try
                   let
-                      old-store $ parse-cirru-edn $ unsafe-coerce raw (quote String)
-                    reset! *store $ assert-type old-store $ :: 'Map 'Tag 'Dynamic
+                      old-store $ parse-cirru-edn $ decode-map-as raw 'String
+                    reset! *store $ decode-map-as old-store $ :: 'Map 'Tag 'Dynamic
                   fn (e) &unit
                 , &unit
             render-app!
-            add-watch *store :rerender $ fn (s p) (render-app!)
+            add-watch! *store :rerender $ fn (s p) (render-app!)
             set! js/window.onbeforeunload save-local-storage!
             println "|App started."
           :examples $ []
@@ -652,15 +689,16 @@
           :code $ quote $ def mount-target (get-mount-target)
           :examples $ []
           :ffi $ {} $ :backend :js
-          :schema $ :: 'JsNullish 'JsObject
+          :schema $ :: 'respo.dom/DomElement
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! ()
             if (nil? build-errors)
-              do (clear-cache!) (remove-watch *store :changes)
-                add-watch *store :changes $ fn (s prev) (render-app!)
+              do (clear-cache!) (remove-watch! *store :rerender)
+                add-watch! *store :rerender $ fn (s prev) (render-app!)
                 render-app!
                 hud! |ok~ |Ok
               hud! |error build-errors
+            , &unit
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ []
@@ -689,6 +727,7 @@
             app.config :as config
             |./calcit.build-errors.mjs :default build-errors
             |bottom-tip :default hud!
+            respo.ffi.browser :as respo-browser
     'app.schema $ %{} 'FileEntry
       :defs $ {}
         'Store $ %{} 'CodeEntry (:doc |)
@@ -719,23 +758,28 @@
           :schema $ :: 'Dynamic
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.schema
-          :require $ [] hsl.core :refer $ [] hsl
+          :require $ hsl.core :refer $ hsl
     'app.updater $ %{} 'FileEntry
       :defs $ {}
         'as-map $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn as-map (x)
             if (map? x)
-              unsafe-coerce x $ :: 'Map 'Tag 'Dynamic
+              decode-map-as x $ :: 'Map 'Tag 'Dynamic
               {}
           :examples $ []
           :schema $ :: 'Fn $ {}
             :args $ [] 'Dynamic
-            :features $ #{} :js-ffi
             :return $ :: 'Map 'Tag 'Dynamic
         'updater $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn updater (store op op-id op-time)
             match op
-              (:states cursor s) (update-states store cursor s)
+              (:states cursor s)
+                assoc store :states $ update-state-tree
+                  decode-map-as
+                    option:unwrap-or (get store :states) ({})
+                    :: 'Map 'Dynamic 'Dynamic
+                  decode-map-as cursor $ :: 'List 'Dynamic
+                  , s
               (:add-group op-data)
                 -> store $ update :groups $ fn (task-groups)
                   assoc task-groups op-id $ merge schema/group $ {} (:id op-id) (:text op-data) (:created-time op-time) (:touched-time op-time)
@@ -745,7 +789,9 @@
                 let
                     data $ as-map op-data
                     id $ option:unwrap-or (get data :id) nil
-                    text $ option:unwrap-or (get data :text) |
+                    text $ decode-map-as
+                      option:unwrap-or (get data :text) |
+                      , 'String
                   assoc-in store ([] :groups id :text) text
               (:touch-group gid)
                 assoc-in store ([] :groups gid :touched-time) op-time
@@ -770,7 +816,9 @@
                     data $ as-map op-data
                     group-id $ option:unwrap-or (get data :group-id) nil
                     id $ option:unwrap-or (get data :id) nil
-                    text $ option:unwrap-or (get data :text) |
+                    text $ decode-map-as
+                      option:unwrap-or (get data :text) |
+                      , 'String
                   assoc-in store ([] :groups group-id :tasks id :text) text
               (:toggle-task op-data)
                 let
@@ -792,11 +840,11 @@
               _ $ do (println |Unknown-op: op) store
           :examples $ []
           :schema $ :: 'Fn $ {}
-            :args $ [] (:: 'Map 'Tag 'Dynamic) 'Dynamic 'Dynamic 'Dynamic
+            :args $ [] (:: 'Map 'Tag 'Dynamic) 'Enum 'String 'Number
             :return $ :: 'Map 'Tag 'Dynamic
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.updater
           :require
-            [] hsl.core :refer $ [] hsl
-            [] app.schema :as schema
-            [] respo.cursor :refer $ [] update-states
+            hsl.core :refer $ hsl
+            app.schema :as schema
+            respo.cursor :refer $ update-state-tree
