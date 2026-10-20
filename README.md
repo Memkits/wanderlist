@@ -9,7 +9,8 @@ Demo http://r.tiye.me/Memkits/wanderlist/ .
 使用者影响：CLI / `@calcit/procs` 精确配对到 `0.30.1-alpha.5`，正常分组、任务和
 `wanderlist` localStorage 存档格式（version 2）不变；升级页面时完整刷新。
 实际使用处检查字符串、Bool、时间、游标和 Map key 类型，非法载荷会更早报错，不再用
-`unsafe-coerce` 伪造类型合同。该检查不等于所有开放状态已静态化。
+`unsafe-coerce` 伪造类型合同。updater 写入前检查必需的 String ID 和新增文本，删除 10 处
+将缺失 ID 还原为 nil 的写法；缺 ID 现在直接报错，不创建 nil key。该检查不等于所有开放状态已静态化。
 
 正式 0.30.1 tag 已发布，但 CLI assets/npm runtime 尚未齐备，暂用配对 alpha.5。
 依赖采用正式 Respo 0.16.122、UI 0.7.41、Alerts 0.10.55、Feather 0.4.29；未使用的

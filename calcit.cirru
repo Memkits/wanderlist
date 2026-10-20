@@ -782,30 +782,46 @@
                   , s
               (:add-group op-data)
                 -> store $ update :groups $ fn (task-groups)
-                  assoc task-groups op-id $ merge schema/group $ {} (:id op-id) (:text op-data) (:created-time op-time) (:touched-time op-time)
+                  assoc task-groups op-id $ merge schema/group $ {} (:id op-id)
+                    :text $ decode-map-as op-data 'String
+                    :created-time op-time
+                    :touched-time op-time
               (:rm-group id)
-                dissoc-in store $ [] :groups id
+                dissoc-in store $ [] :groups $ decode-map-as id 'String
               (:update-group op-data)
                 let
                     data $ as-map op-data
-                    id $ option:unwrap-or (get data :id) nil
+                    id $ decode-map-as
+                      option:unwrap $ get data :id
+                      , 'String
                     text $ decode-map-as
                       option:unwrap-or (get data :text) |
                       , 'String
                   assoc-in store ([] :groups id :text) text
               (:touch-group gid)
-                assoc-in store ([] :groups gid :touched-time) op-time
+                assoc-in store
+                  [] :groups (decode-map-as gid 'String) :touched-time
+                  , op-time
               (:add-task op-data)
                 let
                     data $ as-map op-data
-                    group-id $ option:unwrap-or (get data :group-id) nil
+                    group-id $ decode-map-as
+                      option:unwrap $ get data :group-id
+                      , 'String
                   -> store $ assoc-in ([] :groups group-id :tasks op-id)
                     merge schema/task data $ {} (:id op-id) (:created-time op-time) (:touched-time op-time)
+                      :text $ decode-map-as
+                        option:unwrap-or (get data :text) |
+                        , 'String
               (:rm-task op-data)
                 let
                     data $ as-map op-data
-                    group-id $ option:unwrap-or (get data :group-id) nil
-                    id $ option:unwrap-or (get data :id) nil
+                    group-id $ decode-map-as
+                      option:unwrap $ get data :group-id
+                      , 'String
+                    id $ decode-map-as
+                      option:unwrap $ get data :id
+                      , 'String
                   update-in store ([] :groups group-id :tasks)
                     fn (tasks)
                       dissoc
@@ -814,8 +830,12 @@
               (:update-task op-data)
                 let
                     data $ as-map op-data
-                    group-id $ option:unwrap-or (get data :group-id) nil
-                    id $ option:unwrap-or (get data :id) nil
+                    group-id $ decode-map-as
+                      option:unwrap $ get data :group-id
+                      , 'String
+                    id $ decode-map-as
+                      option:unwrap $ get data :id
+                      , 'String
                     text $ decode-map-as
                       option:unwrap-or (get data :text) |
                       , 'String
@@ -823,18 +843,27 @@
               (:toggle-task op-data)
                 let
                     data $ as-map op-data
-                    group-id $ option:unwrap-or (get data :group-id) nil
-                    id $ option:unwrap-or (get data :id) nil
+                    group-id $ decode-map-as
+                      option:unwrap $ get data :group-id
+                      , 'String
+                    id $ decode-map-as
+                      option:unwrap $ get data :id
+                      , 'String
                   update-in store ([] :groups group-id :tasks id)
                     fn (task)
                       -> (option:unwrap-or task schema/task) (update :done not) (assoc :touched-time op-time) (assoc :done-time op-time)
               (:touch-task op-data)
                 let
                     data $ as-map op-data
-                    group-id $ option:unwrap-or (get data :group-id) nil
-                    id $ option:unwrap-or (get data :id) nil
+                    group-id $ decode-map-as
+                      option:unwrap $ get data :group-id
+                      , 'String
+                    id $ decode-map-as
+                      option:unwrap $ get data :id
+                      , 'String
                   assoc-in store ([] :groups group-id :tasks id :touched-time) op-time
-              (:set-router d) (assoc store :router d)
+              (:set-router d)
+                assoc store :router $ as-map d
               (:hide-sidebar) (assoc store :show-sidebar? false)
               (:show-sidebar) (assoc store :show-sidebar? true)
               _ $ do (println |Unknown-op: op) store
