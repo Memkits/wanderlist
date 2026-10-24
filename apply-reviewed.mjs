@@ -43,7 +43,8 @@ for(const id of ['app.comp.task/comp-task','app.comp.todolist/comp-group-banner'
   const d=expected.defs.find(d=>d.id===id),args=d.schema.find(x=>Array.isArray(x)&&x[0]===':args')[1];
   assert.equal(args[1],"'Dynamic");assert.equal(args[2],"'Dynamic");
   args[1]=structuredClone(mapState);args[2]=structuredClone(mapTag);
-  ops.push(['edit','schema',id,'--input-format','json-ast','--code',JSON.stringify(d.schema)]);
+  const canonical=['::',':fn',['{}',...d.schema.slice(1).filter(field=>field[0]!==':kind')]];
+  ops.push(['edit','schema',id,'--input-format','json-ast','--code',JSON.stringify(canonical)]);
 }
 const list=expected.defs.find(d=>d.id==='app.comp.todolist/comp-todolist');let taskSites=0;
 function taskBoundary(x,path){
