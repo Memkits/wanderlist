@@ -1,0 +1,67 @@
+name: Temporary official Wanderlist formal migration
+on:
+  push:
+    branches: [prepare/wanderlist-formal031]
+permissions:
+  contents: read
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6.5.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - name: Enable Corepack
+        run: |
+          corepack enable
+          corepack prepare yarn@4.18.0 --activate
+      - uses: calcit-lang/setup-calcit@v1.5.0
+        with:
+          tools: calcit,caps
+          caps-version: "0.1.1"
+          deps-file: deps.cirru
+      - name: Install published formal graph
+        run: |
+          set -euo pipefail
+          caps --strict --ci
+          yarn install --immutable
+          caps verify --toolchain
+          git diff --quiet -- deps.cirru package.json yarn.lock .yarnrc.yml
+      - name: Preserve original assertions before source edits
+        run: |
+          set -euo pipefail
+          mkdir -p acceptance
+          calcit calcit.cirru --check-only --all-defs
+          calcit calcit.cirru test --list --format json > acceptance/test-list-before.json
+          yarn compile-page
+          node --test scripts/tasks-regression.test.mjs
+      - name: Apply reviewed atomic source transaction
+        run: node apply-reviewed.mjs
+      - name: Full final gates and unchanged business assertions
+        run: |
+          set -euo pipefail
+          calcit calcit.cirru edit format
+          calcit calcit.cirru --check-only --all-defs
+          calcit calcit.cirru fix --workflow strict --verify --format json | tee acceptance/strict.json | jq -e '.data.workflow.status == "passed" and .diagnostics == []'
+          calcit calcit.cirru analyze weak-types --only coverage --summary-only --format json > acceptance/coverage.json
+          calcit calcit.cirru analyze weak-types --only schema-dynamic,code-dynamic --intent unresolved --summary-only --format json > acceptance/boundaries.json
+          calcit calcit.cirru analyze weak-types --only deprecated-call --summary-only --format json | tee acceptance/deprecated.json | jq -e '.data.summary.calls == 0'
+          calcit calcit.cirru test --list --format json > acceptance/test-list-after.json
+          yarn compile-page
+          node --test scripts/tasks-regression.test.mjs
+          yarn release-page
+          cp calcit.cirru acceptance/snapshot.cirru
+          cp -R dist acceptance/dist
+      - name: Save official evidence
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: wanderlist-formal-evidence
+          path: acceptance/
+          if-no-files-found: error
+          retention-days: 7

@@ -1,0 +1,6347 @@
+{
+  "namespaces": [
+    {
+      "command": "query.ns",
+      "data": {
+        "definition_count": 2,
+        "doc": "",
+        "namespace": "app.$meta",
+        "ns_code": [
+          "ns",
+          "app.$meta"
+        ]
+      },
+      "schema_version": 1
+    },
+    {
+      "command": "query.ns",
+      "data": {
+        "definition_count": 9,
+        "doc": "",
+        "namespace": "app.comp.container",
+        "ns_code": [
+          "ns",
+          "app.comp.container",
+          [
+            ":require",
+            [
+              "respo-ui.core",
+              ":refer",
+              [
+                "hsl"
+              ]
+            ],
+            [
+              "respo.core",
+              ":refer",
+              [
+                "defcomp",
+                ">>",
+                "<>",
+                "div",
+                "textarea",
+                "span"
+              ]
+            ],
+            [
+              "respo.comp.inspect",
+              ":refer",
+              [
+                "comp-inspect"
+              ]
+            ],
+            [
+              "app.comp.sidebar",
+              ":refer",
+              [
+                "comp-sidebar"
+              ]
+            ],
+            [
+              "app.comp.todolist",
+              ":refer",
+              [
+                "comp-todolist"
+              ]
+            ],
+            [
+              "respo-ui.core",
+              ":as",
+              "ui"
+            ],
+            [
+              "feather.core",
+              ":refer",
+              [
+                "comp-icon"
+              ]
+            ],
+            [
+              "app.config",
+              ":refer",
+              [
+                "dev?"
+              ]
+            ],
+            [
+              "respo-ui.css",
+              ":as",
+              "css"
+            ],
+            [
+              "respo.css",
+              ":refer",
+              [
+                "defstyle"
+              ]
+            ]
+          ]
+        ]
+      },
+      "schema_version": 1
+    },
+    {
+      "command": "query.ns",
+      "data": {
+        "definition_count": 5,
+        "doc": "",
+        "namespace": "app.comp.group-line",
+        "ns_code": [
+          "ns",
+          "app.comp.group-line",
+          [
+            ":require",
+            [
+              "respo.core",
+              ":refer",
+              [
+                "defcomp",
+                ">>",
+                "<>",
+                "div",
+                "span",
+                "input"
+              ]
+            ],
+            [
+              "respo-ui.core",
+              ":refer",
+              [
+                "hsl"
+              ]
+            ],
+            [
+              "respo.comp.space",
+              ":refer",
+              [
+                "=<"
+              ]
+            ],
+            [
+              "respo-ui.core",
+              ":as",
+              "ui"
+            ],
+            [
+              "feather.core",
+              ":refer",
+              [
+                "comp-i",
+                "comp-icon"
+              ]
+            ],
+            [
+              "respo-alerts.core",
+              ":refer",
+              [
+                "comp-prompt",
+                "comp-confirm"
+              ]
+            ],
+            [
+              "respo.css",
+              ":refer",
+              [
+                "defstyle"
+              ]
+            ],
+            [
+              "respo-ui.css",
+              ":as",
+              "css"
+            ]
+          ]
+        ]
+      },
+      "schema_version": 1
+    },
+    {
+      "command": "query.ns",
+      "data": {
+        "definition_count": 8,
+        "doc": "",
+        "namespace": "app.comp.sidebar",
+        "ns_code": [
+          "ns",
+          "app.comp.sidebar",
+          [
+            ":require",
+            [
+              "respo-ui.core",
+              ":as",
+              "ui"
+            ],
+            [
+              "respo-ui.core",
+              ":refer",
+              [
+                "hsl"
+              ]
+            ],
+            [
+              "respo.comp.space",
+              ":refer",
+              [
+                "=<"
+              ]
+            ],
+            [
+              "respo.core",
+              ":refer",
+              [
+                "defcomp",
+                ">>",
+                "<>",
+                "div",
+                "span",
+                "input",
+                "list->",
+                "button"
+              ]
+            ],
+            [
+              "app.comp.group-line",
+              ":refer",
+              [
+                "comp-group-line"
+              ]
+            ],
+            [
+              "respo-alerts.core",
+              ":refer",
+              [
+                "use-prompt"
+              ]
+            ],
+            [
+              "feather.core",
+              ":refer",
+              [
+                "comp-i",
+                "comp-icon"
+              ]
+            ],
+            [
+              "respo-ui.css",
+              ":as",
+              "css"
+            ],
+            [
+              "respo.css",
+              ":refer",
+              [
+                "defstyle"
+              ]
+            ]
+          ]
+        ]
+      },
+      "schema_version": 1
+    },
+    {
+      "command": "query.ns",
+      "data": {
+        "definition_count": 5,
+        "doc": "",
+        "namespace": "app.comp.task",
+        "ns_code": [
+          "ns",
+          "app.comp.task",
+          [
+            ":require",
+            [
+              "respo-ui.core",
+              ":refer",
+              [
+                "hsl"
+              ]
+            ],
+            [
+              "respo-ui.core",
+              ":as",
+              "ui"
+            ],
+            [
+              "respo.core",
+              ":refer",
+              [
+                "defcomp",
+                ">>",
+                "<>",
+                "input",
+                "div",
+                "create-element"
+              ]
+            ],
+            [
+              "feather.core",
+              ":refer",
+              [
+                "comp-i",
+                "comp-icon"
+              ]
+            ],
+            [
+              "respo-alerts.core",
+              ":refer",
+              [
+                "use-confirm"
+              ]
+            ],
+            [
+              "respo.comp.space",
+              ":refer",
+              [
+                "=<"
+              ]
+            ],
+            [
+              "respo.css",
+              ":refer",
+              [
+                "defstyle"
+              ]
+            ],
+            [
+              "respo-ui.css",
+              ":as",
+              "css"
+            ]
+          ]
+        ]
+      },
+      "schema_version": 1
+    },
+    {
+      "command": "query.ns",
+      "data": {
+        "definition_count": 10,
+        "doc": "",
+        "namespace": "app.comp.todolist",
+        "ns_code": [
+          "ns",
+          "app.comp.todolist",
+          [
+            ":require",
+            [
+              "respo-ui.core",
+              ":refer",
+              [
+                "hsl"
+              ]
+            ],
+            [
+              "respo-ui.core",
+              ":as",
+              "ui"
+            ],
+            [
+              "clojure.string",
+              ":as",
+              "string"
+            ],
+            [
+              "app.comp.task",
+              ":refer",
+              [
+                "comp-task"
+              ]
+            ],
+            [
+              "respo.core",
+              ":refer",
+              [
+                "defcomp",
+                ">>",
+                "<>",
+                "div",
+                "section",
+                "span",
+                "header",
+                "input",
+                "list->",
+                "button",
+                "create-element"
+              ]
+            ],
+            [
+              "respo.comp.space",
+              ":refer",
+              [
+                "=<"
+              ]
+            ],
+            [
+              "respo.comp.inspect",
+              ":refer",
+              [
+                "comp-inspect"
+              ]
+            ],
+            [
+              "feather.core",
+              ":refer",
+              [
+                "comp-icon",
+                "comp-i"
+              ]
+            ],
+            [
+              "respo-alerts.core",
+              ":refer",
+              [
+                "use-prompt",
+                "use-confirm"
+              ]
+            ],
+            [
+              "respo.css",
+              ":refer",
+              [
+                "defstyle"
+              ]
+            ],
+            [
+              "respo-ui.css",
+              ":as",
+              "css"
+            ]
+          ]
+        ]
+      },
+      "schema_version": 1
+    },
+    {
+      "command": "query.ns",
+      "data": {
+        "definition_count": 2,
+        "doc": "",
+        "namespace": "app.config",
+        "ns_code": [
+          "ns",
+          "app.config"
+        ]
+      },
+      "schema_version": 1
+    },
+    {
+      "command": "query.ns",
+      "data": {
+        "definition_count": 8,
+        "doc": "",
+        "namespace": "app.main",
+        "ns_code": [
+          "ns",
+          "app.main",
+          [
+            ":require",
+            [
+              "respo.core",
+              ":refer",
+              [
+                "render!",
+                "clear-cache!",
+                "realize-ssr!",
+                "render-element"
+              ]
+            ],
+            [
+              "app.comp.container",
+              ":refer",
+              [
+                "comp-container"
+              ]
+            ],
+            [
+              "app.updater",
+              ":refer",
+              [
+                "updater"
+              ]
+            ],
+            [
+              "app.schema",
+              ":as",
+              "schema"
+            ],
+            [
+              "app.config",
+              ":as",
+              "config"
+            ],
+            [
+              "|./calcit.build-errors.mjs",
+              ":default",
+              "build-errors"
+            ],
+            [
+              "|bottom-tip",
+              ":default",
+              "hud!"
+            ],
+            [
+              "respo.ffi.browser",
+              ":as",
+              "respo-browser"
+            ]
+          ]
+        ]
+      },
+      "schema_version": 1
+    },
+    {
+      "command": "query.ns",
+      "data": {
+        "definition_count": 4,
+        "doc": "",
+        "namespace": "app.schema",
+        "ns_code": [
+          "ns",
+          "app.schema",
+          [
+            ":require",
+            [
+              "hsl.core",
+              ":refer",
+              [
+                "hsl"
+              ]
+            ]
+          ]
+        ]
+      },
+      "schema_version": 1
+    },
+    {
+      "command": "query.ns",
+      "data": {
+        "definition_count": 2,
+        "doc": "",
+        "namespace": "app.updater",
+        "ns_code": [
+          "ns",
+          "app.updater",
+          [
+            ":require",
+            [
+              "hsl.core",
+              ":refer",
+              [
+                "hsl"
+              ]
+            ],
+            [
+              "app.schema",
+              ":as",
+              "schema"
+            ],
+            [
+              "respo.cursor",
+              ":refer",
+              [
+                "update-state-tree"
+              ]
+            ]
+          ]
+        ]
+      },
+      "schema_version": 1
+    }
+  ],
+  "definitions": [
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "def",
+          "calcit-dirname",
+          "|"
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.$meta/calcit-dirname",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:b9c073ddc99189680e33ec22dc7f5689",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "def",
+          "calcit-filename",
+          "|calcit.cirru"
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.$meta/calcit-filename",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:a2706c65c80308f07d99e2a9ab5bd02b",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defcomp",
+          "comp-container",
+          [
+            "store"
+          ],
+          [
+            "let",
+            [
+              [
+                "safe-store",
+                [
+                  "if",
+                  [
+                    "map?",
+                    "store"
+                  ],
+                  "store",
+                  [
+                    "{}"
+                  ]
+                ]
+              ],
+              [
+                "router",
+                [
+                  "option:unwrap-or",
+                  [
+                    "get",
+                    "safe-store",
+                    ":router"
+                  ],
+                  [
+                    "{}"
+                  ]
+                ]
+              ],
+              [
+                "safe-router",
+                [
+                  "if",
+                  [
+                    "map?",
+                    "router"
+                  ],
+                  [
+                    "decode-map-as",
+                    "router",
+                    [
+                      "::",
+                      "'Map",
+                      "'Tag",
+                      "'Dynamic"
+                    ]
+                  ],
+                  [
+                    "{}"
+                  ]
+                ]
+              ],
+              [
+                "group-id-option",
+                [
+                  ".map",
+                  [
+                    "get",
+                    "safe-router",
+                    ":group-id"
+                  ],
+                  [
+                    "fn",
+                    [
+                      "id"
+                    ],
+                    [
+                      "decode-map-as",
+                      "id",
+                      "'String"
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "states",
+                [
+                  "option:unwrap-or",
+                  [
+                    "get",
+                    "safe-store",
+                    ":states"
+                  ],
+                  [
+                    "{}"
+                  ]
+                ]
+              ],
+              [
+                "safe-states",
+                [
+                  "if",
+                  [
+                    "map?",
+                    "states"
+                  ],
+                  [
+                    "decode-map-as",
+                    "states",
+                    [
+                      "::",
+                      "'Map",
+                      "'Dynamic",
+                      "'Dynamic"
+                    ]
+                  ],
+                  [
+                    "{}"
+                  ]
+                ]
+              ],
+              [
+                "groups",
+                [
+                  "option:unwrap-or",
+                  [
+                    "get",
+                    "safe-store",
+                    ":groups"
+                  ],
+                  [
+                    "{}"
+                  ]
+                ]
+              ],
+              [
+                "safe-groups",
+                [
+                  "if",
+                  [
+                    "map?",
+                    "groups"
+                  ],
+                  [
+                    "decode-map-as",
+                    "groups",
+                    [
+                      "::",
+                      "'Map",
+                      "'String",
+                      "'Dynamic"
+                    ]
+                  ],
+                  [
+                    "{}"
+                  ]
+                ]
+              ]
+            ],
+            [
+              "div",
+              [
+                "{}",
+                [
+                  ":class-name",
+                  [
+                    "str-spaced",
+                    "css/fullscreen",
+                    "css/global",
+                    "css/row",
+                    "style-root"
+                  ]
+                ]
+              ],
+              [
+                "comp-margin"
+              ],
+              [
+                "if",
+                [
+                  "decode-map-as",
+                  [
+                    "option:unwrap-or",
+                    [
+                      "get",
+                      "safe-store",
+                      ":show-sidebar?"
+                    ],
+                    "false"
+                  ],
+                  "'Bool"
+                ],
+                [
+                  "comp-sidebar",
+                  [
+                    ">>",
+                    "safe-states",
+                    ":group"
+                  ],
+                  "safe-groups",
+                  "safe-router"
+                ],
+                [
+                  "div",
+                  [
+                    "{}",
+                    [
+                      ":class-name",
+                      "style-collapsed-sidebar"
+                    ]
+                  ],
+                  [
+                    "comp-icon",
+                    ":sidebar",
+                    [
+                      "{}",
+                      [
+                        ":font-size",
+                        "16"
+                      ],
+                      [
+                        ":color",
+                        [
+                          "hsl",
+                          "0",
+                          "0",
+                          "80"
+                        ]
+                      ],
+                      [
+                        ":cursor",
+                        ":pointer"
+                      ]
+                    ],
+                    [
+                      "fn",
+                      [
+                        "e",
+                        "d!"
+                      ],
+                      [
+                        "d!",
+                        [
+                          "::",
+                          ":show-sidebar"
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "div",
+                [
+                  "{}",
+                  [
+                    ":class-name",
+                    "style-divider"
+                  ]
+                ]
+              ],
+              [
+                "div",
+                [
+                  "{}",
+                  [
+                    ":class-name",
+                    [
+                      "str-spaced",
+                      "css/expand",
+                      "style-main-panel"
+                    ]
+                  ]
+                ],
+                [
+                  "match",
+                  [
+                    "option:unwrap-or",
+                    [
+                      "get",
+                      "safe-router",
+                      ":name"
+                    ],
+                    ":table"
+                  ],
+                  [
+                    ":table",
+                    [
+                      "if-let",
+                      [
+                        "group-id",
+                        "group-id-option"
+                      ],
+                      [
+                        "comp-todolist",
+                        [
+                          ">>",
+                          "safe-states",
+                          "group-id"
+                        ],
+                        "safe-router",
+                        [
+                          "decode-map-as",
+                          [
+                            "option:unwrap-or",
+                            [
+                              "get",
+                              "safe-groups",
+                              "group-id"
+                            ],
+                            [
+                              "{}"
+                            ]
+                          ],
+                          [
+                            "::",
+                            "'Map",
+                            "'Tag",
+                            "'Dynamic"
+                          ]
+                        ]
+                      ],
+                      [
+                        "comp-placeholder"
+                      ]
+                    ]
+                  ],
+                  [
+                    "_",
+                    [
+                      "div",
+                      [
+                        "{}"
+                      ],
+                      [
+                        "<>",
+                        "|router-not-matching-a-page",
+                        "nil"
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "comp-margin"
+              ],
+              [
+                "if",
+                "dev?",
+                [
+                  "comp-inspect",
+                  "|Store",
+                  "safe-store",
+                  [
+                    "{}",
+                    [
+                      ":bottom",
+                      "0"
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.container/comp-container",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'respo.schema/Component"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              [
+                "::",
+                "'Map",
+                "'Tag",
+                "'Dynamic"
+              ]
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:0a7b09170a4914fbebd8880635c8a2f4",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defcomp",
+          "comp-margin",
+          [],
+          [
+            "div",
+            [
+              "{}",
+              [
+                ":class-name",
+                "style-margin"
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.container/comp-margin",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'respo.schema/Component"
+          ],
+          [
+            ":args",
+            [
+              "[]"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:e846b1e9fe966316cb8e8b0909f327e9",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defcomp",
+          "comp-placeholder",
+          [],
+          [
+            "div",
+            [
+              "{}",
+              [
+                ":class-name",
+                "style-placeholder"
+              ]
+            ],
+            [
+              "<>",
+              "|Select-a-group?",
+              "nil"
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.container/comp-placeholder",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'respo.schema/Component"
+          ],
+          [
+            ":args",
+            [
+              "[]"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:9772ad81a939a9d249a52389009d604e",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstyle",
+          "style-collapsed-sidebar",
+          [
+            "{}",
+            [
+              "|&",
+              [
+                "{}",
+                [
+                  ":padding",
+                  "|24px 8px"
+                ],
+                [
+                  ":width",
+                  "|56px"
+                ],
+                [
+                  ":display",
+                  "|flex"
+                ],
+                [
+                  ":justify-content",
+                  "|center"
+                ],
+                [
+                  ":transition-duration",
+                  "|200ms"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.container/style-collapsed-sidebar",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:7e82131f20b37b0f5c74ec3c457d8bec",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstyle",
+          "style-divider",
+          [
+            "{}",
+            [
+              "|&",
+              [
+                "{}",
+                [
+                  ":width",
+                  "1"
+                ],
+                [
+                  ":background-color",
+                  [
+                    "hsl",
+                    "220",
+                    "16",
+                    "90"
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.container/style-divider",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:8dd296ecf136d71825e0c3dcea68738c",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstyle",
+          "style-main-panel",
+          [
+            "{}",
+            [
+              "|&",
+              [
+                "{}",
+                [
+                  ":max-width",
+                  "|860px"
+                ],
+                [
+                  ":flex-basis",
+                  "|640px"
+                ],
+                [
+                  ":background-color",
+                  "|#ffffff"
+                ],
+                [
+                  ":border-radius",
+                  "|12px"
+                ],
+                [
+                  ":box-shadow",
+                  "|0 2px 12px rgba(5, 5, 5, 0.06)"
+                ],
+                [
+                  ":margin",
+                  "|16px 0"
+                ],
+                [
+                  ":overflow",
+                  "|hidden"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.container/style-main-panel",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:83c97610a94b5c9642eb125a6e2c1f19",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstyle",
+          "style-margin",
+          [
+            "{}",
+            [
+              "|&",
+              [
+                "{}",
+                [
+                  ":flex",
+                  "1"
+                ],
+                [
+                  ":flex-basis",
+                  "|12px"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.container/style-margin",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:5c98890cb29c3993134b7957626952f1",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstyle",
+          "style-placeholder",
+          [
+            "{}",
+            [
+              "|&",
+              [
+                "{}",
+                [
+                  ":width",
+                  "|100%"
+                ],
+                [
+                  ":height",
+                  "|100%"
+                ],
+                [
+                  ":background-color",
+                  [
+                    "hsl",
+                    "220",
+                    "30",
+                    "98"
+                  ]
+                ],
+                [
+                  ":display",
+                  "|flex"
+                ],
+                [
+                  ":justify-content",
+                  "|center"
+                ],
+                [
+                  ":align-items",
+                  "|center"
+                ],
+                [
+                  ":color",
+                  [
+                    "hsl",
+                    "215",
+                    "15",
+                    "65"
+                  ]
+                ],
+                [
+                  ":font-size",
+                  "40"
+                ],
+                [
+                  ":font-weight",
+                  "400"
+                ],
+                [
+                  ":font-family",
+                  "ui/font-fancy"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.container/style-placeholder",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:0940e5d450e5de14384560ed2b03be42",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstyle",
+          "style-root",
+          [
+            "{}",
+            [
+              "|&",
+              [
+                "{}",
+                [
+                  ":background-color",
+                  "|#f5f7fa"
+                ],
+                [
+                  ":min-height",
+                  "|100vh"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.container/style-root",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:9b44da8c59303cb3c287d1f7ec8bdc0d",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defcomp",
+          "comp-group-line",
+          [
+            "group",
+            "index",
+            "selected?"
+          ],
+          [
+            "let",
+            [
+              [
+                "todo-size",
+                [
+                  "count",
+                  [
+                    ".filter-kv",
+                    [
+                      "decode-map-as",
+                      [
+                        "option:unwrap-or",
+                        [
+                          "get",
+                          "group",
+                          ":tasks"
+                        ],
+                        [
+                          "{}"
+                        ]
+                      ],
+                      [
+                        "::",
+                        "'Map",
+                        "'String",
+                        [
+                          "::",
+                          "'Map",
+                          "'Tag",
+                          "'Dynamic"
+                        ]
+                      ]
+                    ],
+                    [
+                      "fn",
+                      [
+                        "id",
+                        "task"
+                      ],
+                      [
+                        "not",
+                        [
+                          "decode-map-as",
+                          [
+                            "option:unwrap-or",
+                            [
+                              "get",
+                              "task",
+                              ":done"
+                            ],
+                            "false"
+                          ],
+                          "'Bool"
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ],
+            [
+              "div",
+              [
+                "{}",
+                [
+                  ":class-name",
+                  "style-group-base"
+                ],
+                [
+                  ":style",
+                  [
+                    "style-group",
+                    "index",
+                    "selected?",
+                    [
+                      ">",
+                      "todo-size",
+                      "0"
+                    ]
+                  ]
+                ],
+                [
+                  ":on-click",
+                  [
+                    "fn",
+                    [
+                      "e",
+                      "d!"
+                    ],
+                    [
+                      "d!",
+                      [
+                        "::",
+                        ":set-router",
+                        [
+                          "{}",
+                          [
+                            ":name",
+                            ":table"
+                          ],
+                          [
+                            ":group-id",
+                            [
+                              "option:unwrap-or",
+                              [
+                                "get",
+                                "group",
+                                ":id"
+                              ],
+                              "nil"
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "<>",
+                [
+                  "str",
+                  "todo-size"
+                ],
+                [
+                  "{}",
+                  [
+                    ":class-name",
+                    "style-small-hint"
+                  ]
+                ]
+              ],
+              [
+                "=<",
+                "8",
+                "0"
+              ],
+              [
+                "span",
+                [
+                  "{}",
+                  [
+                    ":inner-text",
+                    [
+                      "decode-map-as",
+                      [
+                        "option:unwrap-or",
+                        [
+                          "get",
+                          "group",
+                          ":text"
+                        ],
+                        "|"
+                      ],
+                      "'String"
+                    ]
+                  ],
+                  [
+                    ":class-name",
+                    "style-input"
+                  ],
+                  [
+                    ":on-input",
+                    [
+                      "fn",
+                      [
+                        "e",
+                        "d!"
+                      ],
+                      [
+                        "d!",
+                        [
+                          "::",
+                          ":update-group",
+                          [
+                            "{}",
+                            [
+                              ":id",
+                              [
+                                "option:unwrap-or",
+                                [
+                                  "get",
+                                  "group",
+                                  ":id"
+                                ],
+                                "nil"
+                              ]
+                            ],
+                            [
+                              ":text",
+                              [
+                                "decode-map-as",
+                                [
+                                  "option:unwrap-or",
+                                  [
+                                    "get",
+                                    "e",
+                                    ":value"
+                                  ],
+                                  "|"
+                                ],
+                                "'String"
+                              ]
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.group-line/comp-group-line",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'respo.schema/Component"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Dynamic",
+              "'Number",
+              "'Bool"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:42bdb547ac9e8b6b77bf799850936f78",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "style-group",
+          [
+            "index",
+            "selected?",
+            "todo?"
+          ],
+          [
+            "{}",
+            [
+              ":top",
+              [
+                "str",
+                [
+                  "+",
+                  "8",
+                  [
+                    "*",
+                    "40",
+                    "index"
+                  ]
+                ],
+                "|px"
+              ]
+            ],
+            [
+              ":background-color",
+              [
+                "if",
+                "selected?",
+                [
+                  "hsl",
+                  "200",
+                  "20",
+                  "94"
+                ],
+                "|transparent"
+              ]
+            ],
+            [
+              ":color",
+              [
+                "if",
+                "todo?",
+                [
+                  "hsl",
+                  "0",
+                  "0",
+                  "20"
+                ],
+                [
+                  "hsl",
+                  "0",
+                  "0",
+                  "70"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.group-line/style-group",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Number",
+              "'Bool",
+              "'Bool"
+            ]
+          ],
+          [
+            ":return",
+            [
+              "::",
+              "'Map",
+              "'Tag",
+              "'String"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:bae7d773b8f11b83e55dca11af878988",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstyle",
+          "style-group-base",
+          [
+            "{}",
+            [
+              "|&",
+              [
+                "{}",
+                [
+                  ":padding",
+                  "|0px 12px"
+                ],
+                [
+                  ":line-height",
+                  "|40px"
+                ],
+                [
+                  ":cursor",
+                  "|pointer"
+                ],
+                [
+                  ":position",
+                  "|absolute"
+                ],
+                [
+                  ":width",
+                  "|100%"
+                ],
+                [
+                  ":transition-duration",
+                  "|220ms"
+                ],
+                [
+                  ":display",
+                  "|flex"
+                ],
+                [
+                  ":align-items",
+                  "|center"
+                ],
+                [
+                  ":border-radius",
+                  "|8px"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.group-line/style-group-base",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:f8cd7a177ca3a7c78c0263c425be4edb",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstyle",
+          "style-input",
+          [
+            "{}",
+            [
+              "|&",
+              [
+                "{}",
+                [
+                  ":border",
+                  "|none"
+                ],
+                [
+                  ":flex",
+                  "1"
+                ],
+                [
+                  ":outline",
+                  "|none"
+                ],
+                [
+                  ":font-size",
+                  "15"
+                ],
+                [
+                  ":line-height",
+                  "2"
+                ],
+                [
+                  ":background-color",
+                  "|transparent"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.group-line/style-input",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:8339cf2f3d73d0141f810b214b8c5382",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstyle",
+          "style-small-hint",
+          [
+            "{}",
+            [
+              "|&",
+              [
+                "{}",
+                [
+                  ":font-size",
+                  "|12px"
+                ],
+                [
+                  ":color",
+                  "|#8c8c8c"
+                ],
+                [
+                  ":pointer-events",
+                  "|none"
+                ],
+                [
+                  ":min-width",
+                  "|20px"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.group-line/style-small-hint",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:100148786e0b03210c23fd6da86218f6",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "by-newest-group",
+          [
+            "group-a",
+            "group-b"
+          ],
+          [
+            "&compare",
+            [
+              "decode-map-as",
+              [
+                "option:unwrap-or",
+                [
+                  "get",
+                  [
+                    "option:unwrap-or",
+                    [
+                      "last",
+                      "group-b"
+                    ],
+                    [
+                      "{}"
+                    ]
+                  ],
+                  ":touched-time"
+                ],
+                "0"
+              ],
+              "'Number"
+            ],
+            [
+              "decode-map-as",
+              [
+                "option:unwrap-or",
+                [
+                  "get",
+                  [
+                    "option:unwrap-or",
+                    [
+                      "last",
+                      "group-a"
+                    ],
+                    [
+                      "{}"
+                    ]
+                  ],
+                  ":touched-time"
+                ],
+                "0"
+              ],
+              "'Number"
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.sidebar/by-newest-group",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'Number"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Dynamic",
+              "'Dynamic"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:282611c3e6cb32e99b34214f60cb4977",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defcomp",
+          "comp-sidebar",
+          [
+            "states",
+            "groups",
+            "router"
+          ],
+          [
+            "let",
+            [
+              [
+                "cursor",
+                [
+                  "option:unwrap-or",
+                  [
+                    "get",
+                    "states",
+                    ":cursor"
+                  ],
+                  [
+                    "[]"
+                  ]
+                ]
+              ],
+              [
+                "state",
+                [
+                  "option:unwrap-or",
+                  [
+                    "get",
+                    "states",
+                    ":data"
+                  ],
+                  "|"
+                ]
+              ],
+              [
+                "add-plugin",
+                [
+                  "use-prompt",
+                  [
+                    ">>",
+                    "states",
+                    ":add"
+                  ],
+                  [
+                    "{}"
+                  ]
+                ]
+              ]
+            ],
+            [
+              "div",
+              [
+                "{}",
+                [
+                  ":class-name",
+                  "style-sidebar"
+                ]
+              ],
+              [
+                "div",
+                [
+                  "{}",
+                  [
+                    ":class-name",
+                    "css/row-parted"
+                  ]
+                ],
+                [
+                  "div",
+                  [
+                    "{}",
+                    [
+                      ":class-name",
+                      "css/row-middle"
+                    ]
+                  ],
+                  [
+                    "comp-icon",
+                    ":plus",
+                    [
+                      "{}",
+                      [
+                        ":font-size",
+                        "20"
+                      ],
+                      [
+                        ":color",
+                        [
+                          "hsl",
+                          "0",
+                          "00",
+                          "80"
+                        ]
+                      ],
+                      [
+                        ":cursor",
+                        ":pointer"
+                      ]
+                    ],
+                    [
+                      "fn",
+                      [
+                        "e",
+                        "d!"
+                      ],
+                      [
+                        ".show",
+                        "add-plugin",
+                        "d!",
+                        [
+                          "fn",
+                          [
+                            "result"
+                          ],
+                          [
+                            "if",
+                            [
+                              "not",
+                              [
+                                ".blank?",
+                                [
+                                  "prompt-text",
+                                  "result"
+                                ]
+                              ]
+                            ],
+                            [
+                              "d!",
+                              [
+                                "::",
+                                ":add-group",
+                                "result"
+                              ]
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ],
+                  [
+                    "=<",
+                    "16",
+                    "nil"
+                  ],
+                  [
+                    "comp-icon",
+                    ":sidebar",
+                    [
+                      "{}",
+                      [
+                        ":font-size",
+                        "16"
+                      ],
+                      [
+                        ":color",
+                        [
+                          "hsl",
+                          "0",
+                          "0",
+                          "80"
+                        ]
+                      ],
+                      [
+                        ":cursor",
+                        ":pointer"
+                      ]
+                    ],
+                    [
+                      "fn",
+                      [
+                        "e",
+                        "d!"
+                      ],
+                      [
+                        "d!",
+                        [
+                          "::",
+                          ":hide-sidebar"
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "div",
+                [
+                  "{}",
+                  [
+                    ":class-name",
+                    "style-body"
+                  ],
+                  [
+                    ":on-click",
+                    [
+                      "fn",
+                      [
+                        "e",
+                        "d!"
+                      ],
+                      [
+                        "d!",
+                        [
+                          "::",
+                          ":set-router",
+                          [
+                            "{}",
+                            [
+                              ":name",
+                              ":table"
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ],
+                [
+                  "if",
+                  [
+                    "empty?",
+                    "groups"
+                  ],
+                  [
+                    "div",
+                    [
+                      "{}",
+                      [
+                        ":class-name",
+                        "css/center"
+                      ]
+                    ],
+                    [
+                      "<>",
+                      "|Add a group to start",
+                      [
+                        "{}",
+                        [
+                          ":class-name",
+                          "style-empty-hint"
+                        ]
+                      ]
+                    ]
+                  ],
+                  [
+                    "list->",
+                    [
+                      "{}",
+                      [
+                        ":class-name",
+                        "style-box-base"
+                      ],
+                      [
+                        ":style",
+                        [
+                          "style-box",
+                          [
+                            "count",
+                            "groups"
+                          ]
+                        ]
+                      ]
+                    ],
+                    [
+                      "->",
+                      "groups",
+                      [
+                        ".to-list"
+                      ],
+                      [
+                        "sort",
+                        "by-newest-group"
+                      ],
+                      [
+                        "map-indexed",
+                        [
+                          "fn",
+                          [
+                            "index",
+                            "entry"
+                          ],
+                          [
+                            "[]",
+                            [
+                              "first",
+                              "entry"
+                            ],
+                            [
+                              "let",
+                              [
+                                [
+                                  "group",
+                                  [
+                                    "option:unwrap-or",
+                                    [
+                                      "last",
+                                      "entry"
+                                    ],
+                                    [
+                                      "{}"
+                                    ]
+                                  ]
+                                ],
+                                [
+                                  "tasks",
+                                  [
+                                    "option:unwrap-or",
+                                    [
+                                      "get",
+                                      "group",
+                                      ":tasks"
+                                    ],
+                                    [
+                                      "{}"
+                                    ]
+                                  ]
+                                ],
+                                [
+                                  "selected?",
+                                  [
+                                    "=",
+                                    [
+                                      "option:unwrap-or",
+                                      [
+                                        "get",
+                                        "router",
+                                        ":group-id"
+                                      ],
+                                      "nil"
+                                    ],
+                                    [
+                                      "option:unwrap-or",
+                                      [
+                                        "get",
+                                        "group",
+                                        ":id"
+                                      ],
+                                      "nil"
+                                    ]
+                                  ]
+                                ]
+                              ],
+                              [
+                                "comp-group-line",
+                                "group",
+                                "index",
+                                "selected?"
+                              ]
+                            ]
+                          ]
+                        ]
+                      ],
+                      [
+                        ".sort-by",
+                        "first"
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                ".render",
+                "add-plugin"
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.sidebar/comp-sidebar",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'respo.schema/Component"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              [
+                "::",
+                "'Map",
+                "'Dynamic",
+                "'Dynamic"
+              ],
+              [
+                "::",
+                "'Map",
+                "'String",
+                "'Dynamic"
+              ],
+              [
+                "::",
+                "'Map",
+                "'Tag",
+                "'Dynamic"
+              ]
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:5a072e0aa979e838bf6d2ab81836a92d",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "prompt-text",
+          [
+            "x"
+          ],
+          [
+            "decode-map-as",
+            "x",
+            "'String"
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.sidebar/prompt-text",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'String"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Dynamic"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:498ff2307b820dfed43ca34401b77ca7",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstyle",
+          "style-body",
+          [
+            "{}",
+            [
+              "|&",
+              [
+                "{}",
+                [
+                  ":flex",
+                  "|1"
+                ],
+                [
+                  ":background-color",
+                  [
+                    "hsl",
+                    "0",
+                    "0",
+                    "0"
+                  ]
+                ],
+                [
+                  ":position",
+                  "|relative"
+                ],
+                [
+                  ":overflow",
+                  "|auto"
+                ],
+                [
+                  ":padding-top",
+                  "|8px"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.sidebar/style-body",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:77fb9a576f5177a44beee54da7352846",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "style-box",
+          [
+            "n"
+          ],
+          [
+            "{}",
+            [
+              ":height",
+              [
+                "str",
+                [
+                  "+",
+                  "80",
+                  [
+                    "*",
+                    "n",
+                    "40"
+                  ]
+                ],
+                "|px"
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.sidebar/style-box",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Number"
+            ]
+          ],
+          [
+            ":return",
+            [
+              "::",
+              "'Map",
+              "'Tag",
+              "'String"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:edf64f4b8819600de6a3d29136ea576f",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstyle",
+          "style-box-base",
+          [
+            "{}",
+            [
+              "|&",
+              [
+                "{}",
+                [
+                  ":width",
+                  "|100%"
+                ],
+                [
+                  ":position",
+                  "|relative"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.sidebar/style-box-base",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:02a0711d53e689f42eddbbc122fdfa55",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstyle",
+          "style-empty-hint",
+          [
+            "{}",
+            [
+              "|&",
+              [
+                "{}",
+                [
+                  ":font-family",
+                  "ui/font-fancy"
+                ],
+                [
+                  ":font-style",
+                  ":italic"
+                ],
+                [
+                  ":color",
+                  "|#8c8c8c"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.sidebar/style-empty-hint",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:b62e33ca0127d9061903b8fb6ef3592c",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstyle",
+          "style-sidebar",
+          [
+            "{}",
+            [
+              "|&",
+              [
+                "{}",
+                [
+                  ":background-color",
+                  [
+                    "hsl",
+                    "0",
+                    "0",
+                    "100"
+                  ]
+                ],
+                [
+                  ":display",
+                  "|flex"
+                ],
+                [
+                  ":flex-direction",
+                  "|column"
+                ],
+                [
+                  ":height",
+                  "|100%"
+                ],
+                [
+                  ":box-shadow",
+                  "|1px 0 6px rgba(5, 5, 5, 0.06)"
+                ],
+                [
+                  ":padding",
+                  "|20px 16px"
+                ],
+                [
+                  ":width",
+                  "|280px"
+                ],
+                [
+                  ":transition-duration",
+                  "|200ms"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.sidebar/style-sidebar",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:a193f71cb980fa1012ffe9ee51e3a025",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defcomp",
+          "comp-task",
+          [
+            "states",
+            "task",
+            "index"
+          ],
+          [
+            "let",
+            [
+              [
+                "done?",
+                [
+                  "decode-map-as",
+                  [
+                    "option:unwrap-or",
+                    [
+                      "get",
+                      "task",
+                      ":done"
+                    ],
+                    "false"
+                  ],
+                  "'Bool"
+                ]
+              ],
+              [
+                "remove-plugin",
+                [
+                  "use-confirm",
+                  [
+                    ">>",
+                    "states",
+                    ":remove"
+                  ],
+                  [
+                    "{}"
+                  ]
+                ]
+              ]
+            ],
+            [
+              "create-element",
+              ":section",
+              [
+                "{}",
+                [
+                  ":class-name",
+                  [
+                    "str-spaced",
+                    "css/row-middle",
+                    "style-task-base"
+                  ]
+                ],
+                [
+                  ":style",
+                  [
+                    "style-task-offset",
+                    "index"
+                  ]
+                ]
+              ],
+              [
+                "comp-icon",
+                ":check",
+                [
+                  "merge",
+                  [
+                    "style-done",
+                    "done?"
+                  ],
+                  [
+                    "{}",
+                    [
+                      ":font-size",
+                      "20"
+                    ],
+                    [
+                      ":cursor",
+                      ":pointer"
+                    ]
+                  ]
+                ],
+                [
+                  "fn",
+                  [
+                    "e",
+                    "d!"
+                  ],
+                  [
+                    "d!",
+                    [
+                      ":",
+                      ":toggle-task",
+                      "task"
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "input",
+                [
+                  "{}",
+                  [
+                    ":value",
+                    [
+                      "decode-map-as",
+                      [
+                        "option:unwrap-or",
+                        [
+                          "get",
+                          "task",
+                          ":text"
+                        ],
+                        "|"
+                      ],
+                      "'String"
+                    ]
+                  ],
+                  [
+                    ":class-name",
+                    [
+                      "str-spaced",
+                      "|task-input",
+                      "style-input"
+                    ]
+                  ],
+                  [
+                    ":on-input",
+                    [
+                      "fn",
+                      [
+                        "e",
+                        "d!"
+                      ],
+                      [
+                        "d!",
+                        [
+                          ":",
+                          ":update-task",
+                          [
+                            "{}",
+                            [
+                              ":group-id",
+                              [
+                                "option:unwrap-or",
+                                [
+                                  "get",
+                                  "task",
+                                  ":group-id"
+                                ],
+                                "nil"
+                              ]
+                            ],
+                            [
+                              ":id",
+                              [
+                                "option:unwrap-or",
+                                [
+                                  "get",
+                                  "task",
+                                  ":id"
+                                ],
+                                "nil"
+                              ]
+                            ],
+                            [
+                              ":text",
+                              [
+                                "decode-map-as",
+                                [
+                                  "option:unwrap-or",
+                                  [
+                                    "get",
+                                    "e",
+                                    ":value"
+                                  ],
+                                  "|"
+                                ],
+                                "'String"
+                              ]
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "comp-icon",
+                ":arrow-up",
+                [
+                  "{}",
+                  [
+                    ":font-size",
+                    "14"
+                  ],
+                  [
+                    ":color",
+                    [
+                      "hsl",
+                      "150",
+                      "50",
+                      "80"
+                    ]
+                  ],
+                  [
+                    ":cursor",
+                    ":pointer"
+                  ]
+                ],
+                [
+                  "fn",
+                  [
+                    "e",
+                    "d!"
+                  ],
+                  [
+                    "d!",
+                    [
+                      ":",
+                      ":touch-task",
+                      "task"
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "=<",
+                "8",
+                "nil"
+              ],
+              [
+                "comp-icon",
+                ":x",
+                [
+                  "{}",
+                  [
+                    ":font-size",
+                    "14"
+                  ],
+                  [
+                    ":color",
+                    [
+                      "hsl",
+                      "0",
+                      "100",
+                      "70"
+                    ]
+                  ],
+                  [
+                    ":cursor",
+                    ":pointer"
+                  ]
+                ],
+                [
+                  "fn",
+                  [
+                    "e",
+                    "d!"
+                  ],
+                  [
+                    ".show",
+                    "remove-plugin",
+                    "d!",
+                    [
+                      "fn",
+                      [],
+                      [
+                        "d!",
+                        [
+                          ":",
+                          ":rm-task",
+                          "task"
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                ".render",
+                "remove-plugin"
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.task/comp-task",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'respo.schema/Component"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Dynamic",
+              "'Dynamic",
+              "'Number"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:44186ddfe9cb37619ed7a38478b91fe4",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "style-done",
+          [
+            "done?"
+          ],
+          [
+            "{}",
+            [
+              ":color",
+              [
+                "if",
+                "done?",
+                [
+                  "hsl",
+                  "100",
+                  "20",
+                  "60"
+                ],
+                [
+                  "hsl",
+                  "20",
+                  "90",
+                  "80"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.task/style-done",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Bool"
+            ]
+          ],
+          [
+            ":return",
+            [
+              "::",
+              "'Map",
+              "'Tag",
+              "'String"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:5bb56d1192f29158df9b131efdd566fe",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstyle",
+          "style-input",
+          [
+            "{}",
+            [
+              "|&",
+              [
+                "{}",
+                [
+                  ":outline",
+                  "|none"
+                ],
+                [
+                  ":border",
+                  "|1px solid #d9d9d9"
+                ],
+                [
+                  ":padding",
+                  "|0px 10px"
+                ],
+                [
+                  ":line-height",
+                  "|32px"
+                ],
+                [
+                  ":font-size",
+                  "|15px"
+                ],
+                [
+                  ":flex",
+                  "|1"
+                ],
+                [
+                  ":margin",
+                  "|0 8px"
+                ],
+                [
+                  ":border-radius",
+                  "|8px"
+                ],
+                [
+                  ":background-color",
+                  "|#ffffff"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.task/style-input",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:74fbd766fae79ce7caeeb45f392165b7",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstyle",
+          "style-task-base",
+          [
+            "{}",
+            [
+              "|&",
+              [
+                "{}",
+                [
+                  ":display",
+                  "|flex"
+                ],
+                [
+                  ":position",
+                  "|absolute"
+                ],
+                [
+                  ":width",
+                  "|100%"
+                ],
+                [
+                  ":transition-duration",
+                  "|200ms"
+                ],
+                [
+                  ":padding",
+                  "|2px 4px"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.task/style-task-base",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:c8bd3697781ca928dd05d565af977294",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "style-task-offset",
+          [
+            "index"
+          ],
+          [
+            "{}",
+            [
+              ":top",
+              [
+                "str",
+                [
+                  "+",
+                  "8",
+                  [
+                    "*",
+                    "index",
+                    "40"
+                  ]
+                ],
+                "|px"
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.task/style-task-offset",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Number"
+            ]
+          ],
+          [
+            ":return",
+            [
+              "::",
+              "'Map",
+              "'Tag",
+              "'String"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:03b1dfde0a83e21d45b17dea6ac45593",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "as-map",
+          [
+            "x"
+          ],
+          [
+            "if",
+            [
+              "map?",
+              "x"
+            ],
+            [
+              "decode-map-as",
+              "x",
+              [
+                "::",
+                "'Map",
+                "'String",
+                [
+                  "::",
+                  "'Map",
+                  "'Tag",
+                  "'Dynamic"
+                ]
+              ]
+            ],
+            [
+              "{}"
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.todolist/as-map",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Dynamic"
+            ]
+          ],
+          [
+            ":return",
+            [
+              "::",
+              "'Map",
+              "'String",
+              [
+                "::",
+                "'Map",
+                "'Tag",
+                "'Dynamic"
+              ]
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:34cb6b75859720f2e26f748c4ba44994",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "by-touch-time",
+          [
+            "entry-a",
+            "entry-b"
+          ],
+          [
+            "&compare",
+            [
+              "decode-map-as",
+              [
+                "option:unwrap-or",
+                [
+                  "get",
+                  [
+                    "option:unwrap-or",
+                    [
+                      "last",
+                      "entry-b"
+                    ],
+                    [
+                      "{}"
+                    ]
+                  ],
+                  ":touched-time"
+                ],
+                "0"
+              ],
+              "'Number"
+            ],
+            [
+              "decode-map-as",
+              [
+                "option:unwrap-or",
+                [
+                  "get",
+                  [
+                    "option:unwrap-or",
+                    [
+                      "last",
+                      "entry-a"
+                    ],
+                    [
+                      "{}"
+                    ]
+                  ],
+                  ":touched-time"
+                ],
+                "0"
+              ],
+              "'Number"
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.todolist/by-touch-time",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'Number"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Dynamic",
+              "'Dynamic"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:4f1b150f3d95411c1af7cd71e6286e3f",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defcomp",
+          "comp-group-banner",
+          [
+            "states",
+            "group"
+          ],
+          [
+            "let",
+            [
+              [
+                "edit-plugin",
+                [
+                  "use-prompt",
+                  [
+                    ">>",
+                    "states",
+                    ":edit"
+                  ],
+                  [
+                    "{}",
+                    [
+                      ":initial",
+                      [
+                        "decode-map-as",
+                        [
+                          "option:unwrap-or",
+                          [
+                            "get",
+                            "group",
+                            ":text"
+                          ],
+                          "|"
+                        ],
+                        "'String"
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "add-plugin",
+                [
+                  "use-prompt",
+                  [
+                    ">>",
+                    "states",
+                    ":add"
+                  ],
+                  [
+                    "{}"
+                  ]
+                ]
+              ],
+              [
+                "remove-plugin",
+                [
+                  "use-confirm",
+                  [
+                    ">>",
+                    "states",
+                    ":remove"
+                  ],
+                  [
+                    "{}"
+                  ]
+                ]
+              ]
+            ],
+            [
+              "div",
+              [
+                "{}",
+                [
+                  ":class-name",
+                  "css/row-parted"
+                ]
+              ],
+              [
+                "div",
+                [
+                  "{}",
+                  [
+                    ":class-name",
+                    "css/row-middle"
+                  ]
+                ],
+                [
+                  "<>",
+                  [
+                    "decode-map-as",
+                    [
+                      "option:unwrap-or",
+                      [
+                        "get",
+                        "group",
+                        ":text"
+                      ],
+                      "|"
+                    ],
+                    "'String"
+                  ],
+                  [
+                    "{}",
+                    [
+                      ":font-size",
+                      "20"
+                    ],
+                    [
+                      ":font-family",
+                      "ui/font-fancy"
+                    ]
+                  ]
+                ],
+                [
+                  "=<",
+                  "8",
+                  "nil"
+                ],
+                [
+                  "span",
+                  [
+                    "{}",
+                    [
+                      ":on-click",
+                      [
+                        "fn",
+                        [
+                          "e",
+                          "d!"
+                        ],
+                        [
+                          ".show",
+                          "edit-plugin",
+                          "d!",
+                          [
+                            "fn",
+                            [
+                              "result"
+                            ],
+                            [
+                              "d!",
+                              [
+                                "::",
+                                ":update-group",
+                                [
+                                  "{}",
+                                  [
+                                    ":id",
+                                    [
+                                      "option:unwrap-or",
+                                      [
+                                        "get",
+                                        "group",
+                                        ":id"
+                                      ],
+                                      "nil"
+                                    ]
+                                  ],
+                                  [
+                                    ":text",
+                                    "result"
+                                  ]
+                                ]
+                              ]
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ],
+                  [
+                    "comp-i",
+                    ":edit",
+                    "14",
+                    [
+                      "hsl",
+                      "200",
+                      "80",
+                      "80"
+                    ]
+                  ]
+                ],
+                [
+                  "=<",
+                  "16",
+                  "nil"
+                ],
+                [
+                  "span",
+                  [
+                    "{}",
+                    [
+                      ":on-click",
+                      [
+                        "fn",
+                        [
+                          "e",
+                          "d!"
+                        ],
+                        [
+                          ".show",
+                          "add-plugin",
+                          "d!",
+                          [
+                            "fn",
+                            [
+                              "result"
+                            ],
+                            [
+                              "when-not",
+                              [
+                                ".blank?",
+                                [
+                                  "prompt-text",
+                                  "result"
+                                ]
+                              ],
+                              [
+                                "d!",
+                                [
+                                  "::",
+                                  ":add-task",
+                                  [
+                                    "{}",
+                                    [
+                                      ":text",
+                                      "result"
+                                    ],
+                                    [
+                                      ":group-id",
+                                      [
+                                        "option:unwrap-or",
+                                        [
+                                          "get",
+                                          "group",
+                                          ":id"
+                                        ],
+                                        "nil"
+                                      ]
+                                    ]
+                                  ]
+                                ]
+                              ]
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ],
+                  [
+                    "button",
+                    [
+                      "{}",
+                      [
+                        ":class-name",
+                        "css/button"
+                      ],
+                      [
+                        ":inner-text",
+                        "|Add task"
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "div",
+                [
+                  "{}"
+                ],
+                [
+                  "comp-icon",
+                  ":arrow-up",
+                  [
+                    "{}",
+                    [
+                      ":font-size",
+                      "14"
+                    ],
+                    [
+                      ":color",
+                      [
+                        "hsl",
+                        "200",
+                        "80",
+                        "80"
+                      ]
+                    ],
+                    [
+                      ":cursor",
+                      "|pointer"
+                    ]
+                  ],
+                  [
+                    "fn",
+                    [
+                      "e",
+                      "d!"
+                    ],
+                    [
+                      "d!",
+                      [
+                        "::",
+                        ":touch-group",
+                        [
+                          "option:unwrap-or",
+                          [
+                            "get",
+                            "group",
+                            ":id"
+                          ],
+                          "nil"
+                        ]
+                      ]
+                    ]
+                  ]
+                ],
+                [
+                  "=<",
+                  "8",
+                  "nil"
+                ],
+                [
+                  "span",
+                  [
+                    "{}",
+                    [
+                      ":on-click",
+                      [
+                        "fn",
+                        [
+                          "e",
+                          "d!"
+                        ],
+                        [
+                          ".show",
+                          "remove-plugin",
+                          "d!",
+                          [
+                            "fn",
+                            [],
+                            [
+                              "d!",
+                              [
+                                "::",
+                                ":rm-group",
+                                [
+                                  "option:unwrap-or",
+                                  [
+                                    "get",
+                                    "group",
+                                    ":id"
+                                  ],
+                                  "nil"
+                                ]
+                              ]
+                            ],
+                            [
+                              "d!",
+                              [
+                                "::",
+                                ":set-router",
+                                [
+                                  "{}",
+                                  [
+                                    ":name",
+                                    ":table"
+                                  ]
+                                ]
+                              ]
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ],
+                  [
+                    "comp-i",
+                    ":x",
+                    "14",
+                    [
+                      "hsl",
+                      "0",
+                      "100",
+                      "70"
+                    ]
+                  ]
+                ]
+              ],
+              [
+                ".render",
+                "edit-plugin"
+              ],
+              [
+                ".render",
+                "add-plugin"
+              ],
+              [
+                ".render",
+                "remove-plugin"
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.todolist/comp-group-banner",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'respo.schema/Component"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Dynamic",
+              "'Dynamic"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:ced1add40c78479712bd69a4678b03e5",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defcomp",
+          "comp-todolist",
+          [
+            "states",
+            "router",
+            "group"
+          ],
+          [
+            "let",
+            [
+              [
+                "cursor",
+                [
+                  "decode-map-as",
+                  [
+                    "option:unwrap-or",
+                    [
+                      "get",
+                      "states",
+                      ":cursor"
+                    ],
+                    [
+                      "[]"
+                    ]
+                  ],
+                  [
+                    "::",
+                    "'List",
+                    "'Dynamic"
+                  ]
+                ]
+              ],
+              [
+                "tasks",
+                [
+                  "as-map",
+                  [
+                    "option:unwrap-or",
+                    [
+                      "get",
+                      "group",
+                      ":tasks"
+                    ],
+                    [
+                      "{}"
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "state",
+                [
+                  "decode-map-as",
+                  [
+                    "option:unwrap-or",
+                    [
+                      "get",
+                      "states",
+                      ":data"
+                    ],
+                    [
+                      "{}",
+                      [
+                        ":draft",
+                        "|"
+                      ],
+                      [
+                        ":fold-done?",
+                        "true"
+                      ]
+                    ]
+                  ],
+                  [
+                    "::",
+                    "'Map",
+                    "'Tag",
+                    "'Dynamic"
+                  ]
+                ]
+              ],
+              [
+                "todo-tasks",
+                [
+                  ".filter-kv",
+                  "tasks",
+                  [
+                    "fn",
+                    [
+                      "id",
+                      "task"
+                    ],
+                    [
+                      "not",
+                      [
+                        "decode-map-as",
+                        [
+                          "option:unwrap-or",
+                          [
+                            "get",
+                            "task",
+                            ":done"
+                          ],
+                          "false"
+                        ],
+                        "'Bool"
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "done-tasks",
+                [
+                  ".filter-kv",
+                  "tasks",
+                  [
+                    "fn",
+                    [
+                      "id",
+                      "task"
+                    ],
+                    [
+                      "decode-map-as",
+                      [
+                        "option:unwrap-or",
+                        [
+                          "get",
+                          "task",
+                          ":done"
+                        ],
+                        "false"
+                      ],
+                      "'Bool"
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "render-task-list",
+                [
+                  "fn",
+                  [
+                    "tasks"
+                  ],
+                  [
+                    "hint-fn",
+                    [
+                      "{}",
+                      [
+                        ":args",
+                        [
+                          "[]",
+                          [
+                            "::",
+                            "'Map",
+                            "'String",
+                            [
+                              "::",
+                              "'Map",
+                              "'Tag",
+                              "'Dynamic"
+                            ]
+                          ]
+                        ]
+                      ],
+                      [
+                        ":return",
+                        "'respo.schema/Element"
+                      ]
+                    ]
+                  ],
+                  [
+                    "list->",
+                    [
+                      "{}",
+                      [
+                        ":class-name",
+                        "style-list-base"
+                      ],
+                      [
+                        ":style",
+                        [
+                          "style-list-height",
+                          [
+                            "count",
+                            "tasks"
+                          ]
+                        ]
+                      ]
+                    ],
+                    [
+                      "->",
+                      "tasks",
+                      [
+                        ".to-list"
+                      ],
+                      [
+                        "sort",
+                        "by-touch-time"
+                      ],
+                      [
+                        "map-indexed",
+                        [
+                          "fn",
+                          [
+                            "idx",
+                            "entry"
+                          ],
+                          [
+                            "let[]",
+                            [
+                              "id",
+                              "task"
+                            ],
+                            "entry",
+                            [
+                              "[]",
+                              "id",
+                              [
+                                "comp-task",
+                                [
+                                  ">>",
+                                  "states",
+                                  "id"
+                                ],
+                                "task",
+                                "idx"
+                              ]
+                            ]
+                          ]
+                        ]
+                      ],
+                      [
+                        ".sort-by",
+                        "first"
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ],
+            [
+              "div",
+              [
+                "{}",
+                [
+                  ":class-name",
+                  "style-todolist"
+                ]
+              ],
+              [
+                "comp-group-banner",
+                [
+                  ">>",
+                  "states",
+                  ":group"
+                ],
+                "group"
+              ],
+              [
+                "=<",
+                "nil",
+                "16"
+              ],
+              [
+                "create-element",
+                ":section",
+                [
+                  "{}",
+                  [
+                    ":class-name",
+                    "style-body"
+                  ]
+                ],
+                [
+                  "if",
+                  [
+                    "empty?",
+                    "todo-tasks"
+                  ],
+                  [
+                    "div",
+                    [
+                      "{}"
+                    ],
+                    [
+                      "<>",
+                      "|No tasks",
+                      [
+                        "{}",
+                        [
+                          ":font-family",
+                          "ui/font-fancy"
+                        ],
+                        [
+                          ":font-style",
+                          ":italic"
+                        ],
+                        [
+                          ":color",
+                          [
+                            "hsl",
+                            "0",
+                            "0",
+                            "80"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ],
+                  [
+                    "render-task-list",
+                    "todo-tasks"
+                  ]
+                ],
+                [
+                  "if",
+                  [
+                    ">",
+                    [
+                      "count",
+                      "done-tasks"
+                    ],
+                    "0"
+                  ],
+                  [
+                    "div",
+                    [
+                      "{}",
+                      [
+                        ":class-name",
+                        [
+                          "str-spaced",
+                          "css/row-middle",
+                          "style-section"
+                        ]
+                      ]
+                    ],
+                    [
+                      "<>",
+                      "|Done tasks",
+                      [
+                        "{}",
+                        [
+                          ":color",
+                          [
+                            "hsl",
+                            "0",
+                            "0",
+                            "80"
+                          ]
+                        ],
+                        [
+                          ":font-size",
+                          "14"
+                        ]
+                      ]
+                    ],
+                    [
+                      "=<",
+                      "8",
+                      "nil"
+                    ],
+                    [
+                      "comp-icon",
+                      [
+                        "if",
+                        [
+                          "decode-map-as",
+                          [
+                            "option:unwrap-or",
+                            [
+                              "get",
+                              "state",
+                              ":fold-done?"
+                            ],
+                            "true"
+                          ],
+                          "'Bool"
+                        ],
+                        ":eye-off",
+                        ":eye"
+                      ],
+                      [
+                        "{}",
+                        [
+                          ":font-size",
+                          "16"
+                        ],
+                        [
+                          ":color",
+                          [
+                            "hsl",
+                            "200",
+                            "80",
+                            "80"
+                          ]
+                        ],
+                        [
+                          ":cursor",
+                          ":pointer"
+                        ]
+                      ],
+                      [
+                        "fn",
+                        [
+                          "e",
+                          "d!"
+                        ],
+                        [
+                          "d!",
+                          [
+                            "::",
+                            ":states",
+                            "cursor",
+                            [
+                              "update",
+                              "state",
+                              ":fold-done?",
+                              "not"
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ],
+                [
+                  "if",
+                  [
+                    "not",
+                    [
+                      "decode-map-as",
+                      [
+                        "option:unwrap-or",
+                        [
+                          "get",
+                          "state",
+                          ":fold-done?"
+                        ],
+                        "true"
+                      ],
+                      "'Bool"
+                    ]
+                  ],
+                  [
+                    "render-task-list",
+                    "done-tasks"
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.todolist/comp-todolist",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'respo.schema/Component"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              [
+                "::",
+                "'Map",
+                "'Dynamic",
+                "'Dynamic"
+              ],
+              [
+                "::",
+                "'Map",
+                "'Tag",
+                "'Dynamic"
+              ],
+              [
+                "::",
+                "'Map",
+                "'Tag",
+                "'Dynamic"
+              ]
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:a16c076bfff00a96e59acb13fe040183",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "prompt-text",
+          [
+            "x"
+          ],
+          [
+            "decode-map-as",
+            "x",
+            "'String"
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.todolist/prompt-text",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'String"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Dynamic"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:498ff2307b820dfed43ca34401b77ca7",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstyle",
+          "style-body",
+          [
+            "{}",
+            [
+              "|&",
+              [
+                "{}",
+                [
+                  ":padding-bottom",
+                  "|120px"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.todolist/style-body",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:1731c9242dc4d71e483d9b3c057df4a4",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstyle",
+          "style-list-base",
+          [
+            "{}",
+            [
+              "|&",
+              [
+                "{}",
+                [
+                  ":display",
+                  "|flex"
+                ],
+                [
+                  ":flex-direction",
+                  "|column"
+                ],
+                [
+                  ":position",
+                  "|relative"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.todolist/style-list-base",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:b517d89711613a2f1d4f27f227e09663",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "style-list-height",
+          [
+            "size"
+          ],
+          [
+            "{}",
+            [
+              ":height",
+              [
+                "str",
+                [
+                  "*",
+                  "40",
+                  "size"
+                ],
+                "|px"
+              ]
+            ],
+            [
+              ":transition-duration",
+              "|0ms"
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.todolist/style-list-height",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Number"
+            ]
+          ],
+          [
+            ":return",
+            [
+              "::",
+              "'Map",
+              "'Tag",
+              "'String"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:54888a33a95f4b9b569d33b57c278f1d",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstyle",
+          "style-section",
+          [
+            "{}",
+            [
+              "|&",
+              [
+                "{}",
+                [
+                  ":margin-top",
+                  "|16px"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.todolist/style-section",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:ac44b42c6ade7caabb35fd934537710b",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstyle",
+          "style-todolist",
+          [
+            "{}",
+            [
+              "|&",
+              [
+                "{}",
+                [
+                  ":background-color",
+                  [
+                    "hsl",
+                    "0",
+                    "0",
+                    "100"
+                  ]
+                ],
+                [
+                  ":height",
+                  "|100%"
+                ],
+                [
+                  ":box-shadow",
+                  "|0 2px 8px rgba(5, 5, 5, 0.06)"
+                ],
+                [
+                  ":padding",
+                  "|20px 24px"
+                ],
+                [
+                  ":overflow",
+                  ":auto"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.comp.todolist/style-todolist",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:fd33606ef6cde4b836968b76d6d937c0",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "def",
+          "dev?",
+          [
+            "=",
+            "|dev",
+            [
+              "option:unwrap-or",
+              [
+                "get-env",
+                "|mode"
+              ],
+              "|release"
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.config/dev?",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:c671fff607cbc1ec0ae24b6d612d6ef9",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "def",
+          "site",
+          [
+            "{}",
+            [
+              ":title",
+              "|Wanderlist"
+            ],
+            [
+              ":icon",
+              "|http://cdn.tiye.me/logo/respo.png"
+            ],
+            [
+              ":storage-key",
+              "|wanderlist"
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.config/site",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:501093697cb805a51e3b7bb154c4f186",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defref",
+          "*store",
+          "schema/store"
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.main/*store",
+        "js_ffi": null,
+        "schema": [
+          "::",
+          "'Ref",
+          [
+            "::",
+            "'Map",
+            "'Tag",
+            "'Dynamic"
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:54998b0fd1daeab1a2f36a975d7a2841",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "dispatch!",
+          [
+            "op"
+          ],
+          [
+            "if",
+            [
+              "enum?",
+              "op"
+            ],
+            [
+              "do",
+              [
+                "when",
+                "config/dev?",
+                [
+                  "js/console.log",
+                  "op"
+                ]
+              ],
+              [
+                "reset!",
+                "*store",
+                [
+                  "updater",
+                  "@*store",
+                  "op",
+                  [
+                    "generate-id!"
+                  ],
+                  [
+                    "decode-map-as",
+                    [
+                      "js/Date.now"
+                    ],
+                    "'Number"
+                  ]
+                ]
+              ],
+              "&unit"
+            ],
+            [
+              "raise",
+              "|Expected Wanderlist operation Enum"
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.main/dispatch!",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'Unit"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Dynamic"
+            ]
+          ],
+          [
+            ":features",
+            [
+              "#{}",
+              ":js-ffi"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:72b829708352c441de2e8289f5a58580",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "get-mount-target",
+          [],
+          [
+            "option:unwrap",
+            [
+              "respo-browser/query-selector",
+              "|.app"
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.main/get-mount-target",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'respo.dom/DomElement"
+          ],
+          [
+            ":args",
+            [
+              "[]"
+            ]
+          ],
+          [
+            ":features",
+            [
+              "#{}",
+              ":js-ffi"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:6afca1d2beb55bca977c4add4ed90eb1",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "main!",
+          [],
+          [
+            "if",
+            "config/dev?",
+            [
+              "load-console-formatter!"
+            ]
+          ],
+          [
+            "println",
+            "|Running mode:",
+            [
+              "if",
+              "config/dev?",
+              "|dev",
+              "|release"
+            ]
+          ],
+          [
+            "let",
+            [
+              [
+                "raw",
+                [
+                  "js/window.localStorage.getItem",
+                  "|wanderlist"
+                ]
+              ]
+            ],
+            [
+              "if",
+              [
+                "js-present?",
+                "raw"
+              ],
+              [
+                "try",
+                [
+                  "let",
+                  [
+                    [
+                      "old-store",
+                      [
+                        "parse-cirru-edn",
+                        [
+                          "decode-map-as",
+                          "raw",
+                          "'String"
+                        ]
+                      ]
+                    ]
+                  ],
+                  [
+                    "reset!",
+                    "*store",
+                    [
+                      "decode-map-as",
+                      "old-store",
+                      [
+                        "::",
+                        "'Map",
+                        "'Tag",
+                        "'Dynamic"
+                      ]
+                    ]
+                  ]
+                ],
+                [
+                  "fn",
+                  [
+                    "e"
+                  ],
+                  "&unit"
+                ]
+              ],
+              "&unit"
+            ]
+          ],
+          [
+            "render-app!"
+          ],
+          [
+            "add-watch!",
+            "*store",
+            ":rerender",
+            [
+              "fn",
+              [
+                "s",
+                "p"
+              ],
+              [
+                "render-app!"
+              ]
+            ]
+          ],
+          [
+            "set!",
+            "js/window.onbeforeunload",
+            "save-local-storage!"
+          ],
+          [
+            "println",
+            "|App started."
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.main/main!",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'Unit"
+          ],
+          [
+            ":args",
+            [
+              "[]"
+            ]
+          ],
+          [
+            ":features",
+            [
+              "#{}",
+              ":js-ffi"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:927779631bfb6ec3cb4cf0cd0fb8dd3c",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "def",
+          "mount-target",
+          [
+            "get-mount-target"
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": {
+          ":backend": {
+            "__edn_tag": "js"
+          }
+        },
+        "ffi_edn": "{} $ :backend :js",
+        "id": "app.main/mount-target",
+        "js_ffi": null,
+        "schema": "'respo.dom/DomElement",
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:e9c5a7c48a949a4833988340d4fd8834",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "reload!",
+          [],
+          [
+            "if",
+            [
+              "nil?",
+              "build-errors"
+            ],
+            [
+              "do",
+              [
+                "clear-cache!"
+              ],
+              [
+                "remove-watch!",
+                "*store",
+                ":rerender"
+              ],
+              [
+                "add-watch!",
+                "*store",
+                ":rerender",
+                [
+                  "fn",
+                  [
+                    "s",
+                    "prev"
+                  ],
+                  [
+                    "render-app!"
+                  ]
+                ]
+              ],
+              [
+                "render-app!"
+              ],
+              [
+                "hud!",
+                "|ok~",
+                "|Ok"
+              ]
+            ],
+            [
+              "hud!",
+              "|error",
+              "build-errors"
+            ]
+          ],
+          "&unit"
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.main/reload!",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'Unit"
+          ],
+          [
+            ":args",
+            [
+              "[]"
+            ]
+          ],
+          [
+            ":features",
+            [
+              "#{}",
+              ":js-ffi"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:44fea1a3e13d8859d01f4979d9856533",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "render-app!",
+          [],
+          [
+            "render!",
+            "mount-target",
+            [
+              "comp-container",
+              "@*store"
+            ],
+            "dispatch!"
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.main/render-app!",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'Unit"
+          ],
+          [
+            ":args",
+            [
+              "[]"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:d31f89b509b327699ef70ffce69bd0d3",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "save-local-storage!",
+          [
+            "e"
+          ],
+          [
+            "js/window.localStorage.setItem",
+            "|wanderlist",
+            [
+              "format-cirru-edn",
+              [
+                "assoc",
+                "@*store",
+                ":states",
+                [
+                  "{}"
+                ]
+              ]
+            ]
+          ],
+          "&unit"
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.main/save-local-storage!",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'Unit"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Dynamic"
+            ]
+          ],
+          [
+            ":features",
+            [
+              "#{}",
+              ":js-ffi"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:040a68c9c0ef8293f72b41e20de25178",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstruct",
+          "Store",
+          [
+            ":version",
+            "'Number"
+          ],
+          [
+            ":groups",
+            "'Map"
+          ],
+          [
+            ":router",
+            "'Map"
+          ],
+          [
+            ":show-sidebar?",
+            "'Bool"
+          ],
+          [
+            ":states",
+            "'Map"
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.schema/Store",
+        "js_ffi": null,
+        "schema": "'StructDef",
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:0912f51d7aa0236d718a7f036bd2f683",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "def",
+          "group",
+          [
+            "{}",
+            [
+              ":text",
+              "nil"
+            ],
+            [
+              ":id",
+              "nil"
+            ],
+            [
+              ":tasks",
+              [
+                "noted",
+                "task",
+                [
+                  "{}"
+                ]
+              ]
+            ],
+            [
+              ":created-time",
+              "nil"
+            ],
+            [
+              ":touched-time",
+              "nil"
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.schema/group",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:104a8842875e4d7ca40ca9b42af45e09",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "def",
+          "store",
+          [
+            "{}",
+            [
+              ":version",
+              "2"
+            ],
+            [
+              ":groups",
+              [
+                "noted",
+                "group",
+                [
+                  "{}"
+                ]
+              ]
+            ],
+            [
+              ":router",
+              [
+                "{}",
+                [
+                  ":name",
+                  ":table"
+                ]
+              ]
+            ],
+            [
+              ":show-sidebar?",
+              "true"
+            ],
+            [
+              ":states",
+              [
+                "{}"
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.schema/store",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:32e957947a65cdb4fd919a66d5b0909b",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "def",
+          "task",
+          [
+            "{}",
+            [
+              ":id",
+              "nil"
+            ],
+            [
+              ":text",
+              "nil"
+            ],
+            [
+              ":done",
+              "false"
+            ],
+            [
+              ":created-time",
+              "nil"
+            ],
+            [
+              ":touched-time",
+              "nil"
+            ],
+            [
+              ":done-time",
+              "nil"
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.schema/task",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:0ac6209863b2e9a0088caa16cc597a16",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "as-map",
+          [
+            "x"
+          ],
+          [
+            "if",
+            [
+              "map?",
+              "x"
+            ],
+            [
+              "decode-map-as",
+              "x",
+              [
+                "::",
+                "'Map",
+                "'Tag",
+                "'Dynamic"
+              ]
+            ],
+            [
+              "{}"
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.updater/as-map",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Dynamic"
+            ]
+          ],
+          [
+            ":return",
+            [
+              "::",
+              "'Map",
+              "'Tag",
+              "'Dynamic"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:d3aeac36cfea23478a697142b325dbde",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "updater",
+          [
+            "store",
+            "op",
+            "op-id",
+            "op-time"
+          ],
+          [
+            "match",
+            "op",
+            [
+              [
+                ":states",
+                "cursor",
+                "s"
+              ],
+              [
+                "assoc",
+                "store",
+                ":states",
+                [
+                  "update-state-tree",
+                  [
+                    "decode-map-as",
+                    [
+                      "option:unwrap-or",
+                      [
+                        "get",
+                        "store",
+                        ":states"
+                      ],
+                      [
+                        "{}"
+                      ]
+                    ],
+                    [
+                      "::",
+                      "'Map",
+                      "'Dynamic",
+                      "'Dynamic"
+                    ]
+                  ],
+                  [
+                    "decode-map-as",
+                    "cursor",
+                    [
+                      "::",
+                      "'List",
+                      "'Dynamic"
+                    ]
+                  ],
+                  "s"
+                ]
+              ]
+            ],
+            [
+              [
+                ":add-group",
+                "op-data"
+              ],
+              [
+                "->",
+                "store",
+                [
+                  "update",
+                  ":groups",
+                  [
+                    "fn",
+                    [
+                      "task-groups"
+                    ],
+                    [
+                      "assoc",
+                      "task-groups",
+                      "op-id",
+                      [
+                        "merge",
+                        "schema/group",
+                        [
+                          "{}",
+                          [
+                            ":id",
+                            "op-id"
+                          ],
+                          [
+                            ":text",
+                            [
+                              "decode-map-as",
+                              "op-data",
+                              "'String"
+                            ]
+                          ],
+                          [
+                            ":created-time",
+                            "op-time"
+                          ],
+                          [
+                            ":touched-time",
+                            "op-time"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ],
+            [
+              [
+                ":rm-group",
+                "id"
+              ],
+              [
+                "dissoc-in",
+                "store",
+                [
+                  "[]",
+                  ":groups",
+                  [
+                    "decode-map-as",
+                    "id",
+                    "'String"
+                  ]
+                ]
+              ]
+            ],
+            [
+              [
+                ":update-group",
+                "op-data"
+              ],
+              [
+                "let",
+                [
+                  [
+                    "data",
+                    [
+                      "as-map",
+                      "op-data"
+                    ]
+                  ],
+                  [
+                    "id",
+                    [
+                      "decode-map-as",
+                      [
+                        "option:unwrap",
+                        [
+                          "get",
+                          "data",
+                          ":id"
+                        ]
+                      ],
+                      "'String"
+                    ]
+                  ],
+                  [
+                    "text",
+                    [
+                      "decode-map-as",
+                      [
+                        "option:unwrap-or",
+                        [
+                          "get",
+                          "data",
+                          ":text"
+                        ],
+                        "|"
+                      ],
+                      "'String"
+                    ]
+                  ]
+                ],
+                [
+                  "assoc-in",
+                  "store",
+                  [
+                    "[]",
+                    ":groups",
+                    "id",
+                    ":text"
+                  ],
+                  "text"
+                ]
+              ]
+            ],
+            [
+              [
+                ":touch-group",
+                "gid"
+              ],
+              [
+                "assoc-in",
+                "store",
+                [
+                  "[]",
+                  ":groups",
+                  [
+                    "decode-map-as",
+                    "gid",
+                    "'String"
+                  ],
+                  ":touched-time"
+                ],
+                "op-time"
+              ]
+            ],
+            [
+              [
+                ":add-task",
+                "op-data"
+              ],
+              [
+                "let",
+                [
+                  [
+                    "data",
+                    [
+                      "as-map",
+                      "op-data"
+                    ]
+                  ],
+                  [
+                    "group-id",
+                    [
+                      "decode-map-as",
+                      [
+                        "option:unwrap",
+                        [
+                          "get",
+                          "data",
+                          ":group-id"
+                        ]
+                      ],
+                      "'String"
+                    ]
+                  ]
+                ],
+                [
+                  "->",
+                  "store",
+                  [
+                    "assoc-in",
+                    [
+                      "[]",
+                      ":groups",
+                      "group-id",
+                      ":tasks",
+                      "op-id"
+                    ],
+                    [
+                      "merge",
+                      "schema/task",
+                      "data",
+                      [
+                        "{}",
+                        [
+                          ":id",
+                          "op-id"
+                        ],
+                        [
+                          ":created-time",
+                          "op-time"
+                        ],
+                        [
+                          ":touched-time",
+                          "op-time"
+                        ],
+                        [
+                          ":text",
+                          [
+                            "decode-map-as",
+                            [
+                              "option:unwrap-or",
+                              [
+                                "get",
+                                "data",
+                                ":text"
+                              ],
+                              "|"
+                            ],
+                            "'String"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ],
+            [
+              [
+                ":rm-task",
+                "op-data"
+              ],
+              [
+                "let",
+                [
+                  [
+                    "data",
+                    [
+                      "as-map",
+                      "op-data"
+                    ]
+                  ],
+                  [
+                    "group-id",
+                    [
+                      "decode-map-as",
+                      [
+                        "option:unwrap",
+                        [
+                          "get",
+                          "data",
+                          ":group-id"
+                        ]
+                      ],
+                      "'String"
+                    ]
+                  ],
+                  [
+                    "id",
+                    [
+                      "decode-map-as",
+                      [
+                        "option:unwrap",
+                        [
+                          "get",
+                          "data",
+                          ":id"
+                        ]
+                      ],
+                      "'String"
+                    ]
+                  ]
+                ],
+                [
+                  "update-in",
+                  "store",
+                  [
+                    "[]",
+                    ":groups",
+                    "group-id",
+                    ":tasks"
+                  ],
+                  [
+                    "fn",
+                    [
+                      "tasks"
+                    ],
+                    [
+                      "dissoc",
+                      [
+                        "option:unwrap-or",
+                        "tasks",
+                        [
+                          "{}"
+                        ]
+                      ],
+                      "id"
+                    ]
+                  ]
+                ]
+              ]
+            ],
+            [
+              [
+                ":update-task",
+                "op-data"
+              ],
+              [
+                "let",
+                [
+                  [
+                    "data",
+                    [
+                      "as-map",
+                      "op-data"
+                    ]
+                  ],
+                  [
+                    "group-id",
+                    [
+                      "decode-map-as",
+                      [
+                        "option:unwrap",
+                        [
+                          "get",
+                          "data",
+                          ":group-id"
+                        ]
+                      ],
+                      "'String"
+                    ]
+                  ],
+                  [
+                    "id",
+                    [
+                      "decode-map-as",
+                      [
+                        "option:unwrap",
+                        [
+                          "get",
+                          "data",
+                          ":id"
+                        ]
+                      ],
+                      "'String"
+                    ]
+                  ],
+                  [
+                    "text",
+                    [
+                      "decode-map-as",
+                      [
+                        "option:unwrap-or",
+                        [
+                          "get",
+                          "data",
+                          ":text"
+                        ],
+                        "|"
+                      ],
+                      "'String"
+                    ]
+                  ]
+                ],
+                [
+                  "assoc-in",
+                  "store",
+                  [
+                    "[]",
+                    ":groups",
+                    "group-id",
+                    ":tasks",
+                    "id",
+                    ":text"
+                  ],
+                  "text"
+                ]
+              ]
+            ],
+            [
+              [
+                ":toggle-task",
+                "op-data"
+              ],
+              [
+                "let",
+                [
+                  [
+                    "data",
+                    [
+                      "as-map",
+                      "op-data"
+                    ]
+                  ],
+                  [
+                    "group-id",
+                    [
+                      "decode-map-as",
+                      [
+                        "option:unwrap",
+                        [
+                          "get",
+                          "data",
+                          ":group-id"
+                        ]
+                      ],
+                      "'String"
+                    ]
+                  ],
+                  [
+                    "id",
+                    [
+                      "decode-map-as",
+                      [
+                        "option:unwrap",
+                        [
+                          "get",
+                          "data",
+                          ":id"
+                        ]
+                      ],
+                      "'String"
+                    ]
+                  ]
+                ],
+                [
+                  "update-in",
+                  "store",
+                  [
+                    "[]",
+                    ":groups",
+                    "group-id",
+                    ":tasks",
+                    "id"
+                  ],
+                  [
+                    "fn",
+                    [
+                      "task"
+                    ],
+                    [
+                      "->",
+                      [
+                        "option:unwrap-or",
+                        "task",
+                        "schema/task"
+                      ],
+                      [
+                        "update",
+                        ":done",
+                        "not"
+                      ],
+                      [
+                        "assoc",
+                        ":touched-time",
+                        "op-time"
+                      ],
+                      [
+                        "assoc",
+                        ":done-time",
+                        "op-time"
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ],
+            [
+              [
+                ":touch-task",
+                "op-data"
+              ],
+              [
+                "let",
+                [
+                  [
+                    "data",
+                    [
+                      "as-map",
+                      "op-data"
+                    ]
+                  ],
+                  [
+                    "group-id",
+                    [
+                      "decode-map-as",
+                      [
+                        "option:unwrap",
+                        [
+                          "get",
+                          "data",
+                          ":group-id"
+                        ]
+                      ],
+                      "'String"
+                    ]
+                  ],
+                  [
+                    "id",
+                    [
+                      "decode-map-as",
+                      [
+                        "option:unwrap",
+                        [
+                          "get",
+                          "data",
+                          ":id"
+                        ]
+                      ],
+                      "'String"
+                    ]
+                  ]
+                ],
+                [
+                  "assoc-in",
+                  "store",
+                  [
+                    "[]",
+                    ":groups",
+                    "group-id",
+                    ":tasks",
+                    "id",
+                    ":touched-time"
+                  ],
+                  "op-time"
+                ]
+              ]
+            ],
+            [
+              [
+                ":set-router",
+                "d"
+              ],
+              [
+                "assoc",
+                "store",
+                ":router",
+                [
+                  "as-map",
+                  "d"
+                ]
+              ]
+            ],
+            [
+              [
+                ":hide-sidebar"
+              ],
+              [
+                "assoc",
+                "store",
+                ":show-sidebar?",
+                "false"
+              ]
+            ],
+            [
+              [
+                ":show-sidebar"
+              ],
+              [
+                "assoc",
+                "store",
+                ":show-sidebar?",
+                "true"
+              ]
+            ],
+            [
+              "_",
+              [
+                "do",
+                [
+                  "println",
+                  "|Unknown-op:",
+                  "op"
+                ],
+                "store"
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.updater/updater",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              [
+                "::",
+                "'Map",
+                "'Tag",
+                "'Dynamic"
+              ],
+              "'Enum",
+              "'String",
+              "'Number"
+            ]
+          ],
+          [
+            ":return",
+            [
+              "::",
+              "'Map",
+              "'Tag",
+              "'Dynamic"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:1c1ce2976765b806b5bade60ce8b4db0",
+      "schema_version": 1
+    }
+  ],
+  "config": {
+    "schema_version": 1,
+    "command": "config.show",
+    "data": {
+      "package": "app",
+      "version": "0.1.2",
+      "selected_entry": null,
+      "entries": [
+        {
+          "name": "default",
+          "mode": "js",
+          "target": "browser",
+          "init_fn": "app.main/main!",
+          "reload_fn": "app.main/reload!",
+          "description": "",
+          "modules": [
+            "respo.calcit/",
+            "respo-ui.calcit/",
+            "alerts.calcit/",
+            "respo-feather.calcit/"
+          ],
+          "type_slots": {},
+          "feature_policy": {}
+        }
+      ],
+      "verification_schema_version": 1,
+      "verification_profiles": []
+    },
+    "diagnostics": [],
+    "revision": "md5:672c6074e742b40bd5e4fa08ee317f8a"
+  }
+}
