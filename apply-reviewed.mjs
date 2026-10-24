@@ -65,6 +65,18 @@ for(const [path,old,value] of [[[3,2,3,2,2,1,1],'20','|20px'],[[3,2,3,2,2,2,1],'
 }
 const dispatch=['::',"'Fn",['{}',[':rest',"'Dynamic"],[':return',"'Unit"],[':args',['[]',"'Dynamic"]]]];
 const eventHint=['hint-fn',['{}',[':return',"'Unit"],[':args',['[]',structuredClone(mapTag),dispatch]]]];
+let promptContracts=0;
+function promptContract(x){
+  if(!Array.isArray(x))return;
+  if(x[0]==='.show'&&Array.isArray(x[3])&&x[3][0]==='fn'&&JSON.stringify(x[3][1])===JSON.stringify(['result'])){
+    assert.ok(!x[3].slice(2).some(v=>Array.isArray(v)&&v[0]==='hint-fn'));
+    x[3].splice(2,0,['hint-fn',['{}',[':args',['[]',"'String"]],[':return',"'Unit"]]]);
+    x[3].push('&unit');promptContracts++;
+  }
+  x.forEach(promptContract);
+}
+for(const id of ['app.comp.sidebar/comp-sidebar','app.comp.todolist/comp-group-banner'])promptContract(expected.defs.find(d=>d.id===id).code);
+assert.equal(promptContracts,3);
 const hasShow=x=>Array.isArray(x)&&(x[0]==='.show'||x.some(hasShow));let events=0;
 function eventContract(x,path,id){
   if(!Array.isArray(x))return;
@@ -93,4 +105,4 @@ assert.deepEqual(after.defs.find(d=>d.id==='app.main/reload!'),before.defs.find(
 assert.deepEqual(after.defs.find(d=>d.id==='app.main/save-local-storage!'),before.defs.find(d=>d.id==='app.main/save-local-storage!'));
 writeFileSync('acceptance/after.json',JSON.stringify(after,null,2));
 writeFileSync('acceptance/snapshot-after-blob.txt',blob());
-writeFileSync('acceptance/summary.json',JSON.stringify({definitions:55,attachedTests:0,examples:0,counts,operations:76,schemas:2,checkedTaskBoundary:1,eventContracts:5,styles:'20px/pointer String CSS values preserve actual DOM conversion',startup:'restore failures now propagate before rendering/watch/beforeunload',preserved:'All other code/schema/FFI/doc/tags/imports/config and actual reload HUD/save format; no unsafe/cast/default/budget/helper/test added'},null,2));
+writeFileSync('acceptance/summary.json',JSON.stringify({definitions:55,attachedTests:0,examples:0,counts,operations:76,schemas:2,checkedTaskBoundary:1,eventContracts:5,promptContracts:3,styles:'20px/pointer String CSS values preserve actual DOM conversion',startup:'restore failures now propagate before rendering/watch/beforeunload',preserved:'All other code/schema/FFI/doc/tags/imports/config and actual reload HUD/save format; no unsafe/cast/default/budget/helper/test added'},null,2));
