@@ -1,69 +1,32 @@
-Developer runs `cr js` for JavaScript build, and `yarn vite` to start the local server. LLMs should edit code through `cr` commands, then trigger recompilation.
+## 开工前
 
-## 开工前必须看
+先读 README、`deps.cirru` 和当前 CLI 指南：
 
-先读通用 Calcit Agent 指南：
-
-```bash
-cr docs agents --full
+```sh
+calcit docs agents --contract
+calcit docs agents --full
+calcit docs read Respo-Agent.md --full --module respo.calcit
 ```
 
-再看 Respo 模块用法：
+按用户的运行环境约束选择执行位置；不能为了本地验证绕过限制。
+本轮 Snapshot mutation、编译和门禁只在官方 Linux Calcit 0.30.1 CI 执行。
 
-```bash
-cr libs readme respo.calcit -f docs/Respo-Agent.md
-```
+## 源码修改
 
-## 高频命令
+- 只维护 `calcit.cirru` 与 `deps.cirru`；禁止直接读取/解析/文本 patch Snapshot。
+- 先 `query ns/defs/def` 定位，再 `query search` / `tree show` 确认真实 target 与 path，不猜路径。
+- 只通过当前 CLI `edit` / `tree` 修改，先 dry-run，再按 scoped revision 提交。
+- 同一 Snapshot 串行写入，逐定义核对前后 code、schema、FFI、附带区域、imports 和 config。
+- `defn` / `fn` / `let` body 可顺序包含多个表达式，返回最后一项；单表达式位置才需要 `do`。
+- 保留真实边界检查，不用 `unsafe-coerce`、扩大 Dynamic 或补默认数据来消除诊断。
+- 保留 `hud!`、存储 key 和 version 2 格式；恢复失败时不能注册覆盖原值的保存回调。
 
-优先用查询命令定位，再做最小修改：
+## 验证
 
-```bash
-cr query config
-cr query ns <ns>
-cr query defs <ns>
-cr query def <ns/def>
-cr query search '<keyword>' -f '<ns/def>'
-cr tree show <ns/def> -p '<path>'
-```
+遵循 README 的原严格检查、完整 strict、五项 Node 业务测试和生产构建。
+没有附带测试，不能把空测试列表当作执行通过。保留原断言，不加重复验证脚本或 concurrently。
+UI 与逻辑改动分开审阅；新来源合成数据验收不等于真实数据或生产验收。
 
-高频修改命令：
-
-```bash
-cr tree replace <ns/def> -p '<path>' -e '<code>'
-cr tree target-replace <ns/def> -p '<parent-path>' -e '<old>' -r '<new>'
-cr edit def <ns/def>
-cr edit add-import <ns> -e 'src.ns :refer $ symbol'
-```
-
-高频验证命令：
-
-```bash
-cr js
-yarn vite
-```
-
-## 高频工作流
-
-- 先定位再修改。先 `query def/search`，再 `tree show`，最后做 `tree replace` 或 `edit def`。
-- 优先局部替换。不要整段重写 `compact.cirru`，只改目标节点或小段结构。
-- UI 改动和逻辑改动分开做，减少一次修改的影响面。
-- 复杂结构先自检。尤其是 `let`、属性 map、嵌套列表、事件处理函数。
-- 复用已有组件和样式。优先扩展现有 `defstyle`、组件和数据流，不重复造轮子。
-- 每次改完都重新编译。默认先跑 `cr js`，需要看界面再跑 `yarn vite`。
-
-## 高频踩坑
-
-- `let` 只保留最后一个表达式。多个表达式要包一层 `div` 或 `do`。
-- 属性 map 必须成对。不要把 `:style`、`:inner-text` 等属性写进同一个 pair。
-- `keys` 返回 set，不是 list。拼接前先 `.to-list`。
-- 不要用 `.to-map` 处理 list of pairs，改用 `pairs-map`。
-- 避免生成“可调用字符串”。错误写法如 `(<> ((str ...)))`，正确写法是 `<> $ str ...`。
-- 变量必须保持 leaf。像 `week-start` 这种变量不要变成单元素 list，否则会被当成调用。
-- Respo 样式里的纯数字会自动补 `px`。`flex`、`font-weight`、`line-height`、`z-index` 这类属性要显式写字符串，例如 `:flex "\"1"`。
-
-## 修改约束
-
-- 严禁直接手改 `compact.cirru`，必须使用 `cr tree` 或 `cr edit`。
-- 路径不要猜。先用 `cr query search` 拿路径，再用 `cr tree show` 确认。
-- 静态样式优先抽到 `defstyle`，动态列表中尽量少写内联 `:style`。
+开发用 `yarn compile-page`，再用 `yarn vite`；实时编译另开 `yarn watch-page`。
+复用现有组件和 `defstyle`，动态列表避免重复静态内联样式。
+公开编译器/模块问题核实 owner 和已存在 issue 后向相应上游汇报；不新增项目专用编译器 fix 规则。
