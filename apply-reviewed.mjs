@@ -43,7 +43,7 @@ for(const id of ['app.comp.task/comp-task','app.comp.todolist/comp-group-banner'
   const d=expected.defs.find(d=>d.id===id),args=d.schema.find(x=>Array.isArray(x)&&x[0]===':args')[1];
   assert.equal(args[1],"'Dynamic");assert.equal(args[2],"'Dynamic");
   args[1]=structuredClone(mapState);args[2]=structuredClone(mapTag);
-  const canonical=['::',':fn',['{}',...d.schema.slice(1).filter(field=>field[0]!==':kind')]];
+  const canonical=['::',"'Fn",['{}',...d.schema.slice(1).filter(field=>field[0]!==':kind')]];
   ops.push(['edit','schema',id,'--input-format','json-ast','--code',JSON.stringify(canonical)]);
 }
 const list=expected.defs.find(d=>d.id==='app.comp.todolist/comp-todolist');let taskSites=0;
@@ -56,7 +56,28 @@ function taskBoundary(x,path){
   }
   x.forEach((v,i)=>taskBoundary(v,[...path,i]));
 }
-taskBoundary(list.code,[]);assert.equal(taskSites,1);assert.equal(ops.length,69);
+taskBoundary(list.code,[]);assert.equal(taskSites,1);
+const task=expected.defs.find(d=>d.id==='app.comp.task/comp-task');
+for(const [path,old,value] of [[[3,2,3,2,2,1,1],'20','|20px'],[[3,2,3,2,2,2,1],':pointer','|pointer']]){
+  assert.equal(show(task.id,path),old);let parent=task.code;
+  for(const index of path.slice(0,-1))parent=parent[index];assert.equal(parent[path.at(-1)],old);parent[path.at(-1)]=value;
+  ops.push(['tree','replace',task.id,'--path','@'+path.join('.'),'--input-format','json-ast','--code',JSON.stringify(value),'--expect','quote '+old]);
+}
+const dispatch=['::',"'Fn",['{}',[':rest',"'Dynamic"],[':return',"'Unit"],[':args',['[]',"'Dynamic"]]]];
+const eventHint=['hint-fn',['{}',[':return',"'Unit"],[':args',['[]',structuredClone(mapTag),dispatch]]]];
+const hasShow=x=>Array.isArray(x)&&(x[0]==='.show'||x.some(hasShow));let events=0;
+function eventContract(x,path,id){
+  if(!Array.isArray(x))return;
+  if(x[0]==='fn'&&JSON.stringify(x[1])===JSON.stringify(['e','d!'])&&x.slice(2).some(hasShow)){
+    const original=show(id,path);assert.equal(original[0],'fn');assert.deepEqual(original[1],['e','d!']);
+    assert.ok(!x.slice(2).some(v=>Array.isArray(v)&&v[0]==='hint-fn'));
+    x.splice(2,0,structuredClone(eventHint));
+    ops.push(['tree','replace',id,'--path','@'+path.join('.'),'--input-format','json-ast','--code',JSON.stringify(x)]);events++;return;
+  }
+  x.forEach((v,i)=>eventContract(v,[...path,i],id));
+}
+for(const id of ['app.comp.sidebar/comp-sidebar','app.comp.task/comp-task','app.comp.todolist/comp-group-banner'])eventContract(expected.defs.find(d=>d.id===id).code,[],id);
+assert.equal(events,5);assert.equal(ops.length,76);
 mkdirSync('acceptance',{recursive:true});
 writeFileSync('acceptance/before.json',JSON.stringify(before,null,2));
 writeFileSync('acceptance/expected.json',JSON.stringify(expected,null,2));
@@ -72,4 +93,4 @@ assert.deepEqual(after.defs.find(d=>d.id==='app.main/reload!'),before.defs.find(
 assert.deepEqual(after.defs.find(d=>d.id==='app.main/save-local-storage!'),before.defs.find(d=>d.id==='app.main/save-local-storage!'));
 writeFileSync('acceptance/after.json',JSON.stringify(after,null,2));
 writeFileSync('acceptance/snapshot-after-blob.txt',blob());
-writeFileSync('acceptance/summary.json',JSON.stringify({definitions:55,attachedTests:0,examples:0,counts,operations:69,schemas:2,checkedTaskBoundary:1,startup:'restore failures now propagate before rendering/watch/beforeunload',preserved:'All other code/schema/FFI/doc/tags/imports/config and actual reload HUD/save format; no unsafe/cast/default/budget/helper/test added'},null,2));
+writeFileSync('acceptance/summary.json',JSON.stringify({definitions:55,attachedTests:0,examples:0,counts,operations:76,schemas:2,checkedTaskBoundary:1,eventContracts:5,styles:'20px/pointer String CSS values preserve actual DOM conversion',startup:'restore failures now propagate before rendering/watch/beforeunload',preserved:'All other code/schema/FFI/doc/tags/imports/config and actual reload HUD/save format; no unsafe/cast/default/budget/helper/test added'},null,2));
