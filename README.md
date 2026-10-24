@@ -11,9 +11,9 @@ Demo http://r.tiye.me/Memkits/wanderlist/ .
 重新生成 JS 并完整刷新页面，不混装旧 alpha。正常分组、任务和 `wanderlist`
 localStorage 存档格式（version 2）保持。UI 0.8 的基础样式可能变化。
 
-准备修正坏存档解析异常被吞掉后仍注册离页保存的风险：恢复和首次渲染成功后才启用
-watch 与离页保存，不补默认存档、吞异常或自动覆盖原值。见 issue #53。
-源码迁移及验收完成前，不把本说明当作已验证的修复结论。
+已调整原来吞掉解析异常的启动路径：恢复和首次渲染成功后才启用 watch 与离页保存。
+解析、Map 解码或首次渲染确实抛错时停止启动，不补默认存档或自动覆盖原值。见 issue #53。
+这不是完整的 version 2 结构 decoder；不能据此声称所有可渲染但语义无效的 Map 均被拒绝。
 
 ## 迁移范围
 
@@ -21,6 +21,9 @@ watch 与离页保存，不补默认存档、吞异常或自动覆盖原值。�
   Reel 只作为真实传递依赖，不重新加回根配置。
 - 旧 Option helper 改为对应接收者方法，保留既有默认值和失败行为；Map merge 使用方法。
 - 任务与分组标题的已知 Map 参数收紧；pair 解包处先检查任务确为 Map，不用强转伪造合同。
+- 五个 DOM 回调声明正式 Respo 实际 EventHandler 合同；三个 Prompt 回调声明 String 输入、
+  显式结束为 Unit，保留原分支与副作用。正式 Alerts 的包装本来就丢弃回调返回值。
+  这不代表上游 #195 的应用级 Op 类型已经贯通，也不添加 Fn 强转。
 - 原 `hud!` 热更新成功/错误提示、`:rerender` watcher key、单 Enum 派发、Alerts cursor
   adapter、分组/任务 ID 和存档格式保留。混合 UI 状态仍是 Map<Dynamic,Dynamic>，不假装同构。
 
@@ -49,6 +52,9 @@ yarn release-page
 
 CI 保留完整 strict 与原测试，使用 Calcit 自身弱类型/废弃调用视图，不增加永久审计脚本。
 strict 通过不等于所有开放数据已完全静态证明；页面、正常刷新与失败路径需独立验收。
+官方 0.30.1 准备运行已通过完整 strict（diagnostics 为空）、零废弃调用、原测试前后各 5/5
+和构建；全部 55 定义/config/imports 的 before/expected/after 守卫一致。正式 PR CI 与
+页面/坏存档实际验收仍需分别完成，不将临时准备脚本保留在最终 PR。
 
 ## 前端部署
 
