@@ -18,6 +18,7 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
     - uses: actions/checkout@v7.0.1
       with:
@@ -39,6 +40,7 @@ jobs:
       with:
         tools: calcit,caps
         caps-version: "0.1.1"
+        deps-file: deps.cirru
 
     - name: Resolve immutable dependencies
       run: |
@@ -55,9 +57,14 @@ jobs:
         test ! -e compact.cirru
         test ! -e package.cirru
         calcit calcit.cirru edit format
-        git diff --exit-code -- calcit.cirru
+        git diff --quiet -- calcit.cirru
         calcit calcit.cirru --check-only --all-defs
-        calcit calcit.cirru fix --workflow strict --verify
+        report="$(calcit calcit.cirru fix --workflow strict --verify --format json)"
+        printf '%s\n' "$report"
+        jq -e '.data.workflow.status? == "passed" and .diagnostics? == []' <<< "$report"
+        calcit calcit.cirru analyze weak-types --only coverage --summary-only --format json
+        calcit calcit.cirru analyze weak-types --only schema-dynamic,code-dynamic --intent unresolved --summary-only --format json
+        calcit calcit.cirru analyze weak-types --only deprecated-call --summary-only --format json | jq -e '.data.summary.calls == 0'
 
     - name: Select CDN asset path
       id: asset-path
@@ -85,6 +92,7 @@ jobs:
 
     - name: Upload and verify static assets on COS
       if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+      timeout-minutes: 10
       uses: worktools/cos-upload-action@v1.2.0
       with:
         source-dir: dist
