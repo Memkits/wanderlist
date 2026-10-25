@@ -31,6 +31,7 @@ jobs:
           mkdir -p acceptance
           test ! -e compact.cirru
           test ! -e package.cirru
+          node prepare-length.mjs inspect
           node prepare-length.mjs before
           source_blob="$(git hash-object calcit.cirru)"
           calcit calcit.cirru edit format

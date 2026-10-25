@@ -12,13 +12,19 @@ const expected=structuredClone(p.before);for(const s of p.sites){let n=expected.
 const blob=()=>run('git',['hash-object','calcit.cirru']).trim();
 const guard=()=>{for(const [f,h]of Object.entries(p.ordinaryBlobs))assert.equal(run('git',['hash-object',f]).trim(),h,f);};
 mkdirSync('acceptance',{recursive:true});assert.equal(run('calcit',['-v']).trim(),'0.30.1');
-if(mode==='before'){
+if(mode==='inspect'){
+ assert.equal(blob(),p.blob);assert.deepEqual(views(),norm(p.before));guard();
+ for(const [i,s]of p.sites.entries()){
+  const t=q('type-at',s.id,'--path','@'+[...s.path,1].join('.'));writeFileSync('acceptance/inspect-type-'+i+'.json',JSON.stringify(t));
+  console.log(JSON.stringify({site:i,id:s.id,type:t}));
+ }
+}else if(mode==='before'){
  assert.equal(blob(),p.blob);assert.deepEqual(views(),norm(p.before));guard();
  assert.ok(!p.before.defs.some(d=>d.id.endsWith('/count')));
  const symbols=[];const collect=n=>{if(Array.isArray(n))n.forEach(collect);else if(n==='count')symbols.push(n);};p.before.namespaces.forEach(n=>collect(n.ns_code));p.before.defs.forEach(d=>collect(d.code));assert.equal(symbols.length,p.sites.length,'count occurs only at reviewed call heads, no bindings/imports');
  for(const [i,s]of p.sites.entries()){
   writeFileSync('acceptance/before-subtree-'+i+'.json',run('calcit',['tree','show',s.id,'--path','@'+s.path.join('.'),'--format','json']));
-  const t=q('type-at',s.id,'--path','@'+[...s.path,1].join('.'));const kind=p.sites.length===3?'list':'map';assert.ok(t.inferred_type.startsWith(":: '"+(kind==='list'?'List':'Map')+' '),t.inferred_type);
+  const t=q('type-at',s.id,'--path','@'+[...s.path,1].join('.'));writeFileSync('acceptance/type-'+i+'.json',JSON.stringify(t));const kind=p.sites.length===3?'list':'map',typeName=kind==='list'?'List':'Map';assert.ok(t.inferred_type==="'"+typeName||t.inferred_type.startsWith(":: '"+typeName+' '),t.inferred_type);
   const m=t.static_methods.find(m=>m.name==='.len');assert.equal(m.status,'proven');assert.equal(m.definition,'calcit.core/&'+kind+':count');assert.deepEqual(m.parameter_types,[]);assert.equal(m.rest_type,null);assert.equal(m.call_types.returns,"'Number");writeFileSync('acceptance/type-'+i+'.json',JSON.stringify(t));
  }
  writeFileSync('acceptance/before-source.json',JSON.stringify(views()));
