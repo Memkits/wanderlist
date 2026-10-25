@@ -24,7 +24,20 @@ if(mode==='inspect'){
  const symbols=[];const collect=n=>{if(Array.isArray(n))n.forEach(collect);else if(n==='count')symbols.push(n);};p.before.namespaces.forEach(n=>collect(n.ns_code));p.before.defs.forEach(d=>collect(d.code));assert.equal(symbols.length,p.sites.length,'count occurs only at reviewed call heads, no bindings/imports');
  for(const [i,s]of p.sites.entries()){
   writeFileSync('acceptance/before-subtree-'+i+'.json',run('calcit',['tree','show',s.id,'--path','@'+s.path.join('.'),'--format','json']));
-  const t=q('type-at',s.id,'--path','@'+[...s.path,1].join('.'));writeFileSync('acceptance/type-'+i+'.json',JSON.stringify(t));const kind=p.sites.length===3?'list':'map',typeName=kind==='list'?'List':'Map';assert.ok(t.inferred_type==="'"+typeName||t.inferred_type.startsWith(":: '"+typeName+' '),t.inferred_type);
+  let t=q('type-at',s.id,'--path','@'+[...s.path,1].join('.'));writeFileSync('acceptance/type-'+i+'.json',JSON.stringify(t));
+  if(i===0){
+   assert.equal(s.id,'app.comp.group-line/comp-group-line');assert.deepEqual(s.path,[3,1,0,1]);
+   assert.equal(s.before[1][0],'.filter-kv');assert.equal(s.before[1][1][0],'decode-map-as');
+   assert.deepEqual(s.before[1][1][2],['::',"'Map","'String",['::',"'Map","'Tag","'Dynamic"]]);
+   assert.equal(t.inferred_type,"'Dynamic");assert.equal(t.lowering.status,'unavailable');assert.equal(t.static_methods,null);
+   const producer=q('def','calcit.core/&map:filter-kv');writeFileSync('acceptance/filter-producer.json',JSON.stringify(producer));
+   assert.deepEqual(producer.schema.find(x=>Array.isArray(x)&&x[0]===':return')[1],['::',"'Map","'K","'V"]);
+   assert.equal(producer.code[3][0],'&map:fold-kv');assert.deepEqual(producer.code[3][2],['&map:empty','xs']);
+   assert.deepEqual(producer.code[3][3].at(-1),['if',['f','key','value'],['&map:assoc','acc','key','value'],'acc']);
+   t=q('type-at',s.id,'--path','@'+[...s.path,1,1].join('.'));writeFileSync('acceptance/filter-input-type.json',JSON.stringify(t));
+   assert.equal(t.static_methods.find(m=>m.name==='.filter-kv').definition,'calcit.core/&map:filter-kv');
+  }
+  const kind='map',typeName='Map';assert.ok(t.inferred_type==="'"+typeName||t.inferred_type.startsWith(":: '"+typeName+' '),t.inferred_type);
   const m=t.static_methods.find(m=>m.name==='.len');assert.equal(m.status,'proven');assert.equal(m.definition,'calcit.core/&'+kind+':count');assert.deepEqual(m.parameter_types,[]);assert.equal(m.rest_type,null);assert.equal(m.call_types.returns,"'Number");writeFileSync('acceptance/type-'+i+'.json',JSON.stringify(t));
  }
  writeFileSync('acceptance/before-source.json',JSON.stringify(views()));
