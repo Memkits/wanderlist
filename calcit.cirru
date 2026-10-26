@@ -131,7 +131,7 @@
         'comp-group-line $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-group-line (group index selected?)
             let
-                todo-size $ count $ .filter-kv
+                todo-size $ .len $ .filter-kv
                   decode-map-as
                     .unwrap-or (get group :tasks) ({})
                     :: 'Map 'String $ :: 'Map 'Tag 'Dynamic
@@ -268,7 +268,7 @@
                       <> "|Add a group to start" $ {} $ :class-name style-empty-hint
                     list->
                       {} (:class-name style-box-base)
-                        :style $ style-box $ count groups
+                        :style $ style-box $ .len groups
                       -> groups (.to-list) (sort by-newest-group)
                         map-indexed $ fn (index entry)
                           [] (first entry)
@@ -560,7 +560,7 @@
                     :return 'respo.schema/Element
                   list->
                     {} (:class-name style-list-base)
-                      :style $ style-list-height $ count tasks
+                      :style $ style-list-height $ .len tasks
                     -> tasks (.to-list) (sort by-touch-time)
                       map-indexed $ fn (idx entry)
                         let[] (id task) entry $ [] id $ comp-task (>> states id)
@@ -579,7 +579,7 @@
                         :color $ hsl 0 0 80
                     render-task-list todo-tasks
                   if
-                    > (count done-tasks) 0
+                    > (.len done-tasks) 0
                     div
                       {} $ :class-name $ str-spaced css/row-middle style-section
                       <> "|Done tasks" $ {}
