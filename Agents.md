@@ -9,7 +9,7 @@ calcit docs read Respo-Agent.md --full --module respo.calcit
 ```
 
 按用户的运行环境约束选择执行位置；不能为了本地验证绕过限制。
-本轮 Snapshot mutation、编译和门禁只在官方 Linux Calcit 0.30.1 CI 执行。
+使用项目固定的官方 Calcit 0.32.1。本地执行已获用户授权；最终仍运行原 Linux CI 与全部门禁。
 
 ## 源码修改
 

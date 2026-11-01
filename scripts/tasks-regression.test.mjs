@@ -9,7 +9,6 @@ import { comp_sidebar } from "../js-out/app.comp.sidebar.mjs";
 import { comp_todolist } from "../js-out/app.comp.todolist.mjs";
 import { component_$q_, component_tree, child_pair_value } from "../js-out/respo.util.detect.mjs";
 import { make_string } from "../js-out/respo.render.html.mjs";
-import { wrap_dispatch } from "../js-out/respo.controller.client.mjs";
 import { take_prompt_task_$x_ } from "../js-out/respo-alerts.core.mjs";
 
 const t = c.init_tags(["id", "text", "groups", "tasks", "group-id", "router", "states", "cursor", "data", "root", "add", "show?", "fold-done?", "value", "done", "event", "children", "node", "click", "input"]);
@@ -68,7 +67,7 @@ test("done-task folding sends states Enum and preserves group data", () => {
   assert.equal(field(field(field(field(next, t.states), t.root), t.data), t["fold-done?"]), false);
   assert.ok(c._$e_(field(next, t.groups), field(db, t.groups)));
 });
-test("Alerts prompt opening and completion integrate through Respo cursor adapter", () => {
+test("Alerts prompt opening and completion integrate through a single Enum dispatcher", () => {
   let db = initial();
   const cursor = c._$L_(t.root);
   const node = comp_sidebar(map(t.cursor, cursor), field(db, t.groups), field(db, t.router));
@@ -76,11 +75,10 @@ test("Alerts prompt opening and completion integrate through Respo cursor adapte
     assert.equal(args.length, 1);
     db = updater(db, args[0], "prompt-group", 300);
   };
-  // This is the same published Respo adapter used for DOM event dispatch.
-  const wrapped = wrap_dispatch(c.atom(dispatchRaw));
+  // Published Alerts and Respo dispatch one Enum directly; the legacy adapter was removed.
   const fn = handler(node, t.click);
   assert.equal(typeof fn, "function");
-  fn(null, wrapped);
+  fn(null, dispatchRaw);
   const state = field(field(field(field(db, t.states), t.root), t.add), t.data);
   assert.equal(field(state, t["show?"]), true);
   const task = c.option_$o_unwrap(take_prompt_task_$x_(c._$L_(t.root, t.add)));
