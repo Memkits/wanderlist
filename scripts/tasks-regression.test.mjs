@@ -9,6 +9,8 @@ import { comp_sidebar } from "../js-out/app.comp.sidebar.mjs";
 import { comp_todolist } from "../js-out/app.comp.todolist.mjs";
 import { component_$q_, component_tree, child_pair_value } from "../js-out/respo.util.detect.mjs";
 import { make_string } from "../js-out/respo.render.html.mjs";
+import { with_memo_frame } from "../js-out/respo.memo.mjs";
+import { event__GT_edn } from "../js-out/respo.util.format.mjs";
 import { take_prompt_task_$x_ } from "../js-out/respo-alerts.core.mjs";
 
 const t = c.init_tags(["id", "text", "groups", "tasks", "group-id", "router", "states", "cursor", "data", "root", "add", "show?", "fold-done?", "value", "done", "event", "children", "node", "click", "input"]);
@@ -32,7 +34,7 @@ function handler(node, kind, label = "") {
     if (found) return found;
   }
 }
-function dispatch(fn, db, event = null) {
+function dispatch(fn, db, event = event__GT_edn({ type: "click" })) {
   assert.equal(typeof fn, "function");
   let result;
   fn(event, (...args) => {
@@ -43,10 +45,10 @@ function dispatch(fn, db, event = null) {
 }
 test("group row callbacks select and rename the correct group", () => {
   const db = initial();
-  const node = comp_group_line(group(db), 0, false);
+  const node = with_memo_frame(() => comp_group_line(group(db), 0, false));
   const selected = dispatch(handler(node, t.click), db);
   assert.equal(field(field(selected, t.router), t["group-id"]), "g");
-  const renamed = dispatch(handler(node, t.input), db, map(t.value, "renamed"));
+  const renamed = dispatch(handler(node, t.input), db, event__GT_edn({ type: "input", target: { value: "renamed", checked: false } }));
   assert.equal(field(group(renamed), t.text), "renamed");
 });
 test("task add, edit, toggle and remove preserve the group", () => {
@@ -62,7 +64,7 @@ test("task add, edit, toggle and remove preserve the group", () => {
 test("done-task folding sends states Enum and preserves group data", () => {
   const db = apply(apply(initial(), "add-task", taskData(), "a"), "toggle-task", taskData());
   const states = map(t.cursor, c._$L_(t.root));
-  const node = comp_todolist(states, field(db, t.router), group(db));
+  const node = with_memo_frame(() => comp_todolist(states, field(db, t.router), group(db)));
   const next = dispatch(handler(node, t.click, "eye-off"), db);
   assert.equal(field(field(field(field(next, t.states), t.root), t.data), t["fold-done?"]), false);
   assert.ok(c._$e_(field(next, t.groups), field(db, t.groups)));
@@ -70,7 +72,7 @@ test("done-task folding sends states Enum and preserves group data", () => {
 test("Alerts prompt opening and completion integrate through a single Enum dispatcher", () => {
   let db = initial();
   const cursor = c._$L_(t.root);
-  const node = comp_sidebar(map(t.cursor, cursor), field(db, t.groups), field(db, t.router));
+  const node = with_memo_frame(() => comp_sidebar(map(t.cursor, cursor), field(db, t.groups), field(db, t.router)));
   const dispatchRaw = (...args) => {
     assert.equal(args.length, 1);
     db = updater(db, args[0], "prompt-group", 300);
@@ -78,7 +80,7 @@ test("Alerts prompt opening and completion integrate through a single Enum dispa
   // Published Alerts and Respo dispatch one Enum directly; the legacy adapter was removed.
   const fn = handler(node, t.click);
   assert.equal(typeof fn, "function");
-  fn(null, dispatchRaw);
+  fn(event__GT_edn({ type: "click" }), dispatchRaw);
   const state = field(field(field(field(db, t.states), t.root), t.add), t.data);
   assert.equal(field(state, t["show?"]), true);
   const task = c.option_$o_unwrap(take_prompt_task_$x_(c._$L_(t.root, t.add)));
