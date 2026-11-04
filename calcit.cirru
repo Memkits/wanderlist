@@ -16,17 +16,17 @@
                 safe-store $ if (map? store) store $ {}
                 router $ .unwrap-or (get safe-store :router) ({})
                 safe-router $ if (map? router)
-                  decode-map-as router $ :: 'Map 'Tag 'Dynamic
+                  decode-map-as router $ quote $ Map Tag Dynamic
                   {}
                 group-id-option $ .map (get safe-router :group-id)
                   fn (id) (decode-map-as id 'String)
                 states $ .unwrap-or (get safe-store :states) ({})
                 safe-states $ if (map? states)
-                  decode-map-as states $ :: 'Map 'Dynamic 'Dynamic
+                  decode-map-as states $ quote $ Map Dynamic Dynamic
                   {}
                 groups $ .unwrap-or (get safe-store :groups) ({})
                 safe-groups $ if (map? groups)
-                  decode-map-as groups $ :: 'Map 'String 'Dynamic
+                  decode-map-as groups $ quote $ Map String Dynamic
                   {}
               div
                 {} $ :class-name $ str-spaced css/fullscreen css/global css/row style-root
@@ -43,7 +43,11 @@
                         :color $ hsl 0 0 80
                         :cursor :pointer
                       fn (e d!)
+                        hint-fn $ Fn respo.schema/RespoEvent
+                          Fn app.schema/DispatchOp $ -> Unit
+                          -> Unit
                         d! $ :: :show-sidebar
+                        , &unit
                 div $ {} $ :class-name style-divider
                 div
                   {} $ :class-name $ str-spaced css/expand style-main-panel
@@ -52,11 +56,13 @@
                     :table $ if-let (group-id group-id-option)
                       comp-todolist (>> safe-states group-id) safe-router $ decode-map-as
                         .unwrap-or (get safe-groups group-id) ({})
-                        :: 'Map 'Tag 'Dynamic
+                        quote $ Map Tag Dynamic
                       comp-placeholder
-                    _ $ div ({}) (<> |router-not-matching-a-page nil)
+                    _ $ div ({}) (<> |router-not-matching-a-page)
                 comp-margin
-                if dev? $ comp-inspect |Store safe-store $ {} (:bottom 0)
+                if dev?
+                  Option :some $ comp-inspect |Store safe-store $ {} (:bottom 0)
+                  Option :none
           :examples $ []
           :schema $ quote $ Fn (Map Tag Dynamic) (-> respo.schema/Component)
         'comp-margin $ %{} 'CodeEntry (:doc |)
@@ -68,30 +74,30 @@
           :code $ quote $ defcomp comp-placeholder ()
             div
               {} $ :class-name style-placeholder
-              <> |Select-a-group? nil
+              <> |Select-a-group?
           :examples $ []
           :schema $ quote $ Fn (-> respo.schema/Component)
         'style-collapsed-sidebar $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-collapsed-sidebar
             {} $ |& $ {} (:padding "|24px 8px") (:width |56px) (:display |flex) (:justify-content |center) (:transition-duration |200ms)
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote String
         'style-divider $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-divider
             {} $ |& $ {} (:width 1)
               :background-color $ hsl 220 16 90
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote String
         'style-main-panel $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-main-panel
             {} $ |& $ {} (:max-width |860px) (:flex-basis |640px) (:background-color |#ffffff) (:border-radius |12px) (:box-shadow "|0 2px 12px rgba(5, 5, 5, 0.06)") (:margin "|16px 0") (:overflow |hidden)
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote String
         'style-margin $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-margin
             {} $ |& $ {} (:flex 1) (:flex-basis |12px)
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote String
         'style-placeholder $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-placeholder
             {} $ |& $ {} (:width |100%) (:height |100%)
@@ -104,12 +110,12 @@
               :font-weight 400
               :font-family ui/font-fancy
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote String
         'style-root $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-root
             {} $ |& $ {} (:background-color |#f5f7fa) (:min-height |100vh)
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote String
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.comp.container
           :require
@@ -131,7 +137,7 @@
                 todo-size $ .len $ .filter-kv
                   decode-map-as
                     .unwrap-or (get group :tasks) ({})
-                    :: 'Map 'String $ :: 'Map 'Tag 'Dynamic
+                    quote $ Map String $ Map Tag Dynamic
                   fn (id task)
                     not $ decode-map-as
                       .unwrap-or (get task :done) false
@@ -140,22 +146,28 @@
                 {} (:class-name style-group-base)
                   :style $ style-group index selected? $ > todo-size 0
                   :on-click $ fn (e d!)
+                    hint-fn $ Fn respo.schema/RespoEvent
+                      Fn app.schema/DispatchOp $ -> Unit
+                      -> Unit
                     d! $ :: :set-router $ {} (:name :table)
                       :group-id $ .unwrap-or (get group :id) nil
+                    , &unit
                 <> (str todo-size)
                   {} $ :class-name style-small-hint
-                =< 8 0
+                space-x 8
                 span $ {}
                   :inner-text $ decode-map-as
                     .unwrap-or (get group :text) |
                     , 'String
                   :class-name style-input
                   :on-input $ fn (e d!)
+                    hint-fn $ Fn respo.schema/RespoEvent
+                      Fn app.schema/DispatchOp $ -> Unit
+                      -> Unit
                     d! $ :: :update-group $ {}
                       :id $ .unwrap-or (get group :id) nil
-                      :text $ decode-map-as
-                        .unwrap-or (get e :value) |
-                        , 'String
+                      :text $ decode-map-as (:value e) 'String
+                    , &unit
           :examples $ []
           :schema $ quote $ Fn Dynamic Number Bool (-> respo.schema/Component)
         'style-group $ %{} 'CodeEntry (:doc |)
@@ -173,23 +185,23 @@
           :code $ quote $ defstyle style-group-base
             {} $ |& $ {} (:padding "|0px 12px") (:line-height |40px) (:cursor |pointer) (:position |absolute) (:width |100%) (:transition-duration |220ms) (:display |flex) (:align-items |center) (:border-radius |8px)
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote String
         'style-input $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-input
             {} $ |& $ {} (:border |none) (:flex 1) (:outline |none) (:font-size 15) (:line-height 2) (:background-color |transparent)
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote String
         'style-small-hint $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-small-hint
             {} $ |& $ {} (:font-size |12px) (:color |#8c8c8c) (:pointer-events |none) (:min-width |20px)
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote String
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.comp.group-line
           :require
             respo.core :refer $ defcomp >> <> div span input
             respo-ui.core :refer $ hsl
-            respo.comp.space :refer $ =<
+            respo.comp.space :refer $ space-x
             respo-ui.core :as ui
             feather.core :refer $ comp-i comp-icon
             respo-alerts.core :refer $ comp-prompt comp-confirm
@@ -199,23 +211,15 @@
       :defs $ {}
         'by-newest-group $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn by-newest-group (group-a group-b)
-            &compare
+            let[] (_key group-a-value) group-a $ let[] (_key group-b-value) group-b $ &compare
               decode-map-as
-                .unwrap-or
-                  get
-                    .unwrap-or (last group-b) ({})
-                    , :touched-time
-                  , 0
+                .unwrap-or (get group-b-value :touched-time) 0
                 , 'Number
               decode-map-as
-                .unwrap-or
-                  get
-                    .unwrap-or (last group-a) ({})
-                    , :touched-time
-                  , 0
+                .unwrap-or (get group-a-value :touched-time) 0
                 , 'Number
           :examples $ []
-          :schema $ quote $ Fn Dynamic Dynamic (-> Number)
+          :schema $ quote $ Fn (Tuple String Dynamic) (Tuple String Dynamic) (-> Number)
         'comp-sidebar $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-sidebar (states groups router)
             let
@@ -233,7 +237,7 @@
                         :color $ hsl 0 00 80
                         :cursor :pointer
                       fn (e d!)
-                        hint-fn $ Fn (Map Tag Dynamic)
+                        hint-fn $ Fn respo.schema/RespoEvent
                           Fn app.schema/DispatchOp $ -> Unit
                           -> Unit
                         .show add-plugin d! $ fn (result)
@@ -243,35 +247,47 @@
                             d! $ :: :add-group result
                           , &unit
                         , &unit
-                    =< 16 nil
+                    space-x 16
                     comp-icon :sidebar
                       {} (:font-size 16)
                         :color $ hsl 0 0 80
                         :cursor :pointer
                       fn (e d!)
+                        hint-fn $ Fn respo.schema/RespoEvent
+                          Fn app.schema/DispatchOp $ -> Unit
+                          -> Unit
                         d! $ :: :hide-sidebar
+                        , &unit
                 div
                   {} (:class-name style-body)
                     :on-click $ fn (e d!)
+                      hint-fn $ Fn respo.schema/RespoEvent
+                        Fn app.schema/DispatchOp $ -> Unit
+                        -> Unit
                       d! $ :: :set-router $ {} (:name :table)
+                      , &unit
                   if (empty? groups)
                     div
                       {} $ :class-name css/center
                       <> "|Add a group to start" $ {} $ :class-name style-empty-hint
-                    list->
+                    data-list->
                       {} (:class-name style-box-base)
                         :style $ style-box $ .len groups
                       -> groups (.to-list) (sort by-newest-group)
                         map-indexed $ fn (index entry)
-                          [] (first entry)
-                            let
-                                group $ .unwrap-or (last entry) ({})
+                          hint-fn $ Fn Number (Tuple String Dynamic)
+                            -> $ Tuple String respo.schema/Component
+                          let[] (entry-id group) entry $ assert-type
+                            [] entry-id $ let
                                 tasks $ .unwrap-or (get group :tasks) ({})
                                 selected? $ =
                                   .unwrap-or (get router :group-id) nil
                                   .unwrap-or (get group :id) nil
                               comp-group-line group index selected?
-                        .sort-by first
+                            quote $ Tuple String respo.schema/Component
+                        .sort-by $ fn (pair)
+                          hint-fn $ Fn (Tuple String respo.schema/Component) (-> String)
+                          let[] (id _node) pair id
                 .render add-plugin
           :examples $ []
           :schema $ quote $ Fn (Map Dynamic Dynamic) (Map String Dynamic) (Map Tag Dynamic) (-> respo.schema/Component)
@@ -287,7 +303,7 @@
               :overflow |auto
               :padding-top |8px
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote String
         'style-box $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn style-box (n)
             {} $ :height $ str
@@ -300,12 +316,12 @@
           :code $ quote $ defstyle style-box-base
             {} $ |& $ {} (:width |100%) (:position |relative)
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote String
         'style-empty-hint $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-empty-hint
             {} $ |& $ {} (:font-family ui/font-fancy) (:font-style :italic) (:color |#8c8c8c)
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote String
         'style-sidebar $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-sidebar
             {} $ |& $ {}
@@ -318,13 +334,13 @@
               :width |280px
               :transition-duration |200ms
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote String
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.comp.sidebar
           :require (respo-ui.core :as ui)
             respo-ui.core :refer $ hsl
-            respo.comp.space :refer $ =<
-            respo.core :refer $ defcomp >> <> div span input list-> button
+            respo.comp.space :refer $ space-x
+            respo.core :refer $ defcomp >> <> div span input data-list-> button
             app.comp.group-line :refer $ comp-group-line
             respo-alerts.core :refer $ use-prompt
             feather.core :refer $ comp-i comp-icon
@@ -347,35 +363,46 @@
                   .merge (style-done done?)
                     {} (:font-size |20px) (:cursor |pointer)
                   fn (e d!)
+                    hint-fn $ Fn respo.schema/RespoEvent
+                      Fn app.schema/DispatchOp $ -> Unit
+                      -> Unit
                     d! $ : :toggle-task task
+                    , &unit
                 input $ {}
                   :value $ decode-map-as
                     .unwrap-or (get task :text) |
                     , 'String
                   :class-name $ str-spaced |task-input style-input
                   :on-input $ fn (e d!)
+                    hint-fn $ Fn respo.schema/RespoEvent
+                      Fn app.schema/DispatchOp $ -> Unit
+                      -> Unit
                     d! $ : :update-task $ {}
                       :group-id $ .unwrap-or (get task :group-id) nil
                       :id $ .unwrap-or (get task :id) nil
-                      :text $ decode-map-as
-                        .unwrap-or (get e :value) |
-                        , 'String
+                      :text $ decode-map-as (:value e) 'String
+                    , &unit
                 comp-icon :arrow-up
                   {} (:font-size 14)
                     :color $ hsl 150 50 80
                     :cursor :pointer
                   fn (e d!)
+                    hint-fn $ Fn respo.schema/RespoEvent
+                      Fn app.schema/DispatchOp $ -> Unit
+                      -> Unit
                     d! $ : :touch-task task
-                =< 8 nil
+                    , &unit
+                space-x 8
                 comp-icon :x
                   {} (:font-size 14)
                     :color $ hsl 0 100 70
                     :cursor :pointer
                   fn (e d!)
-                    hint-fn $ Fn (Map Tag Dynamic)
+                    hint-fn $ Fn respo.schema/RespoEvent
                       Fn app.schema/DispatchOp $ -> Unit
                       -> Unit
                     .show remove-plugin d! $ fn () $ d! (: :rm-task task)
+                    , &unit
                 .render remove-plugin
           :examples $ []
           :schema $ quote $ Fn (Map Dynamic Dynamic) (Map Tag Dynamic) Number (-> respo.schema/Component)
@@ -389,12 +416,12 @@
           :code $ quote $ defstyle style-input
             {} $ |& $ {} (:outline |none) (:border "|1px solid #d9d9d9") (:padding "|0px 10px") (:line-height |32px) (:font-size |15px) (:flex |1) (:margin "|0 8px") (:border-radius |8px) (:background-color |#ffffff)
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote String
         'style-task-base $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-task-base
             {} $ |& $ {} (:display |flex) (:position |absolute) (:width |100%) (:transition-duration |200ms) (:padding "|2px 4px")
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote String
         'style-task-offset $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn style-task-offset (index)
             {} $ :top $ str
@@ -411,7 +438,7 @@
             respo.core :refer $ defcomp >> <> input div create-element
             feather.core :refer $ comp-i comp-icon
             respo-alerts.core :refer $ use-confirm
-            respo.comp.space :refer $ =<
+            respo.comp.space :refer $ space-x
             respo.css :refer $ defstyle
             respo-ui.css :as css
     'app.comp.todolist $ %{} 'FileEntry
@@ -419,30 +446,25 @@
         'as-map $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn as-map (x)
             if (map? x)
-              decode-map-as x $ :: 'Map 'String $ :: 'Map 'Tag 'Dynamic
+              decode-map-as x $ quote $ Map String (Map Tag Dynamic)
               {}
           :examples $ []
           :schema $ quote $ Fn Dynamic
             -> $ Map String $ Map Tag Dynamic
         'by-touch-time $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn by-touch-time (entry-a entry-b)
-            &compare
+            let[] (_key entry-a-value) entry-a $ let[] (_key entry-b-value) entry-b $ &compare
               decode-map-as
-                .unwrap-or
-                  get
-                    .unwrap-or (last entry-b) ({})
-                    , :touched-time
-                  , 0
+                .unwrap-or (get entry-b-value :touched-time) 0
                 , 'Number
               decode-map-as
-                .unwrap-or
-                  get
-                    .unwrap-or (last entry-a) ({})
-                    , :touched-time
-                  , 0
+                .unwrap-or (get entry-a-value :touched-time) 0
                 , 'Number
           :examples $ []
-          :schema $ quote $ Fn Dynamic Dynamic (-> Number)
+          :schema $ quote $ Fn
+            Tuple String $ Map Tag Dynamic
+            Tuple String $ Map Tag Dynamic
+            -> Number
         'comp-group-banner $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-group-banner (states group)
             let
@@ -461,10 +483,10 @@
                       .unwrap-or (get group :text) |
                       , 'String
                     {} (:font-size 20) (:font-family ui/font-fancy)
-                  =< 8 nil
+                  space-x 8
                   span
                     {} $ :on-click $ fn (e d!)
-                      hint-fn $ Fn (Map Tag Dynamic)
+                      hint-fn $ Fn respo.schema/RespoEvent
                         Fn app.schema/DispatchOp $ -> Unit
                         -> Unit
                       .show edit-plugin d! $ fn (result)
@@ -475,10 +497,10 @@
                         , &unit
                       , &unit
                     comp-i :edit 14 $ hsl 200 80 80
-                  =< 16 nil
+                  space-x 16
                   span
                     {} $ :on-click $ fn (e d!)
-                      hint-fn $ Fn (Map Tag Dynamic)
+                      hint-fn $ Fn respo.schema/RespoEvent
                         Fn app.schema/DispatchOp $ -> Unit
                         -> Unit
                       .show add-plugin d! $ fn (result)
@@ -496,16 +518,21 @@
                       :color $ hsl 200 80 80
                       :cursor |pointer
                     fn (e d!)
+                      hint-fn $ Fn respo.schema/RespoEvent
+                        Fn app.schema/DispatchOp $ -> Unit
+                        -> Unit
                       d! $ :: :touch-group $ .unwrap-or (get group :id) nil
-                  =< 8 nil
+                      , &unit
+                  space-x 8
                   span
                     {} $ :on-click $ fn (e d!)
-                      hint-fn $ Fn (Map Tag Dynamic)
+                      hint-fn $ Fn respo.schema/RespoEvent
                         Fn app.schema/DispatchOp $ -> Unit
                         -> Unit
                       .show remove-plugin d! $ fn ()
                         d! $ :: :rm-group $ .unwrap-or (get group :id) nil
                         d! $ :: :set-router $ {} (:name :table)
+                      , &unit
                     comp-i :x 14 $ hsl 0 100 70
                 .render edit-plugin
                 .render add-plugin
@@ -517,12 +544,12 @@
             let
                 cursor $ decode-map-as
                   .unwrap-or (get states :cursor) ([])
-                  :: 'List 'Dynamic
+                  quote $ List Dynamic
                 tasks $ as-map $ .unwrap-or (get group :tasks) ({})
                 state $ decode-map-as
                   .unwrap-or (get states :data)
                     {} (:draft |) (:fold-done? true)
-                  :: 'Map 'Tag 'Dynamic
+                  quote $ Map Tag Dynamic
                 todo-tasks $ .filter-kv tasks $ fn (id task)
                   not $ decode-map-as
                     .unwrap-or (get task :done) false
@@ -535,19 +562,26 @@
                   hint-fn $ Fn
                     Map String $ Map Tag Dynamic
                     -> respo.schema/Element
-                  list->
+                  data-list->
                     {} (:class-name style-list-base)
                       :style $ style-list-height $ .len tasks
                     -> tasks (.to-list) (sort by-touch-time)
                       map-indexed $ fn (idx entry)
-                        let[] (id task) entry $ [] id $ comp-task (>> states id)
-                          decode-map-as task $ :: 'Map 'Tag 'Dynamic
-                          , idx
-                      .sort-by first
+                        hint-fn $ Fn Number
+                          Tuple String $ Map Tag Dynamic
+                          -> $ Tuple String respo.schema/Component
+                        let[] (id task) entry $ assert-type
+                          [] id $ comp-task (>> states id)
+                            decode-map-as task $ quote $ Map Tag Dynamic
+                            , idx
+                          quote $ Tuple String respo.schema/Component
+                      .sort-by $ fn (pair)
+                        hint-fn $ Fn (Tuple String respo.schema/Component) (-> String)
+                        let[] (id _node) pair id
               div
                 {} $ :class-name style-todolist
                 comp-group-banner (>> states :group) group
-                =< nil 16
+                space-y 16
                 create-element :section
                   {} $ :class-name style-body
                   if (empty? todo-tasks)
@@ -557,12 +591,12 @@
                     render-task-list todo-tasks
                   if
                     > (.len done-tasks) 0
-                    div
+                    Option :some $ div
                       {} $ :class-name $ str-spaced css/row-middle style-section
                       <> "|Done tasks" $ {}
                         :color $ hsl 0 0 80
                         :font-size 14
-                      =< 8 nil
+                      space-x 8
                       comp-icon
                         if
                           decode-map-as
@@ -573,12 +607,18 @@
                           :color $ hsl 200 80 80
                           :cursor :pointer
                         fn (e d!)
+                          hint-fn $ Fn respo.schema/RespoEvent
+                            Fn app.schema/DispatchOp $ -> Unit
+                            -> Unit
                           d! $ :: :states cursor $ update state :fold-done? not
+                          , &unit
+                    Option :none
                   if
                     not $ decode-map-as
                       .unwrap-or (get state :fold-done?) true
                       , 'Bool
-                    render-task-list done-tasks
+                    Option :some $ render-task-list done-tasks
+                    Option :none
           :examples $ []
           :schema $ quote $ Fn (Map Dynamic Dynamic) (Map Tag Dynamic) (Map Tag Dynamic) (-> respo.schema/Component)
         'prompt-text $ %{} 'CodeEntry (:doc |)
@@ -589,12 +629,12 @@
           :code $ quote $ defstyle style-body
             {} $ |& $ {} (:padding-bottom |120px)
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote String
         'style-list-base $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-list-base
             {} $ |& $ {} (:display |flex) (:flex-direction |column) (:position |relative)
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote String
         'style-list-height $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn style-list-height (size)
             {}
@@ -607,7 +647,7 @@
           :code $ quote $ defstyle style-section
             {} $ |& $ {} (:margin-top |16px)
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote String
         'style-todolist $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-todolist
             {} $ |& $ {}
@@ -617,7 +657,7 @@
               :padding "|20px 24px"
               :overflow :auto
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote String
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.comp.todolist
           :require
@@ -625,8 +665,8 @@
             respo-ui.core :as ui
             clojure.string :as string
             app.comp.task :refer $ comp-task
-            respo.core :refer $ defcomp >> <> div section span header input list-> button create-element
-            respo.comp.space :refer $ =<
+            respo.core :refer $ defcomp >> <> div section span header input data-list-> button create-element
+            respo.comp.space :refer $ space-x space-y
             respo.comp.inspect :refer $ comp-inspect
             feather.core :refer $ comp-icon comp-i
             respo-alerts.core :refer $ use-prompt use-confirm
@@ -677,7 +717,7 @@
               if (js-present? raw)
                 let
                     old-store $ parse-cirru-edn $ decode-map-as raw 'String
-                  reset! *store $ decode-map-as old-store $ :: 'Map 'Tag 'Dynamic
+                  reset! *store $ decode-map-as old-store $ quote (Map Tag Dynamic)
                 , &unit
             render-app!
             add-watch! *store :rerender $ fn (s p) (render-app!)
@@ -703,7 +743,9 @@
           :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
-            render! mount-target (comp-container @*store) dispatch!
+            render-with! mount-target
+              fn () $ comp-container @*store
+              , dispatch!
           :examples $ []
           :schema $ quote $ Fn (-> Unit)
         'save-local-storage! $ %{} 'CodeEntry (:doc |)
@@ -715,7 +757,7 @@
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
           :require
-            respo.core :refer $ render! clear-cache! realize-ssr! render-element
+            respo.core :refer $ render-with! clear-cache! realize-ssr! render-element
             app.comp.container :refer $ comp-container
             app.updater :refer $ updater
             app.schema :as schema
@@ -729,10 +771,6 @@
           :code $ quote $ def DispatchOp (:: :unhandled)
           :examples $ []
           :schema $ quote Enum
-        'Store $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defstruct Store (:version 'Number) (:groups 'Map) (:router 'Map) (:show-sidebar? 'Bool) (:states 'Map)
-          :examples $ []
-          :schema $ quote StructDef
         'group $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def group
             {} (:text nil) (:id nil)
@@ -749,7 +787,7 @@
               :show-sidebar? true
               :states $ {}
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote $ Map Tag Dynamic
         'task $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def task
             {} (:id nil) (:text nil) (:done false) (:created-time nil) (:touched-time nil) (:done-time nil)
@@ -763,7 +801,7 @@
         'as-map $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn as-map (x)
             if (map? x)
-              decode-map-as x $ :: 'Map 'Tag 'Dynamic
+              decode-map-as x $ quote $ Map Tag Dynamic
               {}
           :examples $ []
           :schema $ quote $ Fn Dynamic
@@ -775,8 +813,8 @@
                 assoc store :states $ update-state-tree
                   decode-map-as
                     .unwrap-or (get store :states) ({})
-                    :: 'Map 'Dynamic 'Dynamic
-                  decode-map-as cursor $ :: 'List 'Dynamic
+                    quote $ Map Dynamic Dynamic
+                  decode-map-as cursor $ quote $ List Dynamic
                   , s
               (:add-group op-data)
                 -> store $ update :groups $ fn (task-groups)
