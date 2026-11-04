@@ -9,7 +9,7 @@ Demo http://r.tiye.me/Memkits/wanderlist/ .
 
 开发工具链配对正式 **Calcit CLI / @calcit/procs 0.34.2**，请严格更新完整模块图、重新生成 JS 并刷新。
 直接模块为正式 Alerts 0.12.0、Feather 0.6.0、UI 0.14.1、Respo 0.19.2；传递 Reel 0.9.0、JS-FFI 0.2.10、Router 0.11.2。
-其他 npm 版本和一小时包龄政策保持。UI 升级可能影响细节样式，不承诺逐像素一致。
+直接 npm 版本和一小时包龄政策保持。UI 升级可能影响细节样式，不承诺逐像素一致。
 
 分组与任务行为、`wanderlist` localStorage key、version 2 Map 存档保持。
 恢复和首次渲染成功后才启用 watch 与离页保存；解析/解码/首次渲染失败仍停止启动，
@@ -43,7 +43,7 @@ Demo http://r.tiye.me/Memkits/wanderlist/ .
 
 ## 开发与门禁
 
-使用官方 Calcit 0.34.2、Caps 0.1.1、Node 24、Yarn 4.18.0 与现有 Vite 8.3.3：
+使用官方 Calcit 0.34.2、Caps 0.1.1、Node 24（24.15.0 或更新）、Yarn 4.18.0 与现有 Vite 8.3.3。锁文件按原 `node-gyp@latest` 约束刷新到正式 13.1.0，移除旧的 glob/minimatch 构建依赖链；不增加版本 override：
 
 ```sh
 caps --ci --strict
