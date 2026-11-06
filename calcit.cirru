@@ -16,17 +16,17 @@
                 safe-store $ if (map? store) store $ {}
                 router $ .unwrap-or (get safe-store :router) ({})
                 safe-router $ if (map? router)
-                  decode-map-as router $ quote $ Map Tag Dynamic
+                  decode-map-as router $ Map Tag Dynamic
                   {}
                 group-id-option $ .map (get safe-router :group-id)
                   fn (id) (decode-map-as id 'String)
                 states $ .unwrap-or (get safe-store :states) ({})
                 safe-states $ if (map? states)
-                  decode-map-as states $ quote $ Map Dynamic Dynamic
+                  decode-map-as states $ Map Dynamic Dynamic
                   {}
                 groups $ .unwrap-or (get safe-store :groups) ({})
                 safe-groups $ if (map? groups)
-                  decode-map-as groups $ quote $ Map String Dynamic
+                  decode-map-as groups $ Map String Dynamic
                   {}
               div
                 {} $ :class-name $ str-spaced css/fullscreen css/global css/row style-root
@@ -56,7 +56,7 @@
                     :table $ if-let (group-id group-id-option)
                       comp-todolist (>> safe-states group-id) safe-router $ decode-map-as
                         .unwrap-or (get safe-groups group-id) ({})
-                        quote $ Map Tag Dynamic
+                        Map Tag Dynamic
                       comp-placeholder
                     _ $ div ({}) (<> |router-not-matching-a-page)
                 comp-margin
@@ -137,7 +137,7 @@
                 todo-size $ .len $ .filter-kv
                   decode-map-as
                     .unwrap-or (get group :tasks) ({})
-                    quote $ Map String $ Map Tag Dynamic
+                    Map String $ Map Tag Dynamic
                   fn (id task)
                     not $ decode-map-as
                       .unwrap-or (get task :done) false
@@ -284,7 +284,7 @@
                                   .unwrap-or (get router :group-id) nil
                                   .unwrap-or (get group :id) nil
                               comp-group-line group index selected?
-                            quote $ Tuple String respo.schema/Component
+                            Tuple String respo.schema/Component
                         .sort-by $ fn (pair)
                           hint-fn $ Fn (Tuple String respo.schema/Component) (-> String)
                           let[] (id _node) pair id
@@ -446,7 +446,7 @@
         'as-map $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn as-map (x)
             if (map? x)
-              decode-map-as x $ quote $ Map String (Map Tag Dynamic)
+              decode-map-as x $ Map String $ Map Tag Dynamic
               {}
           :examples $ []
           :schema $ quote $ Fn Dynamic
@@ -544,12 +544,12 @@
             let
                 cursor $ decode-map-as
                   .unwrap-or (get states :cursor) ([])
-                  quote $ List Dynamic
+                  List Dynamic
                 tasks $ as-map $ .unwrap-or (get group :tasks) ({})
                 state $ decode-map-as
                   .unwrap-or (get states :data)
                     {} (:draft |) (:fold-done? true)
-                  quote $ Map Tag Dynamic
+                  Map Tag Dynamic
                 todo-tasks $ .filter-kv tasks $ fn (id task)
                   not $ decode-map-as
                     .unwrap-or (get task :done) false
@@ -572,9 +572,9 @@
                           -> $ Tuple String respo.schema/Component
                         let[] (id task) entry $ assert-type
                           [] id $ comp-task (>> states id)
-                            decode-map-as task $ quote $ Map Tag Dynamic
+                            decode-map-as task $ Map Tag Dynamic
                             , idx
-                          quote $ Tuple String respo.schema/Component
+                          Tuple String respo.schema/Component
                       .sort-by $ fn (pair)
                         hint-fn $ Fn (Tuple String respo.schema/Component) (-> String)
                         let[] (id _node) pair id
@@ -717,7 +717,7 @@
               if (js-present? raw)
                 let
                     old-store $ parse-cirru-edn $ decode-map-as raw 'String
-                  reset! *store $ decode-map-as old-store $ quote (Map Tag Dynamic)
+                  reset! *store $ decode-map-as old-store $ Map Tag Dynamic
                 , &unit
             render-app!
             add-watch! *store :rerender $ fn (s p) (render-app!)
@@ -770,7 +770,7 @@
         'DispatchOp $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def DispatchOp (:: :unhandled)
           :examples $ []
-          :schema $ quote Enum
+          :schema $ quote AnyEnum
         'group $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def group
             {} (:text nil) (:id nil)
@@ -801,7 +801,7 @@
         'as-map $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn as-map (x)
             if (map? x)
-              decode-map-as x $ quote $ Map Tag Dynamic
+              decode-map-as x $ Map Tag Dynamic
               {}
           :examples $ []
           :schema $ quote $ Fn Dynamic
@@ -813,8 +813,8 @@
                 assoc store :states $ update-state-tree
                   decode-map-as
                     .unwrap-or (get store :states) ({})
-                    quote $ Map Dynamic Dynamic
-                  decode-map-as cursor $ quote $ List Dynamic
+                    Map Dynamic Dynamic
+                  decode-map-as cursor $ List respo.schema/CoordKey
                   , s
               (:add-group op-data)
                 -> store $ update :groups $ fn (task-groups)
@@ -825,7 +825,7 @@
               (:rm-group id)
                 decode-map-as
                   dissoc-in store $ [] :groups $ decode-map-as id 'String
-                  quote $ Map Tag Dynamic
+                  Map Tag Dynamic
               (:update-group op-data)
                 let
                     data $ as-map op-data
@@ -906,7 +906,7 @@
               (:show-sidebar) (assoc store :show-sidebar? true)
               _ $ do (println |Unknown-op: op) store
           :examples $ []
-          :schema $ quote $ Fn (Map Tag Dynamic) Enum String Number
+          :schema $ quote $ Fn (Map Tag Dynamic) AnyEnum String Number
             -> $ Map Tag Dynamic
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.updater

@@ -7,8 +7,8 @@ Demo http://r.tiye.me/Memkits/wanderlist/ .
 
 ## 使用者需要注意
 
-开发工具链配对正式 **Calcit CLI / @calcit/procs 0.34.2**，请严格更新完整模块图、重新生成 JS 并刷新。
-直接模块为正式 Alerts 0.12.0、Feather 0.6.0、UI 0.14.1、Respo 0.19.2；传递 Reel 0.9.0、JS-FFI 0.2.10、Router 0.11.2。
+开发工具链配对正式 **Calcit CLI / @calcit/procs 0.35.1**，请严格更新完整模块图、重新生成 JS 并刷新。
+直接模块为正式 Alerts 0.13.1、Feather 0.6.2、UI 0.15.1、Respo 0.19.4；传递 Reel 0.9.2、JS FFI 0.2.13、Router 0.12.1。
 直接 npm 版本和一小时包龄政策保持。UI 升级可能影响细节样式，不承诺逐像素一致。
 
 分组与任务行为、`wanderlist` localStorage key、version 2 Map 存档保持。
@@ -26,7 +26,7 @@ Demo http://r.tiye.me/Memkits/wanderlist/ .
 - 两个列表使用现有 data-list-> 的 Tuple 合同；分组 key 从已知 Tuple 取出真实 String，
   保持原排序/位置与数据 ID。根渲染及原测试建树处于 managed memo frame；UI 状态 cursor 与渲染 key 分开。
   Tuple 的 assert-type 只标注本地构造、两个成员已知的字面量，不用于给外部值强行换类型。
-- 原 Enum 操作、updater 和存档恢复/保存策略保持。原 schemaDynamic 54→35、codeNil 28→19、unsafe 仍为 0。
+- 派发入口与 updater 接收 AnyEnum。状态路径按 Respo 的 CoordKey union 校验，原任务和分组操作及存档策略沿用。
   剩余开放 Map 与原 nil 模板/缺省数据保留，不创建或放宽数量预算。
 - Prompt 的 `.show` 公开 trait 仍是裸 Fn，当前方法视图仍显示 open；保留已有 prompt-text String 解码、
   回调的 Unit 返回与 cursor/取消行为。跟进 [Alerts #104](https://github.com/Respo/alerts.calcit/issues/104)，
@@ -36,14 +36,14 @@ Demo http://r.tiye.me/Memkits/wanderlist/ .
 
 本地原门禁通过：269 个全定义、完整 strict diagnostics=[]、零 deprecated/dynamic-method、原 coverage/弱类型报告、
 严格 Caps 七模块/工具链配对、immutable、原五项 Node 回归与生产构建。
-独立 Chrome/全新回环来源用合成分组/任务验收新增 Prompt、输入编辑、完成/折叠、两个分组切换、
+此前在独立 Chrome 的全新回环来源，用合成分组与任务验收新增 Prompt、输入编辑、完成/折叠、两个分组切换、
 版本 2 存档刷新与 Confirm 遮罩取消后任务保留，页面异常为空。
 夹具仅有浏览器自动请求 favicon.ico 的 404，应用 JS/CSS 无失败；未读真实数据、不操作剪贴板、不执行删除或部署。
 未重新注入坏存档或编译错误验收；相关启动顺序与 HUD 实现除官方类型格式化外不变。
 
 ## 开发与门禁
 
-使用官方 Calcit 0.34.2、Caps 0.1.1、Node 24（24.15.0 或更新）、Yarn 4.18.0 与现有 Vite 8.3.3。锁文件按原 `node-gyp@latest` 约束刷新到正式 13.1.0，移除旧的 glob/minimatch 构建依赖链；不增加版本 override：
+使用官方 Calcit 0.35.1、Caps 0.1.1、Node 24（24.15.0 或更新）、Yarn 4.18.0 与现有 Vite 8.3.3。锁文件按原 `node-gyp@latest` 约束刷新到正式 13.1.0，移除旧的 glob/minimatch 构建依赖链；不增加版本 override：
 
 ```sh
 caps --ci --strict
