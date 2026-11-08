@@ -9,7 +9,7 @@ calcit docs read Respo-Agent.md --full --module respo.calcit
 ```
 
 按用户的运行环境约束选择执行位置；不能为了本地验证绕过限制。
-使用项目固定的官方 Calcit 0.35.1。本地执行已获用户授权；最终仍运行原 Linux CI 与全部门禁。
+使用 `deps.cirru` 固定的官方 Calcit 版本。本地执行已获用户授权；最终仍运行原 Linux CI 与全部门禁。
 
 ## 源码修改
 

@@ -6,7 +6,7 @@
     {} (:description |) (:init-fn 'app.main/main!) (:mode :js) (:reload-fn 'app.main/reload!) (:target :browser)
       :feature-policy $ {}
       :modules $ [] |respo.calcit/ |respo-ui.calcit/ |alerts.calcit/ |respo-feather.calcit/
-      :type-slots $ {} $ :dispatch-op |app.schema/DispatchOp
+      :type-slots $ {} $ :dispatch-op 'app.schema/DispatchOp
   :files $ {}
     'app.comp.container $ %{} 'FileEntry
       :defs $ {}
@@ -26,7 +26,7 @@
                   {}
                 groups $ .unwrap-or (get safe-store :groups) ({})
                 safe-groups $ if (map? groups)
-                  decode-map-as groups $ Map String Dynamic
+                  decode-map-as groups $ Map String $ Map Tag Dynamic
                   {}
               div
                 {} $ :class-name $ str-spaced css/fullscreen css/global css/row style-root
@@ -44,9 +44,9 @@
                         :cursor :pointer
                       fn (e d!)
                         hint-fn $ Fn respo.schema/RespoEvent
-                          Fn app.schema/DispatchOp $ -> Unit
+                          Fn app.schema/Op $ -> Unit
                           -> Unit
-                        d! $ :: :show-sidebar
+                        d! $ app.schema/Op :show-sidebar
                         , &unit
                 div $ {} $ :class-name style-divider
                 div
@@ -147,10 +147,12 @@
                   :style $ style-group index selected? $ > todo-size 0
                   :on-click $ fn (e d!)
                     hint-fn $ Fn respo.schema/RespoEvent
-                      Fn app.schema/DispatchOp $ -> Unit
+                      Fn app.schema/Op $ -> Unit
                       -> Unit
-                    d! $ :: :set-router $ {} (:name :table)
-                      :group-id $ .unwrap-or (get group :id) nil
+                    d! $ app.schema/Op :set-router $ {} (:name :table)
+                      :group-id $ decode-map-as
+                        .unwrap $ get group :id
+                        , 'String
                     , &unit
                 <> (str todo-size)
                   {} $ :class-name style-small-hint
@@ -162,14 +164,16 @@
                   :class-name style-input
                   :on-input $ fn (e d!)
                     hint-fn $ Fn respo.schema/RespoEvent
-                      Fn app.schema/DispatchOp $ -> Unit
+                      Fn app.schema/Op $ -> Unit
                       -> Unit
-                    d! $ :: :update-group $ {}
-                      :id $ .unwrap-or (get group :id) nil
+                    d! $ app.schema/Op :update-group $ {}
+                      :id $ decode-map-as
+                        .unwrap $ get group :id
+                        , 'String
                       :text $ decode-map-as (:value e) 'String
                     , &unit
           :examples $ []
-          :schema $ quote $ Fn Dynamic Number Bool (-> respo.schema/Component)
+          :schema $ quote $ Fn (Map Tag Dynamic) Number Bool (-> respo.schema/Component)
         'style-group $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn style-group (index selected? todo?)
             {}
@@ -219,7 +223,10 @@
                 .unwrap-or (get group-a-value :touched-time) 0
                 , 'Number
           :examples $ []
-          :schema $ quote $ Fn (Tuple String Dynamic) (Tuple String Dynamic) (-> Number)
+          :schema $ quote $ Fn
+            Tuple String $ Map Tag Dynamic
+            Tuple String $ Map Tag Dynamic
+            -> Number
         'comp-sidebar $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-sidebar (states groups router)
             let
@@ -238,13 +245,13 @@
                         :cursor :pointer
                       fn (e d!)
                         hint-fn $ Fn respo.schema/RespoEvent
-                          Fn app.schema/DispatchOp $ -> Unit
+                          Fn AnyEnum $ -> Unit
                           -> Unit
                         .show add-plugin d! $ fn (result)
                           hint-fn $ Fn String $ -> Unit
                           if
                             not $ .blank? $ prompt-text result
-                            d! $ :: :add-group result
+                            d! $ app.schema/Op :add-group result
                           , &unit
                         , &unit
                     space-x 16
@@ -254,17 +261,17 @@
                         :cursor :pointer
                       fn (e d!)
                         hint-fn $ Fn respo.schema/RespoEvent
-                          Fn app.schema/DispatchOp $ -> Unit
+                          Fn app.schema/Op $ -> Unit
                           -> Unit
-                        d! $ :: :hide-sidebar
+                        d! $ app.schema/Op :hide-sidebar
                         , &unit
                 div
                   {} (:class-name style-body)
                     :on-click $ fn (e d!)
                       hint-fn $ Fn respo.schema/RespoEvent
-                        Fn app.schema/DispatchOp $ -> Unit
+                        Fn app.schema/Op $ -> Unit
                         -> Unit
-                      d! $ :: :set-router $ {} (:name :table)
+                      d! $ app.schema/Op :set-router $ {} (:name :table)
                       , &unit
                   if (empty? groups)
                     div
@@ -275,14 +282,13 @@
                         :style $ style-box $ .len groups
                       -> groups (.to-list) (sort by-newest-group)
                         map-indexed $ fn (index entry)
-                          hint-fn $ Fn Number (Tuple String Dynamic)
+                          hint-fn $ Fn Number
+                            Tuple String $ Map Tag Dynamic
                             -> $ Tuple String respo.schema/Component
                           let[] (entry-id group) entry $ assert-type
                             [] entry-id $ let
                                 tasks $ .unwrap-or (get group :tasks) ({})
-                                selected? $ =
-                                  .unwrap-or (get router :group-id) nil
-                                  .unwrap-or (get group :id) nil
+                                selected? $ = (get router :group-id) (get group :id)
                               comp-group-line group index selected?
                             Tuple String respo.schema/Component
                         .sort-by $ fn (pair)
@@ -290,7 +296,10 @@
                           let[] (id _node) pair id
                 .render add-plugin
           :examples $ []
-          :schema $ quote $ Fn (Map Dynamic Dynamic) (Map String Dynamic) (Map Tag Dynamic) (-> respo.schema/Component)
+          :schema $ quote $ Fn (Map Dynamic Dynamic)
+            Map String $ Map Tag Dynamic
+            Map Tag Dynamic
+            -> respo.schema/Component
         'prompt-text $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn prompt-text (x) (decode-map-as x 'String)
           :examples $ []
@@ -364,9 +373,9 @@
                     {} (:font-size |20px) (:cursor |pointer)
                   fn (e d!)
                     hint-fn $ Fn respo.schema/RespoEvent
-                      Fn app.schema/DispatchOp $ -> Unit
+                      Fn app.schema/Op $ -> Unit
                       -> Unit
-                    d! $ : :toggle-task task
+                    d! $ app.schema/Op :toggle-task task
                     , &unit
                 input $ {}
                   :value $ decode-map-as
@@ -375,11 +384,15 @@
                   :class-name $ str-spaced |task-input style-input
                   :on-input $ fn (e d!)
                     hint-fn $ Fn respo.schema/RespoEvent
-                      Fn app.schema/DispatchOp $ -> Unit
+                      Fn app.schema/Op $ -> Unit
                       -> Unit
-                    d! $ : :update-task $ {}
-                      :group-id $ .unwrap-or (get task :group-id) nil
-                      :id $ .unwrap-or (get task :id) nil
+                    d! $ app.schema/Op :update-task $ {}
+                      :group-id $ decode-map-as
+                        .unwrap $ get task :group-id
+                        , 'String
+                      :id $ decode-map-as
+                        .unwrap $ get task :id
+                        , 'String
                       :text $ decode-map-as (:value e) 'String
                     , &unit
                 comp-icon :arrow-up
@@ -388,9 +401,9 @@
                     :cursor :pointer
                   fn (e d!)
                     hint-fn $ Fn respo.schema/RespoEvent
-                      Fn app.schema/DispatchOp $ -> Unit
+                      Fn app.schema/Op $ -> Unit
                       -> Unit
-                    d! $ : :touch-task task
+                    d! $ app.schema/Op :touch-task task
                     , &unit
                 space-x 8
                 comp-icon :x
@@ -399,9 +412,9 @@
                     :cursor :pointer
                   fn (e d!)
                     hint-fn $ Fn respo.schema/RespoEvent
-                      Fn app.schema/DispatchOp $ -> Unit
+                      Fn AnyEnum $ -> Unit
                       -> Unit
-                    .show remove-plugin d! $ fn () $ d! (: :rm-task task)
+                    .show remove-plugin d! $ fn () $ d! (app.schema/Op :rm-task task)
                     , &unit
                 .render remove-plugin
           :examples $ []
@@ -487,12 +500,14 @@
                   span
                     {} $ :on-click $ fn (e d!)
                       hint-fn $ Fn respo.schema/RespoEvent
-                        Fn app.schema/DispatchOp $ -> Unit
+                        Fn AnyEnum $ -> Unit
                         -> Unit
                       .show edit-plugin d! $ fn (result)
                         hint-fn $ Fn String $ -> Unit
-                        d! $ :: :update-group $ {}
-                          :id $ .unwrap-or (get group :id) nil
+                        d! $ app.schema/Op :update-group $ {}
+                          :id $ decode-map-as
+                            .unwrap $ get group :id
+                            , 'String
                           :text result
                         , &unit
                       , &unit
@@ -501,14 +516,16 @@
                   span
                     {} $ :on-click $ fn (e d!)
                       hint-fn $ Fn respo.schema/RespoEvent
-                        Fn app.schema/DispatchOp $ -> Unit
+                        Fn AnyEnum $ -> Unit
                         -> Unit
                       .show add-plugin d! $ fn (result)
                         hint-fn $ Fn String $ -> Unit
                         when-not
                           .blank? $ prompt-text result
-                          d! $ :: :add-task $ {} (:text result)
-                            :group-id $ .unwrap-or (get group :id) nil
+                          d! $ app.schema/Op :add-task $ {} (:text result)
+                            :group-id $ decode-map-as
+                              .unwrap $ get group :id
+                              , 'String
                         , &unit
                       , &unit
                     button $ {} (:class-name css/button) (:inner-text "|Add task")
@@ -519,19 +536,23 @@
                       :cursor |pointer
                     fn (e d!)
                       hint-fn $ Fn respo.schema/RespoEvent
-                        Fn app.schema/DispatchOp $ -> Unit
+                        Fn app.schema/Op $ -> Unit
                         -> Unit
-                      d! $ :: :touch-group $ .unwrap-or (get group :id) nil
+                      d! $ app.schema/Op :touch-group $ decode-map-as
+                        .unwrap $ get group :id
+                        , 'String
                       , &unit
                   space-x 8
                   span
                     {} $ :on-click $ fn (e d!)
                       hint-fn $ Fn respo.schema/RespoEvent
-                        Fn app.schema/DispatchOp $ -> Unit
+                        Fn AnyEnum $ -> Unit
                         -> Unit
                       .show remove-plugin d! $ fn ()
-                        d! $ :: :rm-group $ .unwrap-or (get group :id) nil
-                        d! $ :: :set-router $ {} (:name :table)
+                        d! $ app.schema/Op :rm-group $ decode-map-as
+                          .unwrap $ get group :id
+                          , 'String
+                        d! $ app.schema/Op :set-router $ {} (:name :table)
                       , &unit
                     comp-i :x 14 $ hsl 0 100 70
                 .render edit-plugin
@@ -608,9 +629,11 @@
                           :cursor :pointer
                         fn (e d!)
                           hint-fn $ Fn respo.schema/RespoEvent
-                            Fn app.schema/DispatchOp $ -> Unit
+                            Fn app.schema/Op $ -> Unit
                             -> Unit
-                          d! $ :: :states cursor $ update state :fold-done? not
+                          d! $ app.schema/Op :states
+                            decode-map-as cursor $ List respo.schema/CoordKey
+                            update state :fold-done? not
                           , &unit
                     Option :none
                   if
@@ -697,8 +720,21 @@
             if (enum? op)
               do
                 when config/dev? $ js/console.log op
-                reset! *store $ updater @*store op (generate-id!)
-                  decode-map-as (js/Date.now) 'Number
+                let
+                    typed-op $ if
+                      = (enum-definition op) (Option :some app.schema/Op)
+                      Option :some $ decode-map-as op 'app.schema/Op
+                      match op
+                        (:states cursor data)
+                          Option :some $ app.schema/Op :states
+                            decode-map-as cursor $ List respo.schema/CoordKey
+                            , data
+                        _ $ Option :none
+                  match typed-op
+                    (:some operation)
+                      reset! *store $ updater @*store operation (generate-id!)
+                        decode-map-as (js/Date.now) 'Number
+                    (:none) (println |Unknown-op: op)
                 , &unit
               raise "|Expected Wanderlist operation Enum"
           :examples $ []
@@ -771,6 +807,23 @@
           :code $ quote $ def DispatchOp (:: :unhandled)
           :examples $ []
           :schema $ quote AnyEnum
+        'Op $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defenum Op
+            :states (List respo.schema/CoordKey) Dynamic
+            :add-group String
+            :rm-group String
+            :update-group $ Map Tag Dynamic
+            :touch-group String
+            :add-task $ Map Tag Dynamic
+            :rm-task $ Map Tag Dynamic
+            :update-task $ Map Tag Dynamic
+            :toggle-task $ Map Tag Dynamic
+            :touch-task $ Map Tag Dynamic
+            :set-router $ Map Tag Dynamic
+            :hide-sidebar
+            :show-sidebar
+          :examples $ []
+          :schema $ quote EnumDef
         'group $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def group
             {} (:text nil) (:id nil)
@@ -906,7 +959,7 @@
               (:show-sidebar) (assoc store :show-sidebar? true)
               _ $ do (println |Unknown-op: op) store
           :examples $ []
-          :schema $ quote $ Fn (Map Tag Dynamic) AnyEnum String Number
+          :schema $ quote $ Fn (Map Tag Dynamic) app.schema/Op String Number
             -> $ Map Tag Dynamic
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.updater
