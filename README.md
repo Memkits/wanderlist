@@ -7,16 +7,22 @@ Demo http://r.tiye.me/Memkits/wanderlist/ .
 
 ## 使用者需要注意
 
-开发工具链配对正式 **Calcit CLI / @calcit/procs 0.35.1**，请严格更新完整模块图、重新生成 JS 并刷新。
-直接模块为正式 Alerts 0.13.1、Feather 0.6.2、UI 0.15.1、Respo 0.19.4；传递 Reel 0.9.2、JS FFI 0.2.13、Router 0.12.1。
-直接 npm 版本和一小时包龄政策保持。UI 升级可能影响细节样式，不承诺逐像素一致。
+开发工具链配对正式 **Calcit CLI / @calcit/procs 0.38.0**，请严格更新完整模块图、重新生成 JS 并刷新。
+直接模块为正式 Alerts 0.14.2、Feather 0.6.3、UI 0.15.2、Respo 0.19.5。
+UI 升级可能影响细节样式。一小时包龄政策继续生效。
 
 分组与任务行为、`wanderlist` localStorage key、version 2 Map 存档保持。
 恢复和首次渲染成功后才启用 watch 与离页保存；解析/解码/首次渲染失败仍停止启动，
 不补默认存档或覆盖原值。这不是完整 version 2 decoder，不承诺拒绝所有语义无效 Map。
 真实 JS `hud!` 热更新成功/错误提示与 `:rerender` watcher key 保留。
 
-## 类型与迁移范围
+## 0.38.0 类型迁移
+
+- 分组、任务、路由与侧栏操作使用具名 `Op`，由同一个 reducer 处理。Alerts 发出的匿名状态事件在入口校验后转为 `Op :states`，状态路径使用 Respo 的 `CoordKey` union。
+- 分组行、排序和列表使用具体的分组 Map 与键值对类型。可选分组比较直接使用 Option。编辑、选中和删除时读取操作所需的 String ID。
+- version 2 存档、插件状态及路由仍使用开放 Map。Alerts 的回调保留对匿名事件的支持，见 [Alerts #136](https://github.com/Respo/alerts.calcit/issues/136)。
+
+## 0.35.1 迁移记录
 
 - 19 个 defstyle 类名声明由 Dynamic 收紧为真实 String；根 store 声明为实际 Map<Tag,Dynamic>。
   两个排序器使用 Map.to-list 的真实 Tuple 形状，任务排序保留具体 Map 值合同。
@@ -43,7 +49,7 @@ Demo http://r.tiye.me/Memkits/wanderlist/ .
 
 ## 开发与门禁
 
-使用官方 Calcit 0.35.1、Caps 0.1.1、Node 24（24.15.0 或更新）、Yarn 4.18.0 与现有 Vite 8.3.3。锁文件按原 `node-gyp@latest` 约束刷新到正式 13.1.0，移除旧的 glob/minimatch 构建依赖链；不增加版本 override：
+使用官方 Calcit 0.38.0、Caps 0.1.1、Node 24（24.15.0 或更新）、Yarn 4.18.0 与 Vite 8.3.3。
 
 ```sh
 caps --ci --strict
@@ -62,7 +68,7 @@ yarn build
 
 ## 前端部署
 
-仅迁移前端资源。COS action 精确正式 `v1.2.0`，沿用自身内置逐文件 verify；
+仅迁移前端资源。COS action 精确正式 `v1.3.0`，沿用自身内置逐文件 verify；
 不添加额外 CDN 校验脚本。PR 使用 `pr/<number>/<run-id>/<attempt>/` 隔离前缀，
 同一 PR/生产上传串行排队。原 COS 生产前缀与 rsync 服务器路径不变。
 本轮不合并或触发应用生产部署，不发布 npm。
