@@ -149,8 +149,8 @@
                     hint-fn $ Fn respo.schema/RespoEvent
                       Fn app.schema/Op $ -> Unit
                       -> Unit
-                    d! $ app.schema/Op :set-router $ {} (:name :table)
-                      :group-id $ decode-map-as
+                    d! $ app.schema/Op :set-router $ Option :some
+                      decode-map-as
                         .unwrap $ get group :id
                         , 'String
                     , &unit
@@ -166,11 +166,11 @@
                     hint-fn $ Fn respo.schema/RespoEvent
                       Fn app.schema/Op $ -> Unit
                       -> Unit
-                    d! $ app.schema/Op :update-group $ {}
-                      :id $ decode-map-as
+                    d! $ app.schema/Op :update-group
+                      decode-map-as
                         .unwrap $ get group :id
                         , 'String
-                      :text $ decode-map-as (:value e) 'String
+                      decode-map-as (:value e) 'String
                     , &unit
           :examples $ []
           :schema $ quote $ Fn (Map Tag Dynamic) Number Bool (-> respo.schema/Component)
@@ -271,7 +271,7 @@
                       hint-fn $ Fn respo.schema/RespoEvent
                         Fn app.schema/Op $ -> Unit
                         -> Unit
-                      d! $ app.schema/Op :set-router $ {} (:name :table)
+                      d! $ app.schema/Op :set-router $ Option :none
                       , &unit
                   if (empty? groups)
                     div
@@ -375,7 +375,13 @@
                     hint-fn $ Fn respo.schema/RespoEvent
                       Fn app.schema/Op $ -> Unit
                       -> Unit
-                    d! $ app.schema/Op :toggle-task task
+                    d! $ app.schema/Op :toggle-task
+                      decode-map-as
+                        .unwrap $ get task :group-id
+                        , 'String
+                      decode-map-as
+                        .unwrap $ get task :id
+                        , 'String
                     , &unit
                 input $ {}
                   :value $ decode-map-as
@@ -386,14 +392,14 @@
                     hint-fn $ Fn respo.schema/RespoEvent
                       Fn app.schema/Op $ -> Unit
                       -> Unit
-                    d! $ app.schema/Op :update-task $ {}
-                      :group-id $ decode-map-as
+                    d! $ app.schema/Op :update-task
+                      decode-map-as
                         .unwrap $ get task :group-id
                         , 'String
-                      :id $ decode-map-as
+                      decode-map-as
                         .unwrap $ get task :id
                         , 'String
-                      :text $ decode-map-as (:value e) 'String
+                      decode-map-as (:value e) 'String
                     , &unit
                 comp-icon :arrow-up
                   {} (:font-size 14)
@@ -403,7 +409,13 @@
                     hint-fn $ Fn respo.schema/RespoEvent
                       Fn app.schema/Op $ -> Unit
                       -> Unit
-                    d! $ app.schema/Op :touch-task task
+                    d! $ app.schema/Op :touch-task
+                      decode-map-as
+                        .unwrap $ get task :group-id
+                        , 'String
+                      decode-map-as
+                        .unwrap $ get task :id
+                        , 'String
                     , &unit
                 space-x 8
                 comp-icon :x
@@ -414,7 +426,14 @@
                     hint-fn $ Fn respo.schema/RespoEvent
                       Fn AnyEnum $ -> Unit
                       -> Unit
-                    .show remove-plugin d! $ fn () $ d! (app.schema/Op :rm-task task)
+                    .show remove-plugin d! $ fn () $ d!
+                      app.schema/Op :rm-task
+                        decode-map-as
+                          .unwrap $ get task :group-id
+                          , 'String
+                        decode-map-as
+                          .unwrap $ get task :id
+                          , 'String
                     , &unit
                 .render remove-plugin
           :examples $ []
@@ -504,11 +523,11 @@
                         -> Unit
                       .show edit-plugin d! $ fn (result)
                         hint-fn $ Fn String $ -> Unit
-                        d! $ app.schema/Op :update-group $ {}
-                          :id $ decode-map-as
+                        d! $ app.schema/Op :update-group
+                          decode-map-as
                             .unwrap $ get group :id
                             , 'String
-                          :text result
+                          , result
                         , &unit
                       , &unit
                     comp-i :edit 14 $ hsl 200 80 80
@@ -522,10 +541,11 @@
                         hint-fn $ Fn String $ -> Unit
                         when-not
                           .blank? $ prompt-text result
-                          d! $ app.schema/Op :add-task $ {} (:text result)
-                            :group-id $ decode-map-as
+                          d! $ app.schema/Op :add-task
+                            decode-map-as
                               .unwrap $ get group :id
                               , 'String
+                            , result
                         , &unit
                       , &unit
                     button $ {} (:class-name css/button) (:inner-text "|Add task")
@@ -552,7 +572,7 @@
                         d! $ app.schema/Op :rm-group $ decode-map-as
                           .unwrap $ get group :id
                           , 'String
-                        d! $ app.schema/Op :set-router $ {} (:name :table)
+                        d! $ app.schema/Op :set-router $ Option :none
                       , &unit
                     comp-i :x 14 $ hsl 0 100 70
                 .render edit-plugin
@@ -812,14 +832,14 @@
             :states (List respo.schema/CoordKey) Dynamic
             :add-group String
             :rm-group String
-            :update-group $ Map Tag Dynamic
+            :update-group String String
             :touch-group String
-            :add-task $ Map Tag Dynamic
-            :rm-task $ Map Tag Dynamic
-            :update-task $ Map Tag Dynamic
-            :toggle-task $ Map Tag Dynamic
-            :touch-task $ Map Tag Dynamic
-            :set-router $ Map Tag Dynamic
+            :add-task String String
+            :rm-task String String
+            :update-task String String String
+            :toggle-task String String
+            :touch-task String String
+            :set-router $ Option String
             :hide-sidebar
             :show-sidebar
           :examples $ []
@@ -850,16 +870,8 @@
         :code $ quote $ ns app.schema
           :require $ hsl.core :refer $ hsl
     'app.updater $ %{} 'FileEntry
-      :defs $ {}
-        'as-map $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn as-map (x)
-            if (map? x)
-              decode-map-as x $ Map Tag Dynamic
-              {}
-          :examples $ []
-          :schema $ quote $ Fn Dynamic
-            -> $ Map Tag Dynamic
-        'updater $ %{} 'CodeEntry (:doc |)
+      :defs $ {} $ 'updater
+        %{} 'CodeEntry (:doc |)
           :code $ quote $ defn updater (store op op-id op-time)
             match op
               (:states cursor s)
@@ -879,82 +891,35 @@
                 decode-map-as
                   dissoc-in store $ [] :groups $ decode-map-as id 'String
                   Map Tag Dynamic
-              (:update-group op-data)
-                let
-                    data $ as-map op-data
-                    id $ decode-map-as
-                      .unwrap $ get data :id
-                      , 'String
-                    text $ decode-map-as
-                      .unwrap-or (get data :text) |
-                      , 'String
-                  assoc-in store ([] :groups id :text) text
+              (:update-group id text)
+                assoc-in store ([] :groups id :text) text
               (:touch-group gid)
                 assoc-in store
                   [] :groups (decode-map-as gid 'String) :touched-time
                   , op-time
-              (:add-task op-data)
-                let
-                    data $ as-map op-data
-                    group-id $ decode-map-as
-                      .unwrap $ get data :group-id
-                      , 'String
-                  -> store $ assoc-in ([] :groups group-id :tasks op-id)
-                    .merge schema/task data $ {} (:id op-id) (:created-time op-time) (:touched-time op-time)
-                      :text $ decode-map-as
-                        .unwrap-or (get data :text) |
-                        , 'String
-              (:rm-task op-data)
-                let
-                    data $ as-map op-data
-                    group-id $ decode-map-as
-                      .unwrap $ get data :group-id
-                      , 'String
-                    id $ decode-map-as
-                      .unwrap $ get data :id
-                      , 'String
-                  update-in store ([] :groups group-id :tasks)
-                    fn (tasks)
-                      dissoc
-                        .unwrap-or tasks $ {}
-                        , id
-              (:update-task op-data)
-                let
-                    data $ as-map op-data
-                    group-id $ decode-map-as
-                      .unwrap $ get data :group-id
-                      , 'String
-                    id $ decode-map-as
-                      .unwrap $ get data :id
-                      , 'String
-                    text $ decode-map-as
-                      .unwrap-or (get data :text) |
-                      , 'String
-                  assoc-in store ([] :groups group-id :tasks id :text) text
-              (:toggle-task op-data)
-                let
-                    data $ as-map op-data
-                    group-id $ decode-map-as
-                      .unwrap $ get data :group-id
-                      , 'String
-                    id $ decode-map-as
-                      .unwrap $ get data :id
-                      , 'String
-                  update-in store ([] :groups group-id :tasks id)
-                    fn (task)
-                      -> (.unwrap-or task schema/task) (update :done not) (assoc :touched-time op-time) (assoc :done-time op-time)
-              (:touch-task op-data)
-                let
-                    data $ as-map op-data
-                    group-id $ decode-map-as
-                      .unwrap $ get data :group-id
-                      , 'String
-                    id $ decode-map-as
-                      .unwrap $ get data :id
-                      , 'String
-                  assoc-in store ([] :groups group-id :tasks id :touched-time) op-time
-              (:set-router d)
-                assoc store :router $ as-map d
+              (:add-task group-id text)
+                assoc-in store ([] :groups group-id :tasks op-id)
+                  .merge schema/task $ {} (:id op-id) (:group-id group-id) (:text text) (:created-time op-time) (:touched-time op-time)
+              (:rm-task group-id id)
+                update-in store ([] :groups group-id :tasks)
+                  fn (tasks)
+                    dissoc
+                      .unwrap-or tasks $ {}
+                      , id
+              (:update-task group-id id text)
+                assoc-in store ([] :groups group-id :tasks id :text) text
+              (:toggle-task group-id id)
+                update-in store ([] :groups group-id :tasks id)
+                  fn (task)
+                    -> (.unwrap-or task schema/task) (update :done not) (assoc :touched-time op-time) (assoc :done-time op-time)
+              (:touch-task group-id id)
+                assoc-in store ([] :groups group-id :tasks id :touched-time) op-time
+              (:set-router selection)
+                assoc store :router $ match selection
+                  (:none)
+                    {} $ :name :table
+                  (:some group-id)
+                    {} (:name :table) (:group-id group-id)
               (:hide-sidebar) (assoc store :show-sidebar? false)
               (:show-sidebar) (assoc store :show-sidebar? true)
               _ $ do (println |Unknown-op: op) store

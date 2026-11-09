@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { registerHooks } from "node:module";
 import * as c from "../js-out/calcit.core.mjs";
-import { store } from "../js-out/app.schema.mjs";
+import { Op, store } from "../js-out/app.schema.mjs";
 import { updater } from "../js-out/app.updater.mjs";
 import { comp_group_line } from "../js-out/app.comp.group-line.mjs";
 import { comp_sidebar } from "../js-out/app.comp.sidebar.mjs";
@@ -16,10 +16,9 @@ import { take_prompt_task_$x_ } from "../js-out/respo-alerts.core.mjs";
 const t = c.init_tags(["id", "text", "groups", "tasks", "group-id", "router", "states", "cursor", "data", "root", "add", "show?", "fold-done?", "value", "done", "event", "children", "node", "click", "input"]);
 const map = c._$n__$M_;
 const field = (v, key) => c.option_$o_unwrap(c.get(v, key));
-const apply = (db, name, payload, id = "op") => updater(db, payload === undefined ? c._$o__$o_(c.init_tags([name])[name]) : c._$o__$o_(c.init_tags([name])[name], payload), id, 100);
-const initial = () => apply(store, "add-group", "group", "g");
+const apply = (db, name, args, id = "op") => updater(db, c._PCT__$o__$o_(Op, c.to_tag(name), ...args), id, 100);
+const initial = () => apply(store, "add-group", ["group"], "g");
 const group = (db) => field(field(db, t.groups), "g");
-const taskData = (text = "task") => map(t["group-id"], "g", t.id, "a", t.text, text);
 function handler(node, kind, label = "") {
   if (component_$q_(node)) return handler(c.option_$o_unwrap(component_tree(node)), kind, label);
   const event = c.get(node, t.event);
@@ -52,17 +51,17 @@ test("group row callbacks select and rename the correct group", () => {
   assert.equal(field(group(renamed), t.text), "renamed");
 });
 test("task add, edit, toggle and remove preserve the group", () => {
-  let db = apply(initial(), "add-task", taskData(), "a");
-  db = apply(db, "update-task", taskData("edited"));
+  let db = apply(initial(), "add-task", ["g", "task"], "a");
+  db = apply(db, "update-task", ["g", "a", "edited"]);
   assert.equal(field(field(field(group(db), t.tasks), "a"), t.text), "edited");
-  db = apply(db, "toggle-task", taskData());
+  db = apply(db, "toggle-task", ["g", "a"]);
   assert.equal(field(field(field(group(db), t.tasks), "a"), t.done), true);
-  db = apply(db, "rm-task", taskData());
+  db = apply(db, "rm-task", ["g", "a"]);
   assert.equal(c.count(field(group(db), t.tasks)), 0);
   assert.equal(field(group(db), t.text), "group");
 });
 test("done-task folding sends states Enum and preserves group data", () => {
-  const db = apply(apply(initial(), "add-task", taskData(), "a"), "toggle-task", taskData());
+  const db = apply(apply(initial(), "add-task", ["g", "task"], "a"), "toggle-task", ["g", "a"]);
   const states = map(t.cursor, c._$L_(t.root));
   const node = with_memo_frame(() => comp_todolist(states, field(db, t.router), group(db)));
   const next = dispatch(handler(node, t.click, "eye-off"), db);
