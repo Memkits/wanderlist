@@ -733,6 +733,21 @@
             , &unit
           :examples $ []
           :schema $ quote $ Fn schema/Op (-> Unit) (:features :js-ffi)
+        'dispatch-from-view! $ %{} 'CodeEntry
+          :doc "|Normalize the anonymous :states still emitted by legacy Alerts callbacks."
+          :code $ quote $ defn dispatch-from-view! (raw)
+            if
+              = (enum-definition raw) (Some app.schema/Op)
+              dispatch! $ decode-map-as raw 'app.schema/Op
+              match raw
+                (:states cursor state)
+                  dispatch! $ app.schema/Op :states
+                    decode-map-as cursor $ List respo.schema/CoordKey
+                    , state
+                _ $ println |Unknown-op: raw
+            , &unit
+          :examples $ []
+          :schema $ quote $ Fn AnyEnum (-> Unit) (:open :decode)
         'get-mount-target $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn get-mount-target ()
             .unwrap $ respo-browser/query-selector |.app
@@ -775,7 +790,7 @@
           :code $ quote $ defn render-app! ()
             render-with! mount-target
               fn () $ comp-container @*store
-              , dispatch!
+              , dispatch-from-view!
           :examples $ []
           :schema $ quote $ Fn (-> Unit)
         'save-local-storage! $ %{} 'CodeEntry (:doc |)
