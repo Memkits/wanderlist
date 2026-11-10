@@ -250,7 +250,7 @@
                         .show add-plugin d! $ fn (result)
                           hint-fn $ Fn String $ -> Unit
                           if
-                            not $ .blank? $ prompt-text result
+                            not $ .blank? $ decode-map-as result 'String
                             d! $ app.schema/Op :add-group result
                           , &unit
                         , &unit
@@ -300,10 +300,6 @@
             Map String $ Map Tag Dynamic
             Map Tag Dynamic
             -> respo.schema/Component
-        'prompt-text $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn prompt-text (x) (decode-map-as x 'String)
-          :examples $ []
-          :schema $ quote $ Fn Dynamic (-> String)
         'style-body $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-body
             {} $ |& $ {} (:flex |1)
@@ -540,7 +536,7 @@
                       .show add-plugin d! $ fn (result)
                         hint-fn $ Fn String $ -> Unit
                         when-not
-                          .blank? $ prompt-text result
+                          .blank? $ decode-map-as result 'String
                           d! $ app.schema/Op :add-task
                             decode-map-as
                               .unwrap $ get group :id
@@ -664,10 +660,6 @@
                     Option :none
           :examples $ []
           :schema $ quote $ Fn (Map Dynamic Dynamic) (Map Tag Dynamic) (Map Tag Dynamic) (-> respo.schema/Component)
-        'prompt-text $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn prompt-text (x) (decode-map-as x 'String)
-          :examples $ []
-          :schema $ quote $ Fn Dynamic (-> String)
         'style-body $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-body
             {} $ |& $ {} (:padding-bottom |120px)
