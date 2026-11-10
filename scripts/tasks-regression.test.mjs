@@ -68,18 +68,18 @@ test("done-task folding sends states Enum and preserves group data", () => {
   assert.equal(field(field(field(field(next, t.states), t.root), t.data), t["fold-done?"]), false);
   assert.ok(c._$e_(field(next, t.groups), field(db, t.groups)));
 });
-test("Alerts prompt opening and completion integrate through a single Enum dispatcher", () => {
+test("Alerts prompt opening and completion integrate through a single nominal Op dispatcher", () => {
   let db = initial();
   const cursor = c._$L_(t.root);
   const node = with_memo_frame(() => comp_sidebar(map(t.cursor, cursor), field(db, t.groups), c.get(field(db, t.router), t["group-id"])));
-  const dispatchRaw = (...args) => {
+  const dispatchOp = (...args) => {
     assert.equal(args.length, 1);
+    assert.equal(c.option_$o_unwrap(c.enum_definition(args[0])), Op);
     db = updater(db, args[0], "prompt-group", 300);
   };
-  // Published Alerts and Respo dispatch one Enum directly; the legacy adapter was removed.
   const fn = handler(node, t.click);
   assert.equal(typeof fn, "function");
-  fn(event__GT_edn({ type: "click" }), dispatchRaw);
+  fn(event__GT_edn({ type: "click" }), dispatchOp);
   const state = field(field(field(field(db, t.states), t.root), t.add), t.data);
   assert.equal(field(state, t["show?"]), true);
   const task = c.option_$o_unwrap(take_prompt_task_$x_(c._$L_(t.root, t.add)));

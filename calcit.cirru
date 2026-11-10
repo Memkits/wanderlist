@@ -6,7 +6,7 @@
     {} (:description |) (:init-fn 'app.main/main!) (:mode :js) (:reload-fn 'app.main/reload!) (:target :browser)
       :feature-policy $ {}
       :modules $ [] |respo.calcit/ |respo-ui.calcit/ |alerts.calcit/ |respo-feather.calcit/
-      :type-slots $ {} $ :dispatch-op 'app.schema/DispatchOp
+      :type-slots $ {} $ :dispatch-op 'app.schema/Op
   :files $ {}
     'app.comp.container $ %{} 'FileEntry
       :defs $ {}
@@ -60,8 +60,8 @@
                     _ $ div ({}) (<> |router-not-matching-a-page)
                 comp-margin
                 if dev?
-                  Option :some $ comp-inspect |Store safe-store $ {} (:bottom 0)
-                  Option :none
+                  Some $ comp-inspect |Store safe-store $ {} (:bottom 0)
+                  , None
           :examples $ []
           :schema $ quote $ Fn (Map Tag Dynamic) (-> respo.schema/Component)
         'comp-margin $ %{} 'CodeEntry (:doc |)
@@ -148,7 +148,7 @@
                     hint-fn $ Fn respo.schema/RespoEvent
                       Fn app.schema/Op $ -> Unit
                       -> Unit
-                    d! $ app.schema/Op :set-router $ Option :some
+                    d! $ app.schema/Op :set-router $ Some
                       decode-map-as
                         .unwrap $ get group :id
                         , 'String
@@ -244,7 +244,7 @@
                         :cursor :pointer
                       fn (e d!)
                         hint-fn $ Fn respo.schema/RespoEvent
-                          Fn AnyEnum $ -> Unit
+                          Fn app.schema/Op $ -> Unit
                           -> Unit
                         .show add-plugin d! $ fn (result)
                           hint-fn $ Fn String $ -> Unit
@@ -270,7 +270,7 @@
                       hint-fn $ Fn respo.schema/RespoEvent
                         Fn app.schema/Op $ -> Unit
                         -> Unit
-                      d! $ app.schema/Op :set-router $ Option :none
+                      d! $ app.schema/Op :set-router None
                       , &unit
                   if (empty? groups)
                     div
@@ -418,7 +418,7 @@
                     :cursor :pointer
                   fn (e d!)
                     hint-fn $ Fn respo.schema/RespoEvent
-                      Fn AnyEnum $ -> Unit
+                      Fn app.schema/Op $ -> Unit
                       -> Unit
                     .show remove-plugin d! $ fn () $ d!
                       app.schema/Op :rm-task
@@ -513,7 +513,7 @@
                   span
                     {} $ :on-click $ fn (e d!)
                       hint-fn $ Fn respo.schema/RespoEvent
-                        Fn AnyEnum $ -> Unit
+                        Fn app.schema/Op $ -> Unit
                         -> Unit
                       .show edit-plugin d! $ fn (result)
                         hint-fn $ Fn String $ -> Unit
@@ -529,7 +529,7 @@
                   span
                     {} $ :on-click $ fn (e d!)
                       hint-fn $ Fn respo.schema/RespoEvent
-                        Fn AnyEnum $ -> Unit
+                        Fn app.schema/Op $ -> Unit
                         -> Unit
                       .show add-plugin d! $ fn (result)
                         hint-fn $ Fn String $ -> Unit
@@ -560,13 +560,13 @@
                   span
                     {} $ :on-click $ fn (e d!)
                       hint-fn $ Fn respo.schema/RespoEvent
-                        Fn AnyEnum $ -> Unit
+                        Fn app.schema/Op $ -> Unit
                         -> Unit
                       .show remove-plugin d! $ fn ()
                         d! $ app.schema/Op :rm-group $ decode-map-as
                           .unwrap $ get group :id
                           , 'String
-                        d! $ app.schema/Op :set-router $ Option :none
+                        d! $ app.schema/Op :set-router None
                       , &unit
                     comp-i :x 14 $ hsl 0 100 70
                 .render edit-plugin
@@ -626,7 +626,7 @@
                     render-task-list todo-tasks
                   if
                     > (.len done-tasks) 0
-                    Option :some $ div
+                    Some $ div
                       {} $ :class-name $ str-spaced css/row-middle style-section
                       <> "|Done tasks" $ {}
                         :color $ hsl 0 0 80
@@ -649,13 +649,13 @@
                             decode-map-as cursor $ List respo.schema/CoordKey
                             update state :fold-done? not
                           , &unit
-                    Option :none
+                    , None
                   if
                     not $ decode-map-as
                       .unwrap-or (get state :fold-done?) true
                       , 'Bool
-                    Option :some $ render-task-list done-tasks
-                    Option :none
+                    Some $ render-task-list done-tasks
+                    , None
           :examples $ []
           :schema $ quote $ Fn (Map Dynamic Dynamic) (Map Tag Dynamic) (-> respo.schema/Component)
         'style-body $ %{} 'CodeEntry (:doc |)
@@ -727,28 +727,12 @@
           :schema $ quote $ Ref (Map Tag Dynamic)
         'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch! (op)
-            if (enum? op)
-              do
-                when config/dev? $ js/console.log op
-                let
-                    typed-op $ if
-                      = (enum-definition op) (Option :some app.schema/Op)
-                      Option :some $ decode-map-as op 'app.schema/Op
-                      match op
-                        (:states cursor data)
-                          Option :some $ app.schema/Op :states
-                            decode-map-as cursor $ List respo.schema/CoordKey
-                            , data
-                        _ $ Option :none
-                  match typed-op
-                    (:some operation)
-                      reset! *store $ updater @*store operation (generate-id!)
-                        decode-map-as (js/Date.now) 'Number
-                    (:none) (println |Unknown-op: op)
-                , &unit
-              raise "|Expected Wanderlist operation Enum"
+            when config/dev? $ js/console.log op
+            reset! *store $ updater @*store op (generate-id!)
+              decode-map-as (js/Date.now) Number
+            , &unit
           :examples $ []
-          :schema $ quote $ Fn app.schema/DispatchOp (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn schema/Op (-> Unit) (:features :js-ffi)
         'get-mount-target $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn get-mount-target ()
             .unwrap $ respo-browser/query-selector |.app
@@ -813,10 +797,6 @@
             respo.ffi.browser :as respo-browser
     'app.schema $ %{} 'FileEntry
       :defs $ {}
-        'DispatchOp $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ def DispatchOp (:: :unhandled)
-          :examples $ []
-          :schema $ quote AnyEnum
         'Op $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defenum Op
             :states (List respo.schema/CoordKey) Dynamic
@@ -914,7 +894,7 @@
               (:show-sidebar) (assoc store :show-sidebar? true)
               _ $ do (println |Unknown-op: op) store
           :examples $ []
-          :schema $ quote $ Fn (Map Tag Dynamic) app.schema/Op String Number
+          :schema $ quote $ Fn (Map Tag Dynamic) schema/Op String Number
             -> $ Map Tag Dynamic
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.updater
