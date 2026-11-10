@@ -35,7 +35,7 @@
                   decode-map-as
                     .unwrap-or (get safe-store :show-sidebar?) false
                     , 'Bool
-                  comp-sidebar (>> safe-states :group) safe-groups safe-router
+                  comp-sidebar (>> safe-states :group) safe-groups group-id-option
                   div
                     {} $ :class-name style-collapsed-sidebar
                     comp-icon :sidebar
@@ -54,9 +54,8 @@
                   match
                     .unwrap-or (get safe-router :name) :table
                     :table $ if-let (group-id group-id-option)
-                      comp-todolist (>> safe-states group-id) safe-router $ decode-map-as
+                      comp-todolist (>> safe-states group-id)
                         .unwrap-or (get safe-groups group-id) ({})
-                        Map Tag Dynamic
                       comp-placeholder
                     _ $ div ({}) (<> |router-not-matching-a-page)
                 comp-margin
@@ -228,7 +227,7 @@
             Tuple String $ Map Tag Dynamic
             -> Number
         'comp-sidebar $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defcomp comp-sidebar (states groups router)
+          :code $ quote $ defcomp comp-sidebar (states groups selected-group)
             let
                 cursor $ .unwrap-or (get states :cursor) ([])
                 state $ .unwrap-or (get states :data) |
@@ -287,8 +286,7 @@
                             -> $ Tuple String respo.schema/Component
                           let[] (entry-id group) entry $ assert-type
                             [] entry-id $ let
-                                tasks $ .unwrap-or (get group :tasks) ({})
-                                selected? $ = (get router :group-id) (get group :id)
+                                selected? $ = selected-group $ get group :id
                               comp-group-line group index selected?
                             Tuple String respo.schema/Component
                         .sort-by $ fn (pair)
@@ -298,7 +296,7 @@
           :examples $ []
           :schema $ quote $ Fn (Map Dynamic Dynamic)
             Map String $ Map Tag Dynamic
-            Map Tag Dynamic
+            Option String
             -> respo.schema/Component
         'style-body $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-body
@@ -577,7 +575,7 @@
           :examples $ []
           :schema $ quote $ Fn (Map Dynamic Dynamic) (Map Tag Dynamic) (-> respo.schema/Component)
         'comp-todolist $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defcomp comp-todolist (states router group)
+          :code $ quote $ defcomp comp-todolist (states group)
             let
                 cursor $ decode-map-as
                   .unwrap-or (get states :cursor) ([])
@@ -659,7 +657,7 @@
                     Option :some $ render-task-list done-tasks
                     Option :none
           :examples $ []
-          :schema $ quote $ Fn (Map Dynamic Dynamic) (Map Tag Dynamic) (Map Tag Dynamic) (-> respo.schema/Component)
+          :schema $ quote $ Fn (Map Dynamic Dynamic) (Map Tag Dynamic) (-> respo.schema/Component)
         'style-body $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-body
             {} $ |& $ {} (:padding-bottom |120px)

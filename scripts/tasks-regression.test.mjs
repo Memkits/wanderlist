@@ -63,7 +63,7 @@ test("task add, edit, toggle and remove preserve the group", () => {
 test("done-task folding sends states Enum and preserves group data", () => {
   const db = apply(apply(initial(), "add-task", ["g", "task"], "a"), "toggle-task", ["g", "a"]);
   const states = map(t.cursor, c._$L_(t.root));
-  const node = with_memo_frame(() => comp_todolist(states, field(db, t.router), group(db)));
+  const node = with_memo_frame(() => comp_todolist(states, group(db)));
   const next = dispatch(handler(node, t.click, "eye-off"), db);
   assert.equal(field(field(field(field(next, t.states), t.root), t.data), t["fold-done?"]), false);
   assert.ok(c._$e_(field(next, t.groups), field(db, t.groups)));
@@ -71,7 +71,7 @@ test("done-task folding sends states Enum and preserves group data", () => {
 test("Alerts prompt opening and completion integrate through a single Enum dispatcher", () => {
   let db = initial();
   const cursor = c._$L_(t.root);
-  const node = with_memo_frame(() => comp_sidebar(map(t.cursor, cursor), field(db, t.groups), field(db, t.router)));
+  const node = with_memo_frame(() => comp_sidebar(map(t.cursor, cursor), field(db, t.groups), c.get(field(db, t.router), t["group-id"])));
   const dispatchRaw = (...args) => {
     assert.equal(args.length, 1);
     db = updater(db, args[0], "prompt-group", 300);
