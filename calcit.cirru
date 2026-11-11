@@ -230,8 +230,6 @@
         'comp-sidebar $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-sidebar (states groups selected-group)
             let
-                cursor $ .unwrap-or (get states :cursor) ([])
-                state $ .unwrap-or (get states :data) |
                 add-plugin $ use-prompt (>> states :add) ({})
               div
                 {} $ :class-name style-sidebar
@@ -581,7 +579,7 @@
             let
                 cursor $ decode-map-as
                   .unwrap-or (get states :cursor) ([])
-                  List Dynamic
+                  List respo.schema/CoordKey
                 tasks $ as-map $ .unwrap-or (get group :tasks) ({})
                 state $ decode-map-as
                   .unwrap-or (get states :data)
@@ -647,9 +645,7 @@
                           hint-fn $ Fn respo.schema/RespoEvent
                             Fn app.schema/Op $ -> Unit
                             -> Unit
-                          d! $ app.schema/Op :states
-                            decode-map-as cursor $ List respo.schema/CoordKey
-                            update state :fold-done? not
+                          d! $ app.schema/Op :states cursor $ update state :fold-done? not
                           , &unit
                     , None
                   if
@@ -866,8 +862,7 @@
                   decode-map-as
                     .unwrap-or (get store :states) ({})
                     Map Dynamic Dynamic
-                  decode-map-as cursor $ List respo.schema/CoordKey
-                  , s
+                  , cursor s
               (:add-group op-data)
                 -> store $ update :groups $ fn (task-groups)
                   assoc task-groups op-id $ .merge schema/group $ {} (:id op-id)
