@@ -215,17 +215,18 @@
         'by-newest-group $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn by-newest-group (group-a group-b)
             let[] (_key group-a-value) group-a $ let[] (_key group-b-value) group-b $ &compare
-              decode-map-as
-                .unwrap-or (get group-b-value :touched-time) 0
-                , 'Number
-              decode-map-as
-                .unwrap-or (get group-a-value :touched-time) 0
-                , 'Number
+              match (get group-b-value :touched-time)
+                (:some value) (decode-map-as value 'Number)
+                (:none) 0
+              match (get group-a-value :touched-time)
+                (:some value) (decode-map-as value 'Number)
+                (:none) 0
           :examples $ []
           :schema $ quote $ Fn
-            Tuple String $ Map Tag Dynamic
-            Tuple String $ Map Tag Dynamic
+            Tuple String $ Map Tag V
+            Tuple String $ Map Tag V
             -> Number
+            :generics V
         'comp-sidebar $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-sidebar (states groups selected-group)
             let
@@ -480,17 +481,18 @@
         'by-touch-time $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn by-touch-time (entry-a entry-b)
             let[] (_key entry-a-value) entry-a $ let[] (_key entry-b-value) entry-b $ &compare
-              decode-map-as
-                .unwrap-or (get entry-b-value :touched-time) 0
-                , 'Number
-              decode-map-as
-                .unwrap-or (get entry-a-value :touched-time) 0
-                , 'Number
+              match (get entry-b-value :touched-time)
+                (:some value) (decode-map-as value 'Number)
+                (:none) 0
+              match (get entry-a-value :touched-time)
+                (:some value) (decode-map-as value 'Number)
+                (:none) 0
           :examples $ []
           :schema $ quote $ Fn
-            Tuple String $ Map Tag Dynamic
-            Tuple String $ Map Tag Dynamic
+            Tuple String $ Map Tag V
+            Tuple String $ Map Tag V
             -> Number
+            :generics V
         'comp-group-banner $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-group-banner (states group)
             let
@@ -716,7 +718,7 @@
           :code $ quote $ def site
             {} (:title |Wanderlist) (:icon |http://cdn.tiye.me/logo/respo.png) (:storage-key |wanderlist)
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote $ Map Tag String
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.config
     'app.main $ %{} 'FileEntry
