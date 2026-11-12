@@ -709,7 +709,7 @@
           :code $ quote $ def dev?
             = |dev $ .unwrap-or (get-env |mode) |release
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote Bool
         'site $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def site
             {} (:title |Wanderlist) (:icon |http://cdn.tiye.me/logo/respo.png) (:storage-key |wanderlist)
@@ -730,7 +730,7 @@
               decode-map-as (js/Date.now) Number
             , &unit
           :examples $ []
-          :schema $ quote $ Fn schema/Op (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn schema/Op (-> Unit) (:features :io :js-ffi :state)
         'dispatch-from-view! $ %{} 'CodeEntry
           :doc "|Normalize the anonymous :states still emitted by legacy Alerts callbacks."
           :code $ quote $ defn dispatch-from-view! (raw)
@@ -741,11 +741,11 @@
                 (:states cursor state)
                   dispatch! $ app.schema/Op :states
                     decode-map-as cursor $ List respo.schema/CoordKey
-                    , state
+                    decode-map-as state $ Map Dynamic Dynamic
                 _ $ println |Unknown-op: raw
             , &unit
           :examples $ []
-          :schema $ quote $ Fn AnyEnum (-> Unit) (:open :decode)
+          :schema $ quote $ Fn AnyEnum (-> Unit) (:features :io :state) (:open :decode)
         'get-mount-target $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn get-mount-target ()
             .unwrap $ respo-browser/query-selector |.app
@@ -767,7 +767,7 @@
             set! js/window.onbeforeunload save-local-storage!
             println "|App started."
           :examples $ []
-          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn (-> Unit) (:features :io :js-ffi :state)
         'mount-target $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def mount-target (get-mount-target)
           :examples $ []
@@ -783,20 +783,20 @@
               hud! |error build-errors
             , &unit
           :examples $ []
-          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn (-> Unit) (:features :io :js-ffi :state)
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
             render-with! mount-target
               fn () $ comp-container @*store
               , dispatch-from-view!
           :examples $ []
-          :schema $ quote $ Fn (-> Unit)
+          :schema $ quote $ Fn (-> Unit) (:features :io :state)
         'save-local-storage! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn save-local-storage! (e)
             js/window.localStorage.setItem |wanderlist $ format-cirru-edn $ assoc @*store :states ({})
             , &unit
           :examples $ []
-          :schema $ quote $ Fn Dynamic (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn Dynamic (-> Unit) (:features :js-ffi :state)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
           :require
@@ -812,7 +812,7 @@
       :defs $ {}
         'Op $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defenum Op
-            :states (List respo.schema/CoordKey) Dynamic
+            :states (List respo.schema/CoordKey) (Map Dynamic Dynamic)
             :add-group String
             :rm-group String
             :update-group String String
@@ -908,6 +908,7 @@
           :examples $ []
           :schema $ quote $ Fn (Map Tag Dynamic) schema/Op String Number
             -> $ Map Tag Dynamic
+            :features :io
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.updater
           :require
