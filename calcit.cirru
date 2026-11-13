@@ -22,7 +22,7 @@
                   fn (id) (decode-map-as id 'String)
                 states $ .unwrap-or (get safe-store :states) ({})
                 safe-states $ if (map? states)
-                  decode-map-as states $ Map Dynamic Dynamic
+                  decode-map-as states $ Map respo.schema/CoordKey Dynamic
                   {}
                 groups $ .unwrap-or (get safe-store :groups) ({})
                 safe-groups $ if (map? groups)
@@ -864,7 +864,7 @@
                 assoc store :states $ update-state-tree
                   decode-map-as
                     .unwrap-or (get store :states) ({})
-                    Map Dynamic Dynamic
+                    Map respo.schema/CoordKey Dynamic
                   , cursor s
               (:add-group op-data)
                 -> store $ update :groups $ fn (task-groups)
