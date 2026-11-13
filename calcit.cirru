@@ -474,8 +474,9 @@
               decode-map-as x $ Map String $ Map Tag Dynamic
               {}
           :examples $ []
-          :schema $ quote $ Fn Dynamic
+          :schema $ quote $ Fn Input
             -> $ Map String $ Map Tag Dynamic
+            :generics Input
         'by-touch-time $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn by-touch-time (entry-a entry-b)
             let[] (_key entry-a-value) entry-a $ let[] (_key entry-b-value) entry-b $ &compare
