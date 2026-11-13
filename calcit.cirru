@@ -735,18 +735,20 @@
         'dispatch-from-view! $ %{} 'CodeEntry
           :doc "|Normalize the anonymous :states still emitted by legacy Alerts callbacks."
           :code $ quote $ defn dispatch-from-view! (raw)
-            if
-              = (enum-definition raw) (Some app.schema/Op)
-              dispatch! $ decode-map-as raw 'app.schema/Op
-              match raw
-                (:states cursor state)
-                  dispatch! $ app.schema/Op :states
-                    decode-map-as cursor $ List respo.schema/CoordKey
-                    decode-map-as state $ Map Dynamic Dynamic
-                _ $ println |Unknown-op: raw
+            if (enum? raw)
+              if
+                = (enum-definition raw) (Some app.schema/Op)
+                dispatch! $ decode-map-as raw 'app.schema/Op
+                match raw
+                  (:states cursor state)
+                    dispatch! $ app.schema/Op :states
+                      decode-map-as cursor $ List respo.schema/CoordKey
+                      decode-map-as state $ Map Dynamic Dynamic
+                  _ $ println |Unknown-op: raw
+              println |Unknown-op: raw
             , &unit
           :examples $ []
-          :schema $ quote $ Fn AnyEnum (-> Unit) (:features :io :state) (:open :decode)
+          :schema $ quote $ Fn Input (-> Unit) (:generics Input) (:features :io :state)
         'get-mount-target $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn get-mount-target ()
             .unwrap $ respo-browser/query-selector |.app
