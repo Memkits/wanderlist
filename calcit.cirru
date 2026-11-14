@@ -293,10 +293,11 @@
                           let[] (id _node) pair id
                 .render add-plugin
           :examples $ []
-          :schema $ quote $ Fn (Map Dynamic Dynamic)
+          :schema $ quote $ Fn (Map Dynamic State)
             Map String $ Map Tag Dynamic
             Option String
             -> respo.schema/Component
+            :generics State
         'style-body $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-body
             {} $ |& $ {} (:flex |1)
@@ -578,7 +579,7 @@
                 .render add-plugin
                 .render remove-plugin
           :examples $ []
-          :schema $ quote $ Fn (Map Dynamic Dynamic) (Map Tag Dynamic) (-> respo.schema/Component)
+          :schema $ quote $ Fn (Map Dynamic State) (Map Tag Dynamic) (-> respo.schema/Component) (:generics State)
         'comp-todolist $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-todolist (states group)
             let
