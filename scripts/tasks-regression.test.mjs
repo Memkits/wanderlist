@@ -67,6 +67,13 @@ test("done-task folding sends states Enum and preserves group data", () => {
   const next = dispatch(handler(node, t.click, "eye-off"), db);
   assert.equal(field(field(field(field(next, t.states), t.root), t.data), t["fold-done?"]), false);
   assert.ok(c._$e_(field(next, t.groups), field(db, t.groups)));
+  const updateBranch = (source, key) => apply(source, "states", [c._$L_(key), map(t["fold-done?"], true)]);
+  const withString = updateBranch(next, "section");
+  const withNumber = updateBranch(withString, 2);
+  for (const key of ["section", 2]) {
+    assert.equal(field(field(field(field(withNumber, t.states), key), t.data), t["fold-done?"]), true);
+  }
+  assert.equal(field(field(field(field(withNumber, t.states), t.root), t.data), t["fold-done?"]), false);
 });
 test("Alerts prompt opening and completion integrate through a single nominal Op dispatcher", () => {
   let db = initial();
