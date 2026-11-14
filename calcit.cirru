@@ -795,11 +795,11 @@
           :examples $ []
           :schema $ quote $ Fn (-> Unit) (:features :io :state)
         'save-local-storage! $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn save-local-storage! (e)
+          :code $ quote $ defn save-local-storage! (_event)
             js/window.localStorage.setItem |wanderlist $ format-cirru-edn $ assoc @*store :states ({})
             , &unit
           :examples $ []
-          :schema $ quote $ Fn Dynamic (-> Unit) (:features :js-ffi :state)
+          :schema $ quote $ Fn js-ffi.browser/EventHost (-> Unit) (:features :js-ffi :state)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
           :require
