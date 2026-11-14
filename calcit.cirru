@@ -468,6 +468,10 @@
             respo-ui.css :as css
     'app.comp.todolist $ %{} 'FileEntry
       :defs $ {}
+        'TodoViewField $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defunion TodoViewField String Bool
+          :examples $ []
+          :schema $ quote UnionDef
         'as-map $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn as-map (x)
             if (map? x)
@@ -585,7 +589,7 @@
                 state $ decode-map-as
                   .unwrap-or (get states :data)
                     {} (:draft |) (:fold-done? true)
-                  Map Tag Dynamic
+                  Map Tag app.comp.todolist/TodoViewField
                 todo-tasks $ .filter-kv tasks $ fn (id task)
                   not $ decode-map-as
                     .unwrap-or (get task :done) false
