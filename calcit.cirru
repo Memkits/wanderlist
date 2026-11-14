@@ -430,7 +430,7 @@
                     , &unit
                 .render remove-plugin
           :examples $ []
-          :schema $ quote $ Fn (Map Dynamic Dynamic) (Map Tag Dynamic) Number (-> respo.schema/Component)
+          :schema $ quote $ Fn (Map Dynamic State) (Map Tag Dynamic) Number (-> respo.schema/Component) (:generics State)
         'style-done $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn style-done (done?)
             {} $ :color $ if done? (hsl 100 20 60) (hsl 20 90 80)
