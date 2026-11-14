@@ -747,7 +747,7 @@
                   (:states cursor state)
                     dispatch! $ app.schema/Op :states
                       decode-map-as cursor $ List respo.schema/CoordKey
-                      decode-map-as state $ Map Dynamic Dynamic
+                      decode-map-as state $ Map respo.schema/CoordKey Dynamic
                   _ $ println |Unknown-op: raw
               println |Unknown-op: raw
             , &unit
@@ -819,7 +819,7 @@
       :defs $ {}
         'Op $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defenum Op
-            :states (List respo.schema/CoordKey) (Map Dynamic Dynamic)
+            :states (List respo.schema/CoordKey) (Map respo.schema/CoordKey Dynamic)
             :add-group String
             :rm-group String
             :update-group String String
