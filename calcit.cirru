@@ -63,7 +63,7 @@
                   Some $ comp-inspect |Store safe-store $ {} (:bottom 0)
                   , None
           :examples $ []
-          :schema $ quote $ Fn (Map Tag Dynamic) (-> respo.schema/Component)
+          :schema $ quote $ Fn (Map Tag Dynamic) (-> respo.schema/Component) (:features :state)
         'comp-margin $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-margin ()
             div $ {} $ :class-name style-margin
@@ -293,10 +293,12 @@
                           let[] (id _node) pair id
                 .render add-plugin
           :examples $ []
-          :schema $ quote $ Fn (Map Dynamic Dynamic)
+          :schema $ quote $ Fn (Map Dynamic State)
             Map String $ Map Tag Dynamic
             Option String
             -> respo.schema/Component
+            :generics State
+            :features :state
         'style-body $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-body
             {} $ |& $ {} (:flex |1)
@@ -430,7 +432,7 @@
                     , &unit
                 .render remove-plugin
           :examples $ []
-          :schema $ quote $ Fn (Map Dynamic Dynamic) (Map Tag Dynamic) Number (-> respo.schema/Component)
+          :schema $ quote $ Fn (Map Dynamic State) (Map Tag Dynamic) Number (-> respo.schema/Component) (:generics State) (:features :state)
         'style-done $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn style-done (done?)
             {} $ :color $ if done? (hsl 100 20 60) (hsl 20 90 80)
@@ -578,7 +580,7 @@
                 .render add-plugin
                 .render remove-plugin
           :examples $ []
-          :schema $ quote $ Fn (Map Dynamic Dynamic) (Map Tag Dynamic) (-> respo.schema/Component)
+          :schema $ quote $ Fn (Map Dynamic State) (Map Tag Dynamic) (-> respo.schema/Component) (:generics State) (:features :state)
         'comp-todolist $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-todolist (states group)
             let
@@ -660,7 +662,7 @@
                     Some $ render-task-list done-tasks
                     , None
           :examples $ []
-          :schema $ quote $ Fn (Map Dynamic Dynamic) (Map Tag Dynamic) (-> respo.schema/Component)
+          :schema $ quote $ Fn (Map Dynamic Dynamic) (Map Tag Dynamic) (-> respo.schema/Component) (:features :state)
         'style-body $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-body
             {} $ |& $ {} (:padding-bottom |120px)
