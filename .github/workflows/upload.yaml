@@ -88,6 +88,7 @@ jobs:
         set -euo pipefail
         yarn compile-page
         yarn release-page
+        calcit --reload-fn respo.render.html/make-string js
         node --test scripts/*.test.mjs
 
     - name: Upload and verify static assets on COS

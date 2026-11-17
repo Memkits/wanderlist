@@ -63,7 +63,7 @@
                   Some $ comp-inspect |Store safe-store $ {} (:bottom 0)
                   , None
           :examples $ []
-          :schema $ quote $ Fn (Map Tag Dynamic) (-> respo.schema/Component) (:features :state)
+          :schema $ quote $ Fn (Map Tag Dynamic) (-> respo.schema/Component) (:features :io :state)
         'comp-margin $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-margin ()
             div $ {} $ :class-name style-margin
@@ -298,7 +298,7 @@
             Option String
             -> respo.schema/Component
             :generics State
-            :features :state
+            :features :io :state
         'style-body $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-body
             {} $ |& $ {} (:flex |1)
@@ -580,7 +580,7 @@
                 .render add-plugin
                 .render remove-plugin
           :examples $ []
-          :schema $ quote $ Fn (Map Dynamic State) (Map Tag Dynamic) (-> respo.schema/Component) (:generics State) (:features :state)
+          :schema $ quote $ Fn (Map Dynamic State) (Map Tag Dynamic) (-> respo.schema/Component) (:generics State) (:features :io :state)
         'comp-todolist $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-todolist (states group)
             let
@@ -662,7 +662,7 @@
                     Some $ render-task-list done-tasks
                     , None
           :examples $ []
-          :schema $ quote $ Fn (Map Dynamic Dynamic) (Map Tag Dynamic) (-> respo.schema/Component) (:features :state)
+          :schema $ quote $ Fn (Map Dynamic Dynamic) (Map Tag Dynamic) (-> respo.schema/Component) (:features :io :state)
         'style-body $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-body
             {} $ |& $ {} (:padding-bottom |120px)
