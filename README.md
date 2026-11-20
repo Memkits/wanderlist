@@ -7,8 +7,8 @@ Demo http://r.tiye.me/Memkits/wanderlist/ .
 
 ## 使用者需要注意
 
-开发工具链配对正式 **Calcit CLI / @calcit/procs 0.42.1**，请严格更新完整模块图、重新生成 JS 并刷新。
-直接模块为正式 Alerts 0.14.4、Feather 0.6.5、UI 0.15.3、Respo 0.19.9；Reel 0.11.1 作为全定义检查的开发依赖。
+开发工具链配对正式 **Calcit CLI / @calcit/procs 0.44.0**，请严格更新完整模块图、重新生成 JS 并刷新。
+直接模块为正式 Alerts 0.14.6、Feather 0.6.7、UI 0.15.5、Respo 0.19.11；Reel 0.11.3 作为全定义检查的开发依赖。
 UI 升级可能影响细节样式。一小时包龄政策继续生效。
 
 分组与任务行为、`wanderlist` localStorage key、version 2 Map 存档保持。
@@ -53,7 +53,7 @@ UI 升级可能影响细节样式。一小时包龄政策继续生效。
 
 ## 开发与门禁
 
-使用官方 Calcit 0.42.1、Caps 0.1.1、Node 24（24.15.0 或更新）、Yarn 4.18.0 与 Vite 8.3.3。
+使用官方 Calcit 0.44.0、Caps 0.1.1、Node 24（24.15.0 或更新）、Yarn 4.18.0 与 Vite 8.3.3。
 
 ```sh
 caps --ci --strict
