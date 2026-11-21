@@ -8,7 +8,7 @@ Demo http://r.tiye.me/Memkits/wanderlist/ .
 ## 使用者需要注意
 
 开发工具链配对正式 **Calcit CLI / @calcit/procs 0.44.0**，请严格更新完整模块图、重新生成 JS 并刷新。
-直接模块为正式 Alerts 0.14.6、Feather 0.6.7、UI 0.15.5、Respo 0.19.11；Reel 0.11.3 作为全定义检查的开发依赖。
+直接模块为正式 Alerts 0.14.8、Feather 0.6.9、UI 0.15.7、Respo 0.19.13；Reel 0.11.5 作为全定义检查的开发依赖。
 UI 升级可能影响细节样式。一小时包龄政策继续生效。
 
 分组与任务行为、`wanderlist` localStorage key、version 2 Map 存档保持。
@@ -36,7 +36,7 @@ UI 升级可能影响细节样式。一小时包龄政策继续生效。
 - 两个列表使用现有 data-list-> 的 Tuple 合同；分组 key 从已知 Tuple 取出真实 String，
   保持原排序/位置与数据 ID。根渲染及原测试建树处于 managed memo frame；UI 状态 cursor 与渲染 key 分开。
   Tuple 的 assert-type 只标注本地构造、两个成员已知的字面量，不用于给外部值强行换类型。
-- 派发入口与 updater 接收 AnyEnum。状态路径按 Respo 的 CoordKey union 校验，原任务和分组操作及存档策略沿用。
+- 业务派发入口与 updater 接收具名 Op；视图适配器受检归一化旧匿名 states 事件。状态路径按 Respo 的 CoordKey union 校验，原任务和分组操作及存档策略沿用。
   剩余开放 Map 与原 nil 模板/缺省数据保留，不创建或放宽数量预算。
 - Prompt 的 `.show` 公开 trait 仍是裸 Fn，当前方法视图仍显示 open；保留已有 prompt-text String 解码、
   回调的 Unit 返回与 cursor/取消行为。跟进 [Alerts #104](https://github.com/Respo/alerts.calcit/issues/104)，
