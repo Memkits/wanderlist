@@ -584,14 +584,16 @@
         'comp-todolist $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-todolist (states group)
             let
-                cursor $ decode-map-as
-                  .unwrap-or (get states :cursor) ([])
-                  List respo.schema/CoordKey
+                cursor $ match (get states :cursor)
+                  (:some value)
+                    decode-map-as value $ List respo.schema/CoordKey
+                  (:none) ([])
                 tasks $ as-map $ .unwrap-or (get group :tasks) ({})
-                state $ decode-map-as
-                  .unwrap-or (get states :data)
+                state $ match (get states :data)
+                  (:some value)
+                    decode-map-as value $ Map Tag app.comp.todolist/TodoViewField
+                  (:none)
                     {} (:draft |) (:fold-done? true)
-                  Map Tag app.comp.todolist/TodoViewField
                 todo-tasks $ .filter-kv tasks $ fn (id task)
                   not $ decode-map-as
                     .unwrap-or (get task :done) false
@@ -613,9 +615,7 @@
                           Tuple String $ Map Tag Dynamic
                           -> $ Tuple String respo.schema/Component
                         let[] (id task) entry $ assert-type
-                          [] id $ comp-task (>> states id)
-                            decode-map-as task $ Map Tag Dynamic
-                            , idx
+                          [] id $ comp-task (>> states id) task idx
                           Tuple String respo.schema/Component
                       .sort-by $ fn (pair)
                         hint-fn $ Fn (Tuple String respo.schema/Component) (-> String)
@@ -662,7 +662,7 @@
                     Some $ render-task-list done-tasks
                     , None
           :examples $ []
-          :schema $ quote $ Fn (Map Dynamic Dynamic) (Map Tag Dynamic) (-> respo.schema/Component) (:features :io :state)
+          :schema $ quote $ Fn (Map Dynamic StateValue) (Map Tag Dynamic) (-> respo.schema/Component) (:generics StateValue) (:features :io :state)
         'style-body $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-body
             {} $ |& $ {} (:padding-bottom |120px)

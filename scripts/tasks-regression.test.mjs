@@ -75,6 +75,12 @@ test("done-task folding sends states Enum and preserves group data", () => {
   }
   assert.equal(field(field(field(field(withNumber, t.states), t.root), t.data), t["fold-done?"]), false);
 });
+test("task view defaults missing state but rejects explicit invalid values", () => {
+  const current = group(initial());
+  assert.doesNotThrow(() => with_memo_frame(() => comp_todolist(map(), current)));
+  assert.throws(() => with_memo_frame(() => comp_todolist(map(t.cursor, null), current)));
+  assert.throws(() => with_memo_frame(() => comp_todolist(map(t.data, null), current)));
+});
 test("Alerts prompt opening and completion integrate through a single nominal Op dispatcher", () => {
   let db = initial();
   const cursor = c._$L_(t.root);
