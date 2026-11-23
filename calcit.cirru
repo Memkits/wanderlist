@@ -867,7 +867,7 @@
           :code $ quote $ defn updater (store op op-id op-time)
             match op
               (:states cursor s)
-                assoc store :states $ update-state-tree
+                assoc store :states $ update-state-map
                   decode-map-as
                     .unwrap-or (get store :states) ({})
                     Map respo.schema/CoordKey Dynamic
@@ -918,9 +918,29 @@
           :schema $ quote $ Fn (Map Tag Dynamic) schema/Op String Number
             -> $ Map Tag Dynamic
             :features :io
+          :tests $ [] $ %{} 'TestEntry (:name |typed-state-path)
+            :code $ quote $ let
+                original $ assoc schema/store :states $ {}
+                  :other $ {} $ :data |keep
+                root $ updater original
+                  schema/Op :states ([])
+                    {} $ :open true
+                  , |id 0
+                nested $ updater original
+                  schema/Op :states ([] :panel |item 2)
+                    {} $ :open true
+                  , |id 0
+              assert= (Result :ok true)
+                get-in root $ [] :states :data :open
+              assert= (Result :ok true)
+                get-in nested $ [] :states :panel |item 2 :data :open
+              assert= (Result :ok |keep)
+                get-in nested $ [] :states :other :data
+              assert= (get original :groups) (get nested :groups)
+            :tags $ #{} :unit
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.updater
           :require
             hsl.core :refer $ hsl
             app.schema :as schema
-            respo.cursor :refer $ update-state-tree
+            respo.cursor :refer $ update-state-map
